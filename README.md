@@ -1,6 +1,6 @@
-# IT-Systemhaus
+# Kr3is
 
-Statische Landingpage (deutsch) für ein IT-Systemhaus mit den Schwerpunkten
+Statische Landingpage (deutsch) für **Kr3is** (kr3is.com) mit den Schwerpunkten
 Informationssicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand.
 
 ## Aufbau
@@ -58,12 +58,13 @@ Dann `http://localhost:8000` öffnen.
 
 ## Noch zu ersetzende Platzhalter
 
-Alle Platzhalter stehen in eckigen Klammern:
+Firmierung, Logo-Schriftzug, Title, Meta-Description und die E-Mail-Adresse
+(`kontakt@kr3is.com`) sind gesetzt. Offen sind noch, alle in eckigen Klammern:
 
-- `[Firmenname]`, `[Firmen]name` (Logo), `[Rechtsform]`
+- `[Rechtsform]` in der Fußzeile
 - `[Vorname Nachname]` (technische und kaufmännische Leitung) sowie die
   Initialen `VN` in den beiden Profil-Kacheln
-- `[kontakt@ihredomain.de]`, `[+49 ___ _______]` (auch im `tel:`-Link)
+- `[+49 ___ _______]` – auch der `tel:`-Link steht noch auf `tel:+49`
 - `[Straße Hausnummer]`, `[PLZ Ort]`
 
 Zusätzlich fehlen die verlinkten Rechtstexte unter `/impressum` und
