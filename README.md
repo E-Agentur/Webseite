@@ -13,13 +13,29 @@ Informationssicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand.
   Menü, Lichtkegel auf den Karten und den Reveal-Fallback. Die Seite ist ohne
   JavaScript vollständig lesbar und bedienbar.
 
-Abschnitte: Hero, Leistungen, KI-Automatisierung, Vorgehen, Über uns, Kontakt.
+Abschnitte: Hero, Typische Ausgangslagen, Leistungen, NIS2-Betroffenheit,
+KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen, Kontakt.
+
+## Wichtig vor dem Livegang: NIS2-Angaben prüfen
+
+Der Abschnitt „NIS2" nennt Schwellenwerte (50 Beschäftigte bzw. 10 Mio. € Umsatz),
+die 24-Stunden-Frühwarnung und die Pflichten der Geschäftsleitung. Diese Angaben
+stammen aus Sekundärquellen und sind **vor der Veröffentlichung gegen den
+Gesetzestext des NIS2UmsuCG zu prüfen**. Für ein Unternehmen, dessen Produkt
+regulatorische Genauigkeit ist, wäre eine falsche Zahl an dieser Stelle besonders
+schädlich. Bewusst nicht aufgenommen wurden konkrete Fristdaten, weil sie sich
+verschieben können.
 
 ## Visuelle Umsetzung
 
-- **Hero** – dunkle Bühne mit Aurora-Verlauf (drei weich überblendete Farbfelder,
-  sehr langsam driftend) und einem radial ausmaskierten Raster. Die Kopfzeile
-  liegt transparent darüber.
+Gestaltung in Anlehnung an Apple: große, eng laufende Überschriften, zentrierte
+Abschnittseinleitungen, rahmenlose Kacheln auf `#f5f5f7`, Buttons in Pillenform,
+viel Weißraum, zurückhaltende Bewegung.
+
+- **Hero** – schwarze Bühne mit Aurora-Verlauf (drei weich überblendete Farbfelder,
+  sehr langsam driftend) und einem radial ausmaskierten Raster, beide bewusst
+  schwach dosiert, damit die Typografie trägt. Die Kopfzeile liegt transparent
+  darüber.
 - **Kopfzeile** – färbt sich beim Scrollen über eine Scroll-Timeline von
   transparent/hell auf Glas/dunkel um. Umgesetzt über registrierte Custom
   Properties (`@property`), damit die Farben interpolieren.
