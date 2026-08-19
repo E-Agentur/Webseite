@@ -162,6 +162,16 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
 - **Helles und dunkles Schema**, folgt der Systemeinstellung, manuell
   umschaltbar, in `localStorage` gemerkt.
 
+Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
+
+- Das Einblenden im Hero ist bewusst kurz (0,45 s, Staffelung bis 0,3 s). Die
+  Überschrift ist das größte Element im ersten Bild; eine lange Einblendung
+  verzögert direkt, wann sie sichtbar wird. Vorher dauerte das über eine
+  Sekunde auf einer Seite, die nach 0,23 s fertig geladen ist.
+- Aurora und Pulspunkt werden per `IntersectionObserver` angehalten, sobald ihr
+  Abschnitt aus dem Bild ist. Sonst laufen sie über die gesamte Seitenlänge
+  weiter und kosten dauerhaft Rechenzeit.
+
 ### Barrierefreiheit und Fallbacks
 
 - Bewegung liegt hinter `prefers-reduced-motion`, Glaseffekte hinter
@@ -169,7 +179,10 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
 - Scroll-Animationen stehen in `@supports`; ohne Unterstützung greift ein
   IntersectionObserver-Fallback, ohne JavaScript ist alles sofort sichtbar.
 - Sprunglink, sichtbare Fokusringe, `aria-expanded` am mobilen Menü, `Esc`
-  schließt.
+  schließt und gibt den Fokus an die Schaltfläche zurück.
+- Bei offenem mobilem Menü wird alles außer der Kopfzeile per `inert`
+  stillgelegt. Ohne das wandert der Fokus hinter die Überlagerung – sichtbar ist
+  dann nichts, der Fokus aber weg.
 - Textkontraste erfüllen WCAG AA in beiden Schemata. Geprüft wird über alle
   Seiten; der niedrigste gemessene Wert liegt bei 4,66:1.
 - Genau eine `h1` je Seite, keine Sprünge in der Überschriftenebene. Auf

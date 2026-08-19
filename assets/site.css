@@ -373,12 +373,21 @@ header::before{
 .standards li{font-size:1.02rem;font-weight:500;color:#d2d2d7;letter-spacing:-.01em}
 
 /* Einblenden beim Laden */
+/* Bewusst kurz gehalten: Die Überschrift ist das größte Element im ersten Bild
+   und zählt damit für den Largest Contentful Paint. Eine lange Einblendung
+   verzögert diesen Messwert direkt – vorher landete er bei 1,1 s auf einer
+   Seite, die nach 0,23 s fertig geladen war. */
 @media (prefers-reduced-motion:no-preference){
-  .rise{opacity:0;transform:translateY(22px);animation:rise-in .85s cubic-bezier(.16,.84,.44,1) forwards}
-  .rise:nth-child(1){animation-delay:.05s}
-  .d1{animation-delay:.14s}.d2{animation-delay:.24s}.d3{animation-delay:.34s}
-  .d4{animation-delay:.44s}.d5{animation-delay:.56s}
+  .rise{opacity:0;transform:translateY(18px);animation:rise-in .45s cubic-bezier(.16,.84,.44,1) forwards}
+  .rise:nth-child(1){animation-delay:.02s}
+  .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+  .d4{animation-delay:.24s}.d5{animation-delay:.3s}
 }
+
+/* Aurora und Pulspunkt anhalten, sobald der Hero aus dem Bild ist – sonst
+   laufen sie über die gesamte Seitenlänge weiter und kosten dauerhaft Strom. */
+.offscreen .aurora i,
+.offscreen .dot::after{animation-play-state:paused}
 @keyframes rise-in{to{opacity:1;transform:none}}
 
 /* Zweitbutton außerhalb des dunklen Hero – dort braucht er Kontur in Textfarbe. */
