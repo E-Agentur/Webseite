@@ -32,6 +32,23 @@ Bewusst **nicht** ausgelagert:
 - Die strukturierten Daten (JSON-LD) bleiben inline, weil Suchmaschinen sie sonst
   nicht zuverlässig auslesen.
 
+## Aufbau der Startseite
+
+Die Startseite führt **zwei gleichrangige Schwerpunkte**:
+
+1. **IT-Sicherheit** – ein Feld, das die sechs Leistungsbereiche nur benennt und
+   auf `it-sicherheit.html` verweist. Die ausführlichen Karten liegen dort.
+2. **Sichere KI-Automatisierung** – ein Feld gleicher Bauart, das in den
+   ausführlichen Abschnitt weiter unten auf derselben Seite führt.
+
+Beide nutzen dieselbe Komponente (`.card.feature` im Container `.focus`), damit
+kein Thema optisch dominiert. Wer einen dritten Schwerpunkt ergänzen will, fügt
+einfach ein weiteres `.card.feature` in `.focus` ein.
+
+Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
+NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
+Kontakt.
+
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
 
@@ -56,7 +73,7 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
   `@property`-registrierte Custom Properties, damit die Farben interpolieren).
 - **Reveal beim Scrollen** – native CSS Scroll-Driven Animations
   (`animation-timeline: view()`), gestaffelt über `animation-range`.
-- **Bento-Raster** bei den Leistungen, KI-Automatisierung als Vollbreiten-Kachel.
+- **Bento-Raster** auf `it-sicherheit.html` für die sechs Leistungskarten.
 - **Zeitstrahl** im Vorgehen – die Linie baut sich beim Scrollen auf, horizontal
   ab 900 px, darunter vertikal.
 - **Helles und dunkles Schema**, folgt der Systemeinstellung, manuell
@@ -70,8 +87,8 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
   IntersectionObserver-Fallback, ohne JavaScript ist alles sofort sichtbar.
 - Sprunglink, sichtbare Fokusringe, `aria-expanded` am mobilen Menü, `Esc`
   schließt.
-- Textkontraste erfüllen WCAG AA in beiden Schemata (geprüft: 36 Paare,
-  niedrigster Wert 4,66:1).
+- Textkontraste erfüllen WCAG AA in beiden Schemata. Geprüft wird über alle
+  vier Seiten; der niedrigste gemessene Wert liegt bei 4,66:1.
 
 ## Vor dem Livegang
 
@@ -97,9 +114,10 @@ muss sie erweitert werden. Beides anwaltlich prüfen lassen.
 
 Alle in eckigen Klammern:
 
-- `[Rechtsform]` in den Fußzeilen aller drei Seiten
+- `[Rechtsform]` in den Fußzeilen aller vier Seiten
 - `[Vorname Nachname]` sowie die Initialen `VN` in den Profil-Kacheln
-- `[+49 ___ _______]` – auch der `tel:`-Link steht noch auf `tel:+49`
+- `[+49 ___ _______]` – auch der `tel:`-Link steht noch auf `tel:+49`,
+  auf der Startseite wie auf `it-sicherheit.html`
 - `[Straße Hausnummer]`, `[PLZ Ort]`
 - im Impressum zusätzlich Registergericht, Registernummer, USt-IdNr.,
   Berufshaftpflicht
