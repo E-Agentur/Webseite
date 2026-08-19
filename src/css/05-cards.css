@@ -1,0 +1,94 @@
+/* Kacheln, Icons, Bento-Raster, Schwerpunkt-Felder */
+
+/* ============================================================
+   7. Karten
+   ============================================================ */
+/* Kacheln ohne Rahmen – die Fläche trägt, nicht die Linie. */
+.card{
+  position:relative;isolation:isolate;
+  background:var(--bg-alt);
+  border:none;
+  border-radius:var(--radius);
+  padding:34px 32px;
+  transition:transform .35s cubic-bezier(.16,.84,.44,1),box-shadow .35s ease;
+}
+.alt .card{background:var(--surface)}
+/* Sehr zurückhaltender Lichtkegel, der dem Zeiger folgt */
+.card::before{
+  content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,0%),
+             color-mix(in srgb,var(--brand-bright) 9%,transparent),transparent 64%);
+  opacity:0;transition:opacity .35s ease;
+}
+@media (hover:hover){
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .card:hover::before{opacity:1}
+}
+.card h3{margin-bottom:10px}
+.card p{font-size:1rem;line-height:1.5}
+.card ul{margin-top:18px;display:grid;gap:9px}
+.card ul li{
+  position:relative;padding-left:24px;font-size:.97rem;color:var(--ink-soft);line-height:1.5;
+}
+.card ul li::before{
+  content:"";position:absolute;left:2px;top:.42em;width:11px;height:6px;
+  border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);
+  transform:rotate(-45deg);
+}
+
+.ico{
+  width:40px;height:40px;display:grid;place-items:center;margin-bottom:20px;
+  color:var(--brand-bright);background:none;border:none;
+  transition:transform .35s cubic-bezier(.16,.84,.44,1);
+}
+.ico svg{width:32px;height:32px;stroke-width:1.4}
+@media (hover:hover){.card:hover .ico{transform:scale(1.06)}}
+
+.num{
+  position:absolute;top:30px;right:32px;
+  font-size:.85rem;font-weight:500;letter-spacing:.02em;
+  color:var(--ink-mute);
+}
+
+/* ============================================================
+   8. Bento-Raster (Leistungen)
+   ============================================================ */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:56px}
+.bento > *{grid-column:span 2}
+
+/* Die beiden Schwerpunkte auf der Startseite – untereinander, volle Breite. */
+.focus{display:grid;gap:16px;margin-top:56px}
+
+.feature{
+  display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;
+  padding:40px 36px;
+  background:linear-gradient(150deg,#0b1a2e,#08131f 60%,#0a1c2a);
+  color:#f5f5f7;
+}
+.feature h3{color:#f5f5f7;font-size:1.6rem}
+.feature p{color:#a1a1a6}
+.feature .kicker{color:#2997ff}
+.feature .ico{width:52px;height:52px;margin:0;color:#2997ff}
+.feature .ico svg{width:44px;height:44px}
+.feature ul{margin-top:16px;grid-template-columns:repeat(2,1fr);gap:9px 30px}
+.feature ul li{color:#a1a1a6}
+.feature ul li::before{border-color:#2997ff}
+.feature-link{
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  font-weight:400;font-size:1.06rem;color:#2997ff;text-decoration:none;
+}
+.feature-link:hover{text-decoration:underline}
+.feature-link svg{width:15px;height:15px}
+@media (hover:hover){.feature:hover{transform:none;box-shadow:none}}
+
+@media (max-width:1000px){
+  .bento{grid-template-columns:repeat(4,1fr)}
+  .feature{grid-template-columns:auto 1fr;row-gap:22px}
+  .feature-link{grid-column:1/-1;justify-self:start}
+}
+@media (max-width:660px){
+  .bento{grid-template-columns:1fr;gap:18px}
+  .bento > *{grid-column:span 1}
+  .feature{grid-template-columns:1fr}
+  .feature ul{grid-template-columns:1fr}
+}

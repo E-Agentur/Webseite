@@ -1,119 +1,13 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#000000">
-<title>Kr3is – IT-Sicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand</title>
-<meta name="description" content="Kr3is unterstützt mittelständische Unternehmen bei Informationssicherheit, regulatorischen Anforderungen, sicherer KI-Automatisierung und dem Betrieb der IT-Infrastruktur.">
+<!--{
+  "title": "Kr3is – IT-Sicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand",
+  "description": "Kr3is unterstützt mittelständische Unternehmen bei Informationssicherheit, regulatorischen Anforderungen, sicherer KI-Automatisierung und dem Betrieb der IT-Infrastruktur.",
+  "ogTitle": "Kr3is – IT-Sicherheit, KI-Automatisierung und IT-Betrieb",
+  "ogDescription": "Informationssicherheit, die im Alltag funktioniert. Wir unterstützen mittelständische Unternehmen bei NIS2, ISO 27001, sicherer KI-Automatisierung und dem Betrieb der IT.",
+  "path": "",
+  "home": "#",
+  "navPrefix": ""
+}-->
 
-<link rel="canonical" href="https://kr3is.com/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>">
-
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Kr3is">
-<meta property="og:locale" content="de_DE">
-<meta property="og:url" content="https://kr3is.com/">
-<meta property="og:title" content="Kr3is – IT-Sicherheit, KI-Automatisierung und IT-Betrieb">
-<meta property="og:description" content="Informationssicherheit, die im Alltag funktioniert. Wir unterstützen mittelständische Unternehmen bei NIS2, ISO 27001, sicherer KI-Automatisierung und dem Betrieb der IT.">
-<meta property="og:image" content="https://kr3is.com/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-
-<script>
-  /* Setzt das Farbschema vor dem ersten Paint – verhindert Aufblitzen beim Laden. */
-  (function () {
-    try {
-      var t = localStorage.getItem('theme');
-      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
-    } catch (e) {}
-  })();
-</script>
-
-<link rel="stylesheet" href="assets/site.css">
-</head>
-<body class="">
-
-<a class="skip" href="#main">Zum Inhalt springen</a>
-<div class="progress" aria-hidden="true"></div>
-
-<!-- Icon-Sammlung: inline, damit keine externen Anfragen entstehen.
-     Gemeinsam für alle Seiten – so kann kein Icon auf einer Seite fehlen. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <g id="i-shield"><path d="M12 3l7.5 3v5.6c0 4.4-3.1 8.1-7.5 9-4.4-.9-7.5-4.6-7.5-9V6z"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4"/></g>
-    <!-- Bildmarke: geschlossener Kreis, der weiterläuft – der Zyklus aus „Sicherheit ist kein Projektende“ -->
-    <g id="i-cycle"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></g>
-    <g id="i-cert"><path d="M6 3h8l4.5 4.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h4.5"/><path d="M8.5 13h7"/><path d="M8.5 17h4.5"/></g>
-    <g id="i-scan"><circle cx="11" cy="11" r="6.2"/><path d="m19.5 19.5-3.9-3.9"/><path d="M11 8.6v3.1"/><path d="M11 14.1h.01"/></g>
-    <g id="i-pulse"><path d="M3 12.5h3.6l2.4 6.4 3.6-13.8 2.4 7.4h5"/></g>
-    <g id="i-server"><rect x="3" y="4" width="18" height="6.5" rx="2"/><rect x="3" y="13.5" width="18" height="6.5" rx="2"/><path d="M7 7.2h.01"/><path d="M7 16.8h.01"/><path d="M11 7.2h3"/><path d="M11 16.8h3"/></g>
-    <g id="i-alert"><path d="M12 4.2 2.8 20h18.4z"/><path d="M12 10v4.2"/><path d="M12 17.2h.01"/></g>
-    <g id="i-check"><path d="m4.5 12.5 5 5 10-11"/></g>
-    <g id="i-cpu"><rect x="6" y="6" width="12" height="12" rx="2.5"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3"/></g>
-    <g id="i-target"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1.6v3M12 19.4v3M1.6 12h3M19.4 12h3"/></g>
-    <g id="i-lock"><rect x="4.2" y="10.2" width="15.6" height="10" rx="2.4"/><path d="M8 10.2V7.4a4 4 0 0 1 8 0v2.8"/><path d="M12 14v2.4"/></g>
-    <g id="i-key"><circle cx="8.2" cy="15.4" r="4.2"/><path d="m11.4 12.4 8.3-8.3"/><path d="m16.6 5.6 2.4 2.4"/><path d="m14.2 8 2.4 2.4"/></g>
-    <g id="i-log"><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/><path d="M9 6h10.5M9 12h10.5M9 18h6.5"/></g>
-    <g id="i-scale"><path d="M12 4.4v15.2"/><path d="M5.5 7.6h13"/><path d="M8.6 20h6.8"/><path d="m5.5 7.6-2.7 5.6h5.4z"/><path d="m18.5 7.6-2.7 5.6h5.4z"/></g>
-    <g id="i-gauge"><path d="M4 18.5a9 9 0 1 1 16 0"/><path d="m12 14.5 3.6-3.9"/></g>
-    <g id="i-mail"><rect x="3" y="5.2" width="18" height="13.6" rx="2.4"/><path d="m3.8 6.6 8.2 6 8.2-6"/></g>
-    <g id="i-phone"><path d="M6.5 3.6h3l1.6 4-2 1.4a11.5 11.5 0 0 0 5.9 5.9l1.4-2 4 1.6v3a2 2 0 0 1-2.2 2A17.4 17.4 0 0 1 4.5 5.8a2 2 0 0 1 2-2.2z"/></g>
-    <g id="i-pin"><path d="M12 21c4-4.6 6.2-7.9 6.2-10.6a6.2 6.2 0 1 0-12.4 0C5.8 13.1 8 16.4 12 21z"/><circle cx="12" cy="10.3" r="2.4"/></g>
-    <g id="i-arrow"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></g>
-    <g id="i-sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 12H1.8M22.2 12h-2.4M6.5 6.5 4.8 4.8M19.2 19.2l-1.7-1.7M17.5 6.5l1.7-1.7M4.8 19.2l1.7-1.7"/></g>
-    <g id="i-moon"><path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.6 8.6 0 1 0 10.9 10.9z"/></g>
-    <g id="i-menu"><path d="M4 7h16M4 12h16M4 17h16"/></g>
-    <g id="i-close"><path d="M6 6 18 18M18 6 6 18"/></g>
-  </defs>
-</svg>
-
-<header>
-  <div class="wrap nav">
-    <a href="#" class="logo">
-      <span class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cycle"/></svg>
-      </span>
-      <span class="logo-text">Kr<em>3</em>is</span>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#leistungen">Leistungen</a></li>
-      <li><a href="#nis2">NIS2</a></li>
-      <li><a href="#ki-automatisierung">KI-Automatisierung</a></li>
-      <li><a href="#vorgehen">Vorgehen</a></li>
-      <li><a href="#ueber-uns">Über uns</a></li>
-    </ul>
-
-    <button class="icon-btn theme-btn" type="button" aria-label="Farbschema wechseln">
-      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-sun"/></svg>
-      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-moon"/></svg>
-    </button>
-
-    <a href="#kontakt" class="nav-cta">Erstgespräch</a>
-
-    <button class="icon-btn menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menü öffnen">
-      <svg class="open-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><use href="#i-menu"/></svg>
-      <svg class="close-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><use href="#i-close"/></svg>
-    </button>
-  </div>
-
-  <div class="mobile-nav" id="mobile-nav">
-    <ul>
-      <li><a href="#leistungen">Leistungen</a></li>
-      <li><a href="#nis2">NIS2</a></li>
-      <li><a href="#ki-automatisierung">KI-Automatisierung</a></li>
-      <li><a href="#vorgehen">Vorgehen</a></li>
-      <li><a href="#ueber-uns">Über uns</a></li>
-      <li><a href="#fragen">Häufige Fragen</a></li>
-      <li><a href="#kontakt">Erstgespräch vereinbaren</a></li>
-    </ul>
-  </div>
-</header>
-
-<main id="main">
 <!-- ==================== HERO ==================== -->
 <section class="hero">
   <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
@@ -537,19 +431,3 @@
     </div>
   </div>
 </section>
-</main>
-
-<footer>
-  <div class="wrap foot">
-    <div>© 2026 Kr3is [Rechtsform]</div>
-    <nav aria-label="Rechtliches">
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html">Datenschutzerklärung</a>
-    </nav>
-  </div>
-</footer>
-
-<script src="assets/site.js" defer></script>
-
-</body>
-</html>

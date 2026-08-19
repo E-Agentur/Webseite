@@ -1,0 +1,222 @@
+<!--{
+  "title": "Betroffenheit prüfen lassen – NIS2 | Kr3is",
+  "description": "Schildern Sie uns Ihre Ausgangslage. Wir prüfen, ob NIS2 für Ihr Unternehmen gilt, und melden uns in der Regel innerhalb eines Werktages.",
+  "ogTitle": "NIS2-Betroffenheit prüfen lassen | Kr3is",
+  "ogDescription": "Ein paar Angaben zu Ihrem Unternehmen genügen. Wir prüfen die Betroffenheit und nennen Ihnen den sinnvollsten Einstieg.",
+  "path": "betroffenheit.html",
+  "home": "index.html",
+  "navPrefix": "index.html",
+  "bodyClass": "plain"
+}-->
+
+<section class="page-top">
+  <div class="wrap">
+    <div class="intro">
+      <a href="index.html#nis2" class="backlink">Zurück zur Übersicht</a>
+      <span class="kicker">NIS2</span>
+      <h1>Betroffenheit prüfen lassen</h1>
+      <p class="lead">Ein paar Angaben zu Ihrem Unternehmen genügen. Wir ordnen Ihre
+         Lage ein und melden uns in der Regel innerhalb eines Werktages – kostenfrei
+         und unverbindlich.</p>
+    </div>
+
+    <div class="form-wrap">
+      <!--
+        Netlify nimmt die Einsendungen entgegen: data-netlify aktiviert das
+        Formular beim Deploy, das versteckte Feld form-name ordnet die Daten zu,
+        netlify-honeypot benennt die Falle gegen automatisierte Einsendungen.
+      -->
+      <form name="betroffenheit"
+            method="POST"
+            action="/danke.html"
+            data-netlify="true"
+            netlify-honeypot="firmenwebsite">
+        <input type="hidden" name="form-name" value="betroffenheit">
+        <p class="hp" aria-hidden="true">
+          <label>Dieses Feld bitte frei lassen
+            <input name="firmenwebsite" tabindex="-1" autocomplete="off">
+          </label>
+        </p>
+
+        <fieldset>
+          <legend>Ihr Unternehmen</legend>
+          <p class="legend-note">Sektor, Größe und Konzernzugehörigkeit entscheiden
+             gemeinsam über die Einstufung.</p>
+
+          <div class="field">
+            <label for="unternehmen">Unternehmen <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="unternehmen" name="Unternehmen" required autocomplete="organization">
+          </div>
+
+          <div class="field">
+            <label for="sektor">Sektor <span class="req" aria-hidden="true">*</span></label>
+            <select id="sektor" name="Sektor" required>
+              <option value="">Bitte wählen</option>
+              <optgroup label="Sektoren hoher Kritikalität">
+                <option>Energie</option>
+                <option>Verkehr</option>
+                <option>Bankwesen</option>
+                <option>Finanzmarktinfrastrukturen</option>
+                <option>Gesundheitswesen</option>
+                <option>Trinkwasser</option>
+                <option>Abwasser</option>
+                <option>Digitale Infrastruktur</option>
+                <option>Verwaltung von IKT-Diensten</option>
+                <option>Öffentliche Verwaltung</option>
+                <option>Weltraum</option>
+              </optgroup>
+              <optgroup label="Sonstige kritische Sektoren">
+                <option>Post- und Kurierdienste</option>
+                <option>Abfallbewirtschaftung</option>
+                <option>Chemie</option>
+                <option>Lebensmittel</option>
+                <option>Maschinenbau</option>
+                <option>Fahrzeug- und Zulieferindustrie</option>
+                <option>Elektronik, Optik, elektrische Ausrüstung</option>
+                <option>Medizinprodukte</option>
+                <option>Anbieter digitaler Dienste</option>
+                <option>Forschung</option>
+              </optgroup>
+              <optgroup label="Sonstiges">
+                <option>Nicht aufgeführt</option>
+                <option>Weiß ich nicht</option>
+              </optgroup>
+            </select>
+            <span class="hint">Wenn Sie unsicher sind, wählen Sie „Weiß ich nicht“ – das klären wir.</span>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="beschaeftigte">Beschäftigte <span class="req" aria-hidden="true">*</span></label>
+              <select id="beschaeftigte" name="Beschäftigte" required>
+                <option value="">Bitte wählen</option>
+                <option>unter 50</option>
+                <option>50 bis 249</option>
+                <option>250 bis 999</option>
+                <option>1000 und mehr</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="umsatz">Jahresumsatz</label>
+              <select id="umsatz" name="Jahresumsatz">
+                <option value="">Keine Angabe</option>
+                <option>bis 10 Mio. €</option>
+                <option>10 bis 50 Mio. €</option>
+                <option>über 50 Mio. €</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="gruppe">Teil einer Unternehmensgruppe?</label>
+            <select id="gruppe" name="Unternehmensgruppe">
+              <option value="">Keine Angabe</option>
+              <option>Nein, eigenständig</option>
+              <option>Ja, Teil einer Gruppe</option>
+              <option>Unklar</option>
+            </select>
+            <span class="hint">Verflechtungen können die Schwellenwerte verändern.</span>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ihre Ausgangslage</legend>
+          <p class="legend-note">Mehrfachauswahl möglich – das hilft uns, das Erstgespräch vorzubereiten.</p>
+
+          <div class="group">
+            <span class="group-label">Was ist der Anlass?</span>
+            <div class="checks">
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="NIS2-Betroffenheit unklar"> NIS2-Betroffenheit unklar</label>
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="Kunde verlangt ISO-27001-Nachweis"> Kunde verlangt ISO-27001-Nachweis</label>
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="Anforderungen der Cyberversicherung"> Anforderungen der Cyberversicherung</label>
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="Nach einem Sicherheitsvorfall"> Nach einem Sicherheitsvorfall</label>
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="KI-Einsatz geplant"> KI-Einsatz geplant</label>
+              <label class="check-tile"><input type="checkbox" name="Anlass" value="Allgemeine Standortbestimmung"> Allgemeine Standortbestimmung</label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:22px">
+            <div class="field">
+              <label for="isms">Bestehendes ISMS oder Zertifizierung?</label>
+              <select id="isms" name="ISMS">
+                <option value="">Keine Angabe</option>
+                <option>Nein</option>
+                <option>Im Aufbau</option>
+                <option>Vorhanden</option>
+                <option>Weiß ich nicht</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="itbetreuung">Wer betreut Ihre IT?</label>
+              <select id="itbetreuung" name="IT-Betreuung">
+                <option value="">Keine Angabe</option>
+                <option>Eigene IT-Abteilung</option>
+                <option>Externer Dienstleister</option>
+                <option>Beides</option>
+                <option>Niemand fest zuständig</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="zeitrahmen">Zeitlicher Rahmen</label>
+            <select id="zeitrahmen" name="Zeitrahmen">
+              <option value="">Keine Angabe</option>
+              <option>So bald wie möglich</option>
+              <option>In den nächsten drei Monaten</option>
+              <option>In sechs bis zwölf Monaten</option>
+              <option>Noch offen</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ihr Kontakt</legend>
+          <p class="legend-note">Sie sprechen anschließend direkt mit uns, nicht mit einem Ticketsystem.</p>
+
+          <div class="row">
+            <div class="field">
+              <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="name" name="Name" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="funktion">Funktion</label>
+              <input type="text" id="funktion" name="Funktion" placeholder="z. B. Geschäftsführung, IT-Leitung" autocomplete="organization-title">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="email">E-Mail <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="email" name="E-Mail" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="telefon">Telefon</label>
+              <input type="tel" id="telefon" name="Telefon" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="nachricht">Was sollten wir vorab wissen?</label>
+            <textarea id="nachricht" name="Nachricht" placeholder="Optional – etwa eine konkrete Frist, eine Kundenanforderung oder ein offener Punkt."></textarea>
+          </div>
+        </fieldset>
+
+        <label class="consent">
+          <input type="checkbox" name="Einwilligung" value="erteilt" required>
+          <span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner
+            Anfrage verarbeitet werden. Einzelheiten und mein Widerrufsrecht stehen in
+            der <a href="datenschutz.html">Datenschutzerklärung</a>.
+            <span class="req" aria-hidden="true">*</span></span>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Anfrage senden
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </button>
+          <p class="required-note">Mit <span class="req" aria-hidden="true">*</span> gekennzeichnete Felder sind Pflichtangaben.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

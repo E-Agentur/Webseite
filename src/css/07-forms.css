@@ -1,0 +1,111 @@
+/* Formulare – Betroffenheitsprüfung */
+
+.form-wrap{max-width:760px;margin:clamp(48px,7vw,76px) auto 0}
+
+fieldset{border:none;padding:0;margin:0 0 38px}
+legend{
+  padding:0;margin-bottom:6px;
+  font-size:1.3rem;font-weight:600;letter-spacing:-.02em;color:var(--ink);
+}
+.legend-note{margin:0 0 22px;font-size:1rem;color:var(--ink-mute)}
+
+.field{margin-bottom:20px}
+.field > label,.group > .group-label{
+  display:block;margin-bottom:7px;
+  font-size:.98rem;font-weight:500;color:var(--ink);
+}
+.hint{display:block;margin-top:6px;font-size:.9rem;color:var(--ink-mute)}
+.req{color:var(--brand-bright)}
+
+input[type="text"],input[type="email"],input[type="tel"],select,textarea{
+  width:100%;
+  padding:13px 15px;
+  font:inherit;font-size:1.02rem;
+  color:var(--ink);
+  background:var(--bg-alt);
+  border:1px solid transparent;
+  border-radius:12px;
+  transition:border-color .2s ease,background-color .2s ease;
+  appearance:none;
+}
+.alt input[type="text"],.alt input[type="email"],.alt input[type="tel"],
+.alt select,.alt textarea{background:var(--surface)}
+input::placeholder,textarea::placeholder{color:var(--ink-mute)}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--brand-bright);
+  box-shadow:0 0 0 3px var(--ring);
+}
+textarea{min-height:130px;resize:vertical;line-height:1.5}
+
+/* Eigener Pfeil, damit das Auswahlfeld in beiden Schemata gleich aussieht */
+select{
+  background-image:
+    linear-gradient(45deg,transparent 50%,var(--ink-mute) 50%),
+    linear-gradient(135deg,var(--ink-mute) 50%,transparent 50%);
+  background-position:calc(100% - 20px) calc(50% + 2px),calc(100% - 14px) calc(50% + 2px);
+  background-size:6px 6px,6px 6px;
+  background-repeat:no-repeat;
+  padding-right:44px;
+}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:620px){.row{grid-template-columns:1fr}}
+
+/* Mehrfachauswahl als antippbare Kacheln */
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+@media (max-width:620px){.checks{grid-template-columns:1fr}}
+.check-tile{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;border-radius:12px;cursor:pointer;
+  background:var(--bg-alt);border:1px solid transparent;
+  font-size:.99rem;line-height:1.4;
+  transition:border-color .2s ease,background-color .2s ease;
+}
+.alt .check-tile{background:var(--surface)}
+.check-tile:hover{border-color:var(--line-strong)}
+.check-tile input{
+  appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
+  border:1.5px solid var(--line-strong);border-radius:6px;background:transparent;
+  cursor:pointer;transition:background-color .15s ease,border-color .15s ease;
+}
+.check-tile input:checked{background:var(--brand-bright);border-color:var(--brand-bright)}
+.check-tile input:checked::after{
+  content:"";display:block;width:5px;height:9px;margin:2px auto 0;
+  border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);
+}
+.check-tile:has(input:checked){border-color:var(--brand-bright)}
+.check-tile input:focus-visible{outline:2px solid var(--brand-bright);outline-offset:2px}
+
+/* Einwilligung */
+.consent{
+  display:flex;align-items:flex-start;gap:13px;
+  padding:20px 22px;border-radius:14px;background:var(--bg-alt);
+  font-size:.97rem;line-height:1.5;color:var(--ink-soft);
+}
+.alt .consent{background:var(--surface)}
+.consent input{
+  appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
+  border:1.5px solid var(--line-strong);border-radius:6px;cursor:pointer;
+}
+.consent input:checked{background:var(--brand-bright);border-color:var(--brand-bright)}
+.consent input:checked::after{
+  content:"";display:block;width:5px;height:9px;margin:2px auto 0;
+  border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);
+}
+.consent input:focus-visible{outline:2px solid var(--brand-bright);outline-offset:2px}
+.consent a{color:var(--accent)}
+
+.form-actions{margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
+.form-actions .btn{cursor:pointer;border:none;font-family:inherit}
+.form-actions .required-note{font-size:.92rem;color:var(--ink-mute);margin:0}
+
+/* Honigtopf gegen automatisierte Einsendungen – für Menschen unsichtbar */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Bestätigungsseite */
+.done{text-align:center;max-width:620px;margin:0 auto}
+.done .mark{
+  width:74px;height:74px;margin:0 auto 28px;border-radius:50%;
+  display:grid;place-items:center;background:var(--brand-bright);color:#fff;
+}
+.done .mark svg{width:34px;height:34px}

@@ -1,0 +1,28 @@
+# Netlify-Konfiguration
+#
+# Das Formular auf betroffenheit.html wird über das Attribut data-netlify="true"
+# im HTML erkannt; hier stehen nur Auslieferung und Schutzkopfzeilen.
+
+[build]
+  publish = "."
+  command = "node build.mjs"
+
+# Sicherheitskopfzeilen. Die Content-Security-Policy passt zur Seite, wie sie
+# gebaut ist: keine Inhalte von Dritten, Stile und Skripte nur von der eigenen
+# Herkunft. 'unsafe-inline' bleibt für script-src nötig, weil das Skript gegen
+# das Farb-Aufblitzen inline im <head> stehen muss, und für style-src wegen
+# einzelner style-Attribute im Markup.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), camera=(), microphone=(), interest-cohort=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

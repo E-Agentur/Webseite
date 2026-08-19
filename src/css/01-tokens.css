@@ -1,0 +1,74 @@
+/* Farben, Maße, Radien – für helles und dunkles Schema */
+
+/* ============================================================
+   1. Design-Tokens
+   ============================================================ */
+:root{
+  /* Marke */
+  --brand:#0064d2;
+  --brand-bright:#0a84ff;
+  --brand-cyan:#30c9c9;
+
+  /* Maße */
+  --maxw:1120px;
+  --radius:22px;
+  --radius-sm:14px;
+  --header-h:52px;
+
+  /* Helles Schema */
+  --bg:#ffffff;
+  --bg-alt:#f5f5f7;
+  --surface:#ffffff;
+  --surface-2:#f5f5f7;
+  --ink:#1d1d1f;
+  --ink-soft:#515154;
+  --ink-mute:#6e6e73;
+  --line:#d2d2d7;
+  --line-strong:#c6c6cb;
+  --accent:var(--brand);
+  --glass:rgba(255,255,255,.72);
+  --shadow:0 4px 20px -8px rgba(0,0,0,.10);
+  --shadow-lg:0 24px 60px -28px rgba(0,0,0,.28);
+  --ring:rgba(10,132,255,.4);
+
+  color-scheme:light;
+}
+
+/* Dunkles Schema – Systemeinstellung */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000;
+    --bg-alt:#101012;
+    --surface:#1d1d1f;
+    --surface-2:#101012;
+    --ink:#f5f5f7;
+    --ink-soft:#a1a1a6;
+    --ink-mute:#86868b;
+    --line:#2a2a2d;
+    --line-strong:#3a3a3d;
+    --accent:#2997ff;
+    --glass:rgba(22,22,24,.72);
+    --shadow:0 4px 20px -8px rgba(0,0,0,.7);
+    --shadow-lg:0 24px 60px -28px rgba(0,0,0,.9);
+    --ring:rgba(41,151,255,.45);
+    color-scheme:dark;
+  }
+}
+/* Dunkles Schema – manuelle Wahl */
+:root[data-theme="dark"]{
+  --bg:#000000;
+  --bg-alt:#101012;
+  --surface:#1d1d1f;
+  --surface-2:#101012;
+  --ink:#f5f5f7;
+  --ink-soft:#a1a1a6;
+  --ink-mute:#86868b;
+  --line:#2a2a2d;
+  --line-strong:#3a3a3d;
+  --accent:#2997ff;
+  --glass:rgba(22,22,24,.72);
+  --shadow:0 4px 20px -8px rgba(0,0,0,.7);
+  --shadow-lg:0 24px 60px -28px rgba(0,0,0,.9);
+  --ring:rgba(41,151,255,.45);
+  color-scheme:dark;
+}

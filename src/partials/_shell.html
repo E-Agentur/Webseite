@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#000000">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+{{noindex}}
+<link rel="canonical" href="https://kr3is.com/{{path}}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a84ff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kr3is">
+<meta property="og:locale" content="de_DE">
+<meta property="og:url" content="https://kr3is.com/{{path}}">
+<meta property="og:title" content="{{ogTitle}}">
+<meta property="og:description" content="{{ogDescription}}">
+<meta property="og:image" content="https://kr3is.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<script>
+  /* Setzt das Farbschema vor dem ersten Paint – verhindert Aufblitzen beim Laden. */
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body class="{{bodyClass}}">
+
+<a class="skip" href="#main">Zum Inhalt springen</a>
+<div class="progress" aria-hidden="true"></div>
+
+<!-- include: sprite -->
+<!-- include: header -->
+
+<main id="main">
+{{content}}
+</main>
+
+<!-- include: footer -->
+
+<script src="assets/site.js" defer></script>
+
+</body>
+</html>
