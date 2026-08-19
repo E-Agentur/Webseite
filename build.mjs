@@ -64,6 +64,7 @@ function buildPages() {
       ogTitle: meta.title,
       ogDescription: meta.description,
       noindex: '',
+      headExtra: '',
       ...meta,
       content: raw.slice(m[0].length).trim(),
     };

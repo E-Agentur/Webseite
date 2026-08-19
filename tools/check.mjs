@@ -1,0 +1,185 @@
+#!/usr/bin/env node
+/**
+ * Kr3is – Prüfung der gebauten Seiten.
+ *
+ *   cd tools && npm install && npx playwright install chromium && npm run check
+ *
+ * Ist bereits ein Chromium vorhanden, genügt CHROMIUM_PATH=/pfad/zu/chrome.
+ *
+ * Startet einen lokalen Server, öffnet jede Seite in Chromium und prüft:
+ *   1. Auslieferung   – keine fehlgeschlagenen Anfragen, keine Konsolenfehler
+ *   2. Layout         – kein horizontaler Überlauf über zehn Breiten
+ *   3. Plausibilität  – h1 nicht hinter der Kopfzeile, eine h1 je Seite,
+ *                       keine Sprünge in der Überschriftenebene, Zeilenlänge
+ *   4. Kontrast       – gemessene Text-/Hintergrundpaare gegen WCAG AA
+ *   5. Formular       – Netlify-Merkmale, Pflichtfelder, Labels, Honigtopf
+ *
+ * Punkt 3 gibt es, weil die ersten drei Prüfungen eine Seite durchwinken, die
+ * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
+ * ging, meldete keine von ihnen etwas.
+ */
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { extname, join, normalize } from 'node:path';
+import { chromium } from 'playwright';
+
+const ROOT = new URL('..', import.meta.url).pathname;
+const PORT = 8899;
+const PAGES = ['index.html', 'it-sicherheit.html', 'betroffenheit.html',
+               'danke.html', 'impressum.html', 'datenschutz.html', '404.html'];
+const WIDTHS = [1600, 1440, 1200, 1024, 900, 768, 640, 480, 390, 360];
+const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css',
+                '.js': 'text/javascript', '.png': 'image/png',
+                '.xml': 'application/xml', '.txt': 'text/plain' };
+
+const problems = [];
+const note = (m) => problems.push(m);
+
+/* Relative Leuchtdichte und Kontrastverhältnis nach WCAG 2.1 */
+const luminance = (c) => {
+  const [r, g, b] = c.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number)
+    .map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const contrast = (a, b) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+const server = createServer(async (req, res) => {
+  const path = join(ROOT, normalize(decodeURI(req.url.split('?')[0])).replace(/^(\.\.[/\\])+/, ''));
+  try {
+    const body = await readFile(path);
+    res.writeHead(200, { 'Content-Type': TYPES[extname(path)] ?? 'application/octet-stream' });
+    res.end(body);
+  } catch {
+    res.writeHead(404).end('nicht gefunden');
+  }
+});
+await new Promise((r) => server.listen(PORT, r));
+const url = (p) => `http://localhost:${PORT}/${p}`;
+
+/* CHROMIUM_PATH erlaubt einen bereits vorhandenen Browser, etwa in einer CI,
+   in der „npx playwright install“ nicht laufen soll. */
+const browser = await chromium.launch(
+  process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
+
+/* ---------- 1 + 2: Auslieferung und Überlauf ---------- */
+for (const page of PAGES) {
+  for (const colorScheme of ['light', 'dark']) {
+    for (const width of WIDTHS) {
+      const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme });
+      const p = await ctx.newPage();
+      const where = `${page}/${colorScheme}/${width}`;
+      p.on('pageerror', (e) => note(`${where}: Skriptfehler ${e.message}`));
+      p.on('console', (m) => m.type() === 'error' && note(`${where}: ${m.text()}`));
+      p.on('requestfailed', (r) => note(`${where}: Anfrage fehlgeschlagen ${r.url()}`));
+      p.on('response', (r) => r.status() >= 400 && note(`${where}: ${r.status()} ${r.url()}`));
+      await p.goto(url(page), { waitUntil: 'networkidle' });
+      await p.addStyleTag({ content: 'html{scroll-behavior:auto !important}' });
+      await p.evaluate(() => scrollTo(0, document.body.scrollHeight));
+      await p.waitForTimeout(120);
+      const over = await p.evaluate(() =>
+        document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (over > 0) note(`${where}: horizontaler Überlauf ${over}px`);
+      await ctx.close();
+    }
+  }
+}
+console.log(`Auslieferung und Überlauf: ${PAGES.length * 2 * WIDTHS.length} Kombinationen geprüft.`);
+
+/* ---------- 3: Layout-Plausibilität ---------- */
+for (const page of PAGES) {
+  const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
+  const p = await ctx.newPage();
+  await p.goto(url(page), { waitUntil: 'networkidle' });
+  await p.waitForTimeout(250);
+  const r = await p.evaluate(() => {
+    const header = document.querySelector('header').getBoundingClientRect().height;
+    const h1 = document.querySelector('h1');
+    let widest = 0;
+    for (const el of document.querySelectorAll('p, li')) {
+      if (el.textContent.trim().length < 80) continue;
+      const chars = el.getBoundingClientRect().width / (parseFloat(getComputedStyle(el).fontSize) * 0.5);
+      if (chars > widest) widest = chars;
+    }
+    const levels = [...document.querySelectorAll('h1,h2,h3,h4')].map((e) => +e.tagName[1]);
+    const skips = levels.flatMap((lvl, i) =>
+      i && lvl - levels[i - 1] > 1 ? [`h${levels[i - 1]}→h${lvl}`] : []);
+    return { header, h1Top: h1?.getBoundingClientRect().top ?? null,
+             chars: Math.round(widest), skips, h1Count: document.querySelectorAll('h1').length };
+  });
+  if (r.h1Top !== null && r.h1Top < r.header) note(`${page}: h1 liegt hinter der Kopfzeile`);
+  if (r.chars > 110) note(`${page}: Zeilenlänge etwa ${r.chars} Zeichen`);
+  if (r.h1Count !== 1) note(`${page}: ${r.h1Count} h1-Elemente statt einer`);
+  if (r.skips.length) note(`${page}: Überschriftensprung ${r.skips.join(', ')}`);
+  await ctx.close();
+}
+console.log('Layout-Plausibilität geprüft.');
+
+/* ---------- 4: Kontraste ---------- */
+const PAIRS = [
+  ['index.html', 'Fließtext', '#leistungen .lead', 'body'],
+  ['index.html', 'Kachel-Liste', '#leistungen .card ul li', '#leistungen .card'],
+  ['index.html', 'Fußzeile', '.foot', 'footer'],
+  ['it-sicherheit.html', 'Kacheltext', '.card p', '.card'],
+  ['it-sicherheit.html', 'Rücklink', '.backlink', 'body'],
+  ['betroffenheit.html', 'Feldbeschriftung', '.field label', 'body'],
+  ['betroffenheit.html', 'Hinweis', '.hint', 'body'],
+  ['betroffenheit.html', 'Einwilligung', '.consent', '.consent'],
+  ['impressum.html', 'Link im Rechtstext', '.legal a', 'body'],
+];
+for (const colorScheme of ['light', 'dark']) {
+  for (const [page, label, fgSel, bgSel] of PAIRS) {
+    const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 }, colorScheme });
+    const p = await ctx.newPage();
+    await p.goto(url(page), { waitUntil: 'networkidle' });
+    const pair = await p.evaluate(([f, b]) => {
+      const fe = document.querySelector(f); const be = document.querySelector(b);
+      return fe && be ? [getComputedStyle(fe).color, getComputedStyle(be).backgroundColor] : null;
+    }, [fgSel, bgSel]);
+    if (!pair) { note(`${page}: Kontrastpaar "${label}" nicht gefunden`); await ctx.close(); continue; }
+    const ratio = contrast(pair[0], pair[1]);
+    if (ratio < 4.5) note(`Kontrast ${colorScheme} ${page} ${label}: ${ratio.toFixed(2)}:1`);
+    await ctx.close();
+  }
+}
+console.log(`Kontraste geprüft: ${PAIRS.length * 2} Paare gegen WCAG AA.`);
+
+/* ---------- 5: Formular ---------- */
+{
+  const ctx = await browser.newContext({ viewport: { width: 1000, height: 900 } });
+  const p = await ctx.newPage();
+  await p.goto(url('betroffenheit.html'), { waitUntil: 'networkidle' });
+  const f = await p.evaluate(() => {
+    const el = document.querySelector('form');
+    return { name: el.getAttribute('name'), netlify: el.getAttribute('data-netlify'),
+             honeypot: el.getAttribute('netlify-honeypot'),
+             method: el.getAttribute('method'),
+             formName: document.querySelector('input[name="form-name"]')?.value,
+             hpOffscreen: document.querySelector('.hp').getBoundingClientRect().right < 0,
+             unlabeled: [...document.querySelectorAll('input:not([type=hidden]),select,textarea')]
+               .filter((e) => !e.closest('label') &&
+                 !(e.id && document.querySelector(`label[for="${e.id}"]`)))
+               .map((e) => e.name || e.id) };
+  });
+  if (f.netlify !== 'true') note('Formular: data-netlify fehlt');
+  if (f.formName !== f.name) note('Formular: form-name passt nicht zum Namen');
+  if (!f.honeypot) note('Formular: netlify-honeypot fehlt');
+  if (f.method?.toUpperCase() !== 'POST') note('Formular: Methode ist nicht POST');
+  if (!f.hpOffscreen) note('Formular: Honigtopf ist sichtbar');
+  if (f.unlabeled.length) note(`Formular: Felder ohne Label – ${f.unlabeled.join(', ')}`);
+
+  await p.click('button[type="submit"]');
+  await p.waitForTimeout(250);
+  if (!p.url().includes('betroffenheit')) note('Formular: wurde ohne Pflichtfelder abgeschickt');
+  await ctx.close();
+}
+console.log('Formular geprüft.');
+
+await browser.close();
+server.close();
+
+console.log('\n=== ERGEBNIS ===');
+if (problems.length) { console.log(problems.join('\n')); process.exitCode = 1; }
+else console.log('Keine Befunde.');

@@ -29,6 +29,8 @@ src/
   pages/        je Seite nur der Inhalt, mit JSON-Kopf für Titel und Pfad
 
 build.mjs       Build ohne jede Abhängigkeit
+tools/          Prüfsuite (eigene package.json, damit der Netlify-Build
+                keine Abhängigkeiten installiert)
 
 Erzeugt (nicht direkt bearbeiten):
   index.html, it-sicherheit.html, betroffenheit.html, danke.html,
@@ -50,6 +52,28 @@ erneut – ein neuer Navigationspunkt bedeutete acht Änderungen an vier Dateien
 Jetzt steht jeder Baustein genau einmal. Die gebündelten `site.css` und
 `site.js` sorgen dafür, dass die feine Aufteilung im Quellcode den Besucher
 trotzdem nur eine Anfrage kostet.
+
+### Prüfen
+
+```
+cd tools
+npm install
+npx playwright install chromium
+npm run check
+```
+
+Die Suite startet einen lokalen Server, öffnet jede Seite in Chromium und prüft
+fünf Dinge: Auslieferung ohne fehlgeschlagene Anfragen oder Konsolenfehler,
+kein horizontaler Überlauf über zehn Breiten in beiden Farbschemata,
+Layout-Plausibilität, Textkontraste gegen WCAG AA und das Verhalten des
+Formulars. Ist bereits ein Chromium vorhanden, genügt
+`CHROMIUM_PATH=/pfad/zu/chrome npm run check`.
+
+Die Layout-Plausibilität prüft, ob die `h1` hinter der Kopfzeile verschwindet,
+ob es genau eine `h1` gibt, ob Überschriftenebenen übersprungen werden und wie
+lang die längste Textzeile wird. Dieser Teil existiert, weil die übrigen
+Prüfungen eine Seite durchwinken, die lediglich falsch gestaltet ist: Als das
+Layout der Rechtstexte einmal verlorenging, meldete keine von ihnen etwas.
 
 ### Seitensyntax
 
@@ -103,6 +127,10 @@ Kontakt.
 
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
+
+Netlify liefert das gesamte Verzeichnis aus, `src/` und `tools/` also mit. Beide
+sind über `robots.txt` und einen `X-Robots-Tag`-Kopf aus dem Index genommen,
+damit daraus keine doppelten Inhalte entstehen.
 
 ## Vorschau
 
