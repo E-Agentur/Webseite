@@ -7,6 +7,7 @@ Informationssicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand.
 
 ```
 index.html          Startseite
+it-sicherheit.html  Unterseite: die sechs Sicherheitsleistungen im Detail
 impressum.html      Pflichtseite (Gerüst)
 datenschutz.html    Pflichtseite (Gerüst)
 assets/

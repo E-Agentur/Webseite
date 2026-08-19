@@ -213,18 +213,6 @@ header::before{
 .btn-ghost{color:#fff;background:rgba(255,255,255,.001);border-color:rgba(255,255,255,.42)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 
-/* Textlink mit Chevron */
-.tlink{
-  display:inline-flex;align-items:center;gap:5px;
-  color:var(--brand-bright);text-decoration:none;font-size:1.06rem;
-}
-.tlink::after{
-  content:"";width:7px;height:7px;margin-top:-1px;
-  border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
-  transform:rotate(-45deg);transition:transform .2s ease;
-}
-.tlink:hover{text-decoration:underline}
-.tlink:hover::after{transform:rotate(-45deg) translate(2px,2px)}
 
 /* Standards-Leiste */
 .standards{margin-top:clamp(56px,8vw,88px)}
@@ -298,7 +286,9 @@ header::before{
    ============================================================ */
 .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:56px}
 .bento > *{grid-column:span 2}
-.bento .feature{grid-column:span 6}
+
+/* Die beiden Schwerpunkte auf der Startseite – untereinander, volle Breite. */
+.focus{display:grid;gap:16px;margin-top:56px}
 
 .feature{
   display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;
@@ -324,13 +314,12 @@ header::before{
 
 @media (max-width:1000px){
   .bento{grid-template-columns:repeat(4,1fr)}
-  .bento > *{grid-column:span 2}
-  .bento .feature{grid-column:span 4;grid-template-columns:auto 1fr;row-gap:22px}
+  .feature{grid-template-columns:auto 1fr;row-gap:22px}
   .feature-link{grid-column:1/-1;justify-self:start}
 }
 @media (max-width:660px){
   .bento{grid-template-columns:1fr;gap:18px}
-  .bento > *,.bento .feature{grid-column:span 1}
+  .bento > *{grid-column:span 1}
   .feature{grid-template-columns:1fr}
   .feature ul{grid-template-columns:1fr}
 }
@@ -418,7 +407,7 @@ header::before{
   transform:rotate(45deg);transition:transform .3s ease;
 }
 .faq details[open] summary::after{transform:rotate(-135deg);margin-top:11px}
-.faq summary:hover{color:var(--brand-bright)}
+.faq summary:hover{color:var(--accent)}
 .faq .answer{padding:0 4px 26px;font-size:1.04rem;line-height:1.5;max-width:70ch}
 
 /* ============================================================
@@ -600,7 +589,7 @@ footer{padding:32px 0;background:var(--bg-alt)}
   content:"";position:absolute;left:4px;top:.62em;width:5px;height:5px;border-radius:50%;
   background:var(--brand-bright);
 }
-.legal a{color:var(--brand-bright);text-decoration:none}
+.legal a{color:var(--accent);text-decoration:none}
 .legal a:hover{text-decoration:underline}
 .legal .box{
   margin:28px 0;padding:24px 28px;border-radius:var(--radius-sm);
@@ -615,3 +604,19 @@ body.plain header{
   --hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);
   --hdr-line:var(--line);--hdr-accent:var(--accent);
 }
+
+/* ============================================================
+   16. Unterseiten mit normalem Seitenkopf
+   ============================================================ */
+.page-top{padding-top:calc(var(--header-h) + clamp(52px,8vw,96px))}
+.backlink{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:22px;
+  color:var(--accent);text-decoration:none;font-size:1.02rem;
+}
+.backlink::before{
+  content:"";width:8px;height:8px;
+  border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
+  transform:rotate(45deg);transition:transform .2s ease;
+}
+.backlink:hover{text-decoration:underline}
+.backlink:hover::before{transform:rotate(45deg) translate(2px,-2px)}
