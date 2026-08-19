@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kr3is.com/sitemap.xml
