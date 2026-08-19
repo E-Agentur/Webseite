@@ -32,7 +32,7 @@ build.mjs       Build ohne jede Abhängigkeit
 
 Erzeugt (nicht direkt bearbeiten):
   index.html, it-sicherheit.html, betroffenheit.html, danke.html,
-  impressum.html, datenschutz.html
+  impressum.html, datenschutz.html, 404.html
   assets/site.css, assets/site.js
 ```
 
@@ -143,7 +143,9 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
 - Sprunglink, sichtbare Fokusringe, `aria-expanded` am mobilen Menü, `Esc`
   schließt.
 - Textkontraste erfüllen WCAG AA in beiden Schemata. Geprüft wird über alle
-  vier Seiten; der niedrigste gemessene Wert liegt bei 4,66:1.
+  Seiten; der niedrigste gemessene Wert liegt bei 4,66:1.
+- Genau eine `h1` je Seite, keine Sprünge in der Überschriftenebene. Auf
+  `it-sicherheit.html` sorgt dafür eine nur für Screenreader sichtbare `h2`.
 
 ## Formular zur Betroffenheitsprüfung
 

@@ -381,6 +381,10 @@ header::before{
 }
 @keyframes rise-in{to{opacity:1;transform:none}}
 
+/* Zweitbutton außerhalb des dunklen Hero – dort braucht er Kontur in Textfarbe. */
+.btn-ghost-light{color:var(--ink);border-color:var(--line-strong);background:transparent}
+.btn-ghost-light:hover{background:var(--bg-alt);border-color:var(--ink-mute)}
+
 /* ---------- 05-cards.css ---------- */
 /* Kacheln, Icons, Bento-Raster, Schwerpunkt-Felder */
 

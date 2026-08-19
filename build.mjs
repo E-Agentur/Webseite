@@ -60,13 +60,17 @@ function buildPages() {
     const meta = JSON.parse(m[1]);
     const vars = {
       bodyClass: '',
+      mainClass: '',
       ogTitle: meta.title,
       ogDescription: meta.description,
       noindex: '',
       ...meta,
       content: raw.slice(m[0].length).trim(),
     };
-    writeFileSync(file, expand(shell, vars).replace(/\n{3,}/g, '\n\n'));
+    const html = expand(shell, vars)
+      .replace(/ class=""/g, '')          // leere Attribute nicht ausliefern
+      .replace(/\n{3,}/g, '\n\n');
+    writeFileSync(file, html);
   }
   return names.length;
 }
