@@ -1,0 +1,138 @@
+/* Fortschrittsbalken, Kopfzeile, mobiles Menü */
+
+/* ============================================================
+   3. Fortschrittsbalken (scroll-driven)
+   ============================================================ */
+.progress{
+  position:fixed;inset:0 0 auto 0;height:3px;z-index:120;
+  background:linear-gradient(90deg,var(--brand),var(--brand-bright) 55%,var(--brand-cyan));
+  transform:scaleX(0);transform-origin:0 50%;
+}
+@keyframes progress-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@supports (animation-timeline:scroll()){
+  .progress{animation:progress-grow linear both;animation-timeline:scroll(root block)}
+}
+
+/* ============================================================
+   4. Kopfzeile
+   ============================================================ */
+/* Die Kopfzeile liegt transparent über dem Hero und färbt sich beim Scrollen ein.
+   Gesteuert über registrierte Custom Properties, damit die Farben interpolieren. */
+@property --hdr-bg{syntax:"<number>";inherits:true;initial-value:0}
+@property --hdr-ink{syntax:"<color>";inherits:true;initial-value:#ffffff}
+@property --hdr-soft{syntax:"<color>";inherits:true;initial-value:#bccfe4}
+@property --hdr-line{syntax:"<color>";inherits:true;initial-value:rgba(255,255,255,.18)}
+@property --hdr-accent{syntax:"<color>";inherits:true;initial-value:#7fc4ff}
+
+header{
+  position:sticky;top:0;z-index:100;
+  --hdr-bg:0;
+  --hdr-ink:#ffffff;
+  --hdr-soft:#bccfe4;
+  --hdr-line:rgba(255,255,255,.18);
+  --hdr-accent:#7fc4ff;
+}
+header::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:var(--glass);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);
+  opacity:var(--hdr-bg);
+}
+@keyframes header-solid{
+  to{
+    --hdr-bg:1;
+    --hdr-ink:var(--ink);
+    --hdr-soft:var(--ink-soft);
+    --hdr-line:var(--line);
+    --hdr-accent:var(--accent);
+  }
+}
+@supports (animation-timeline:scroll()){
+  header{animation:header-solid linear both;animation-timeline:scroll(root block);animation-range:0 110px}
+}
+/* Ohne Scroll-Timeline: dauerhaft eingefärbt, damit der Text lesbar bleibt. */
+@supports not (animation-timeline:scroll()){
+  header{--hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);--hdr-line:var(--line);--hdr-accent:var(--accent)}
+}
+
+.nav{display:flex;align-items:center;gap:14px;height:var(--header-h)}
+.logo{
+  display:inline-flex;align-items:center;gap:8px;
+  font-weight:600;font-size:1.02rem;letter-spacing:-.03em;text-decoration:none;color:var(--hdr-ink);
+  margin-right:auto;
+}
+.logo-mark{
+  width:23px;height:23px;flex:none;
+  display:grid;place-items:center;color:var(--hdr-ink);
+}
+.logo-mark svg{width:21px;height:21px}
+/* Eigenes Element, damit der Flex-Abstand der Kopfzeile den Schriftzug nicht auseinanderzieht. */
+.logo-text{white-space:nowrap}
+.logo em{font-style:normal;color:var(--hdr-accent)}
+
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  display:block;padding:6px 12px;border-radius:7px;
+  text-decoration:none;color:var(--hdr-soft);font-size:.82rem;font-weight:400;
+  transition:opacity .2s ease;
+}
+.nav-links a:hover{color:var(--hdr-ink)}
+
+.nav-cta{
+  display:inline-flex;align-items:center;
+  padding:5px 13px;border-radius:980px;text-decoration:none;font-size:.82rem;font-weight:400;
+  color:#fff;background:var(--brand-bright);
+  transition:background-color .2s ease;
+}
+.nav-cta:hover{background:var(--brand)}
+
+.icon-btn{
+  width:30px;height:30px;flex:none;display:grid;place-items:center;
+  border:none;border-radius:7px;background:transparent;color:var(--hdr-soft);
+  cursor:pointer;transition:color .2s ease;
+}
+.icon-btn:hover{color:var(--hdr-ink)}
+.icon-btn svg{width:17px;height:17px;grid-area:1/1}
+.theme-btn .moon{display:none}
+:root[data-theme="dark"] .theme-btn .sun{display:none}
+:root[data-theme="dark"] .theme-btn .moon{display:block}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .theme-btn .sun{display:none}
+  :root:not([data-theme="light"]) .theme-btn .moon{display:block}
+}
+
+/* Menü-Icon folgt aria-expanded – kein zusätzliches JavaScript nötig. */
+.menu-btn .close-i{display:none}
+.menu-btn[aria-expanded="true"] .open-i{display:none}
+.menu-btn[aria-expanded="true"] .close-i{display:block}
+
+.menu-btn{display:none}
+.mobile-nav{display:none}
+
+@media (max-width:960px){
+  .nav-links,.nav-cta{display:none}
+  .menu-btn{display:grid}
+  .mobile-nav{
+    display:block;position:absolute;left:0;right:0;top:var(--header-h);
+    background:var(--surface);border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow);
+    opacity:0;visibility:hidden;transform:translateY(-8px);
+    transition:opacity .22s ease,transform .22s ease,visibility .22s;
+  }
+  .mobile-nav.open{opacity:1;visibility:visible;transform:none}
+  /* Bei geöffnetem Menü muss die Kopfzeile deckend sein – die Scroll-Animation
+     wird dafür ausgesetzt, sonst gewinnt sie gegen diese Deklarationen. */
+  header:has(.mobile-nav.open){
+    animation:none;
+    --hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);
+    --hdr-line:var(--line);--hdr-accent:var(--accent);
+  }
+  .mobile-nav ul{padding:12px 26px 22px}
+  .mobile-nav a{
+    display:block;padding:13px 0;text-decoration:none;color:var(--ink);
+    font-weight:550;border-bottom:1px solid var(--line);
+  }
+  .mobile-nav li:last-child a{border-bottom:none;color:var(--accent);font-weight:700}
+}

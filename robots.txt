@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# Bestätigungsseite gehört nicht in den Index – sie trägt zusätzlich noindex.
+Disallow: /danke.html
+
+# Quelldateien werden mit ausgeliefert, sind aber keine eigenständigen Seiten.
+Disallow: /src/
+Disallow: /tools/
+Disallow: /build.mjs
+
 Sitemap: https://kr3is.com/sitemap.xml

@@ -1,6 +1,153 @@
-/* Kr3is – Komponenten: Kopfzeile, Hero, Kacheln, Abschnitte, Fußzeile.
-   Der Block „Nutzerpraeferenzen“ steht bewusst am Ende, damit seine
-   Ueberschreibungen im Kaskadenvergleich gewinnen. */
+/* GENERIERT von build.mjs – nicht direkt bearbeiten, sondern src/ ändern. */
+/* Reihenfolge: 01-tokens.css, 02-base.css, 03-header.css, 04-hero.css, 05-cards.css, 06-sections.css, 07-forms.css, 08-legal.css, 09-preferences.css */
+
+/* ---------- 01-tokens.css ---------- */
+/* Farben, Maße, Radien – für helles und dunkles Schema */
+
+/* ============================================================
+   1. Design-Tokens
+   ============================================================ */
+:root{
+  /* Marke */
+  --brand:#0064d2;
+  --brand-bright:#0a84ff;
+  --brand-cyan:#30c9c9;
+
+  /* Maße */
+  --maxw:1120px;
+  --radius:22px;
+  --radius-sm:14px;
+  --header-h:52px;
+
+  /* Helles Schema */
+  --bg:#ffffff;
+  --bg-alt:#f5f5f7;
+  --surface:#ffffff;
+  --surface-2:#f5f5f7;
+  --ink:#1d1d1f;
+  --ink-soft:#515154;
+  --ink-mute:#6e6e73;
+  --line:#d2d2d7;
+  --line-strong:#c6c6cb;
+  --accent:var(--brand);
+  --glass:rgba(255,255,255,.72);
+  --shadow:0 4px 20px -8px rgba(0,0,0,.10);
+  --shadow-lg:0 24px 60px -28px rgba(0,0,0,.28);
+  --ring:rgba(10,132,255,.4);
+
+  color-scheme:light;
+}
+
+/* Dunkles Schema – Systemeinstellung */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000;
+    --bg-alt:#101012;
+    --surface:#1d1d1f;
+    --surface-2:#101012;
+    --ink:#f5f5f7;
+    --ink-soft:#a1a1a6;
+    --ink-mute:#86868b;
+    --line:#2a2a2d;
+    --line-strong:#3a3a3d;
+    --accent:#2997ff;
+    --glass:rgba(22,22,24,.72);
+    --shadow:0 4px 20px -8px rgba(0,0,0,.7);
+    --shadow-lg:0 24px 60px -28px rgba(0,0,0,.9);
+    --ring:rgba(41,151,255,.45);
+    color-scheme:dark;
+  }
+}
+/* Dunkles Schema – manuelle Wahl */
+:root[data-theme="dark"]{
+  --bg:#000000;
+  --bg-alt:#101012;
+  --surface:#1d1d1f;
+  --surface-2:#101012;
+  --ink:#f5f5f7;
+  --ink-soft:#a1a1a6;
+  --ink-mute:#86868b;
+  --line:#2a2a2d;
+  --line-strong:#3a3a3d;
+  --accent:#2997ff;
+  --glass:rgba(22,22,24,.72);
+  --shadow:0 4px 20px -8px rgba(0,0,0,.7);
+  --shadow-lg:0 24px 60px -28px rgba(0,0,0,.9);
+  --ring:rgba(41,151,255,.45);
+  color-scheme:dark;
+}
+
+/* ---------- 02-base.css ---------- */
+/* Reset, Typografie, Layout-Primitive, Reveal beim Scrollen */
+
+/* ============================================================
+   2. Basis
+   ============================================================ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+img,svg{max-width:100%}
+h1,h2,h3,h4{line-height:1.08;letter-spacing:-.035em;text-wrap:balance;hyphens:auto;color:var(--ink)}
+h1{font-size:clamp(2.1rem,7.4vw,4.4rem);font-weight:600}
+h2{font-size:clamp(1.75rem,5vw,3.05rem);font-weight:600}
+h3{font-size:1.28rem;font-weight:600;line-height:1.2}
+p{color:var(--ink-soft);text-wrap:pretty}
+a{color:inherit}
+ul,ol{list-style:none}
+main{margin-top:calc(var(--header-h) * -1)}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+section{padding:clamp(78px,11vw,140px) 0;position:relative;scroll-margin-top:calc(var(--header-h) + 12px)}
+.alt{background:var(--bg-alt)}
+.lead{font-size:clamp(1.08rem,2vw,1.32rem);line-height:1.45;max-width:36ch;margin-top:18px;color:var(--ink-soft)}
+
+/* Zentrierter Abschnittskopf – Apple setzt Einleitungen mittig, Fließtext linksbündig. */
+.intro{text-align:center;max-width:760px;margin:0 auto}
+.intro .lead{max-width:46ch;margin-left:auto;margin-right:auto}
+
+:focus-visible{outline:2px solid var(--brand-bright);outline-offset:3px;border-radius:4px}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:300;
+  background:var(--brand);color:#fff;padding:12px 20px;border-radius:0 0 8px 0;font-weight:600;
+  text-decoration:none;
+}
+.skip:focus{left:0}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* Abschnittskopf */
+.kicker{
+  display:block;font-size:clamp(1.05rem,1.6vw,1.24rem);font-weight:600;
+  letter-spacing:-.01em;color:var(--accent);margin-bottom:8px;
+}
+
+/* ============================================================
+   6. Reveal beim Scrollen (scroll-driven, Progressive Enhancement)
+   ============================================================ */
+@keyframes reveal-in{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:no-preference){
+  @supports (animation-timeline:view()){
+    .reveal{animation:reveal-in linear both;animation-timeline:view();animation-range:entry 2% entry 62%}
+    .stagger > *{animation:reveal-in linear both;animation-timeline:view()}
+    .stagger > :nth-child(3n+1){animation-range:entry 0% entry 55%}
+    .stagger > :nth-child(3n+2){animation-range:entry 5% entry 62%}
+    .stagger > :nth-child(3n+3){animation-range:entry 10% entry 70%}
+  }
+}
+
+/* ---------- 03-header.css ---------- */
+/* Fortschrittsbalken, Kopfzeile, mobiles Menü */
 
 /* ============================================================
    3. Fortschrittsbalken (scroll-driven)
@@ -139,6 +286,9 @@ header::before{
   .mobile-nav li:last-child a{border-bottom:none;color:var(--accent);font-weight:700}
 }
 
+/* ---------- 04-hero.css ---------- */
+/* Hero mit Aurora und Raster, Buttons, Standards-Leiste */
+
 /* ============================================================
    5. Hero – Aurora-Verlauf + Raster
    ============================================================ */
@@ -213,18 +363,6 @@ header::before{
 .btn-ghost{color:#fff;background:rgba(255,255,255,.001);border-color:rgba(255,255,255,.42)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 
-/* Textlink mit Chevron */
-.tlink{
-  display:inline-flex;align-items:center;gap:5px;
-  color:var(--brand-bright);text-decoration:none;font-size:1.06rem;
-}
-.tlink::after{
-  content:"";width:7px;height:7px;margin-top:-1px;
-  border-right:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
-  transform:rotate(-45deg);transition:transform .2s ease;
-}
-.tlink:hover{text-decoration:underline}
-.tlink:hover::after{transform:rotate(-45deg) translate(2px,2px)}
 
 /* Standards-Leiste */
 .standards{margin-top:clamp(56px,8vw,88px)}
@@ -235,13 +373,29 @@ header::before{
 .standards li{font-size:1.02rem;font-weight:500;color:#d2d2d7;letter-spacing:-.01em}
 
 /* Einblenden beim Laden */
+/* Bewusst kurz gehalten: Die Überschrift ist das größte Element im ersten Bild
+   und zählt damit für den Largest Contentful Paint. Eine lange Einblendung
+   verzögert diesen Messwert direkt – vorher landete er bei 1,1 s auf einer
+   Seite, die nach 0,23 s fertig geladen war. */
 @media (prefers-reduced-motion:no-preference){
-  .rise{opacity:0;transform:translateY(22px);animation:rise-in .85s cubic-bezier(.16,.84,.44,1) forwards}
-  .rise:nth-child(1){animation-delay:.05s}
-  .d1{animation-delay:.14s}.d2{animation-delay:.24s}.d3{animation-delay:.34s}
-  .d4{animation-delay:.44s}.d5{animation-delay:.56s}
+  .rise{opacity:0;transform:translateY(18px);animation:rise-in .45s cubic-bezier(.16,.84,.44,1) forwards}
+  .rise:nth-child(1){animation-delay:.02s}
+  .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
+  .d4{animation-delay:.24s}.d5{animation-delay:.3s}
 }
+
+/* Aurora und Pulspunkt anhalten, sobald der Hero aus dem Bild ist – sonst
+   laufen sie über die gesamte Seitenlänge weiter und kosten dauerhaft Strom. */
+.offscreen .aurora i,
+.offscreen .dot::after{animation-play-state:paused}
 @keyframes rise-in{to{opacity:1;transform:none}}
+
+/* Zweitbutton außerhalb des dunklen Hero – dort braucht er Kontur in Textfarbe. */
+.btn-ghost-light{color:var(--ink);border-color:var(--line-strong);background:transparent}
+.btn-ghost-light:hover{background:var(--bg-alt);border-color:var(--ink-mute)}
+
+/* ---------- 05-cards.css ---------- */
+/* Kacheln, Icons, Bento-Raster, Schwerpunkt-Felder */
 
 /* ============================================================
    7. Karten
@@ -298,7 +452,9 @@ header::before{
    ============================================================ */
 .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:56px}
 .bento > *{grid-column:span 2}
-.bento .feature{grid-column:span 6}
+
+/* Die beiden Schwerpunkte auf der Startseite – untereinander, volle Breite. */
+.focus{display:grid;gap:16px;margin-top:56px}
 
 .feature{
   display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;
@@ -324,16 +480,18 @@ header::before{
 
 @media (max-width:1000px){
   .bento{grid-template-columns:repeat(4,1fr)}
-  .bento > *{grid-column:span 2}
-  .bento .feature{grid-column:span 4;grid-template-columns:auto 1fr;row-gap:22px}
+  .feature{grid-template-columns:auto 1fr;row-gap:22px}
   .feature-link{grid-column:1/-1;justify-self:start}
 }
 @media (max-width:660px){
   .bento{grid-template-columns:1fr;gap:18px}
-  .bento > *,.bento .feature{grid-column:span 1}
+  .bento > *{grid-column:span 1}
   .feature{grid-template-columns:1fr}
   .feature ul{grid-template-columns:1fr}
 }
+
+/* ---------- 06-sections.css ---------- */
+/* Ausgangslagen, NIS2-Check, FAQ, Zeitstrahl, Über uns, Kontakt, Fußzeile */
 
 /* ============================================================
    9. KI-Abschnitt
@@ -418,7 +576,7 @@ header::before{
   transform:rotate(45deg);transition:transform .3s ease;
 }
 .faq details[open] summary::after{transform:rotate(-135deg);margin-top:11px}
-.faq summary:hover{color:var(--brand-bright)}
+.faq summary:hover{color:var(--accent)}
 .faq .answer{padding:0 4px 26px;font-size:1.04rem;line-height:1.5;max-width:70ch}
 
 /* ============================================================
@@ -560,6 +718,177 @@ footer{padding:32px 0;background:var(--bg-alt)}
 .foot a{color:var(--ink-mute);text-decoration:none;transition:color .2s ease}
 .foot a:hover{color:var(--accent)}
 
+/* Verweis auf das Formular im Kontaktblock */
+.contact-note a{color:#2997ff;text-decoration:none}
+.contact-note a:hover{text-decoration:underline}
+
+/* ---------- 07-forms.css ---------- */
+/* Formulare – Betroffenheitsprüfung */
+
+.form-wrap{max-width:760px;margin:clamp(48px,7vw,76px) auto 0}
+
+fieldset{border:none;padding:0;margin:0 0 38px}
+legend{
+  padding:0;margin-bottom:6px;
+  font-size:1.3rem;font-weight:600;letter-spacing:-.02em;color:var(--ink);
+}
+.legend-note{margin:0 0 22px;font-size:1rem;color:var(--ink-mute)}
+
+.field{margin-bottom:20px}
+.field > label,.group > .group-label{
+  display:block;margin-bottom:7px;
+  font-size:.98rem;font-weight:500;color:var(--ink);
+}
+.hint{display:block;margin-top:6px;font-size:.9rem;color:var(--ink-mute)}
+.req{color:var(--brand-bright)}
+
+input[type="text"],input[type="email"],input[type="tel"],select,textarea{
+  width:100%;
+  padding:13px 15px;
+  font:inherit;font-size:1.02rem;
+  color:var(--ink);
+  background:var(--bg-alt);
+  border:1px solid transparent;
+  border-radius:12px;
+  transition:border-color .2s ease,background-color .2s ease;
+  appearance:none;
+}
+.alt input[type="text"],.alt input[type="email"],.alt input[type="tel"],
+.alt select,.alt textarea{background:var(--surface)}
+input::placeholder,textarea::placeholder{color:var(--ink-mute)}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--brand-bright);
+  box-shadow:0 0 0 3px var(--ring);
+}
+textarea{min-height:130px;resize:vertical;line-height:1.5}
+
+/* Eigener Pfeil, damit das Auswahlfeld in beiden Schemata gleich aussieht */
+select{
+  background-image:
+    linear-gradient(45deg,transparent 50%,var(--ink-mute) 50%),
+    linear-gradient(135deg,var(--ink-mute) 50%,transparent 50%);
+  background-position:calc(100% - 20px) calc(50% + 2px),calc(100% - 14px) calc(50% + 2px);
+  background-size:6px 6px,6px 6px;
+  background-repeat:no-repeat;
+  padding-right:44px;
+}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:620px){.row{grid-template-columns:1fr}}
+
+/* Mehrfachauswahl als antippbare Kacheln */
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+@media (max-width:620px){.checks{grid-template-columns:1fr}}
+.check-tile{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 16px;border-radius:12px;cursor:pointer;
+  background:var(--bg-alt);border:1px solid transparent;
+  font-size:.99rem;line-height:1.4;
+  transition:border-color .2s ease,background-color .2s ease;
+}
+.alt .check-tile{background:var(--surface)}
+.check-tile:hover{border-color:var(--line-strong)}
+.check-tile input{
+  appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
+  border:1.5px solid var(--line-strong);border-radius:6px;background:transparent;
+  cursor:pointer;transition:background-color .15s ease,border-color .15s ease;
+}
+.check-tile input:checked{background:var(--brand-bright);border-color:var(--brand-bright)}
+.check-tile input:checked::after{
+  content:"";display:block;width:5px;height:9px;margin:2px auto 0;
+  border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);
+}
+.check-tile:has(input:checked){border-color:var(--brand-bright)}
+.check-tile input:focus-visible{outline:2px solid var(--brand-bright);outline-offset:2px}
+
+/* Einwilligung */
+.consent{
+  display:flex;align-items:flex-start;gap:13px;
+  padding:20px 22px;border-radius:14px;background:var(--bg-alt);
+  font-size:.97rem;line-height:1.5;color:var(--ink-soft);
+}
+.alt .consent{background:var(--surface)}
+.consent input{
+  appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
+  border:1.5px solid var(--line-strong);border-radius:6px;cursor:pointer;
+}
+.consent input:checked{background:var(--brand-bright);border-color:var(--brand-bright)}
+.consent input:checked::after{
+  content:"";display:block;width:5px;height:9px;margin:2px auto 0;
+  border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);
+}
+.consent input:focus-visible{outline:2px solid var(--brand-bright);outline-offset:2px}
+.consent a{color:var(--accent)}
+
+.form-actions{margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:18px}
+.form-actions .btn{cursor:pointer;border:none;font-family:inherit}
+.form-actions .required-note{font-size:.92rem;color:var(--ink-mute);margin:0}
+
+/* Honigtopf gegen automatisierte Einsendungen – für Menschen unsichtbar */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Bestätigungsseite */
+.done{text-align:center;max-width:620px;margin:0 auto}
+.done .mark{
+  width:74px;height:74px;margin:0 auto 28px;border-radius:50%;
+  display:grid;place-items:center;background:var(--brand-bright);color:#fff;
+}
+.done .mark svg{width:34px;height:34px}
+
+/* ---------- 08-legal.css ---------- */
+/* Rechtstexte und Unterseiten mit normalem Seitenkopf */
+
+/* ============================================================
+   15. Rechtstexte (impressum.html, datenschutz.html)
+   ============================================================ */
+.legal{padding:calc(clamp(56px,8vw,96px) + var(--header-h)) 0 clamp(64px,9vw,110px)}
+.legal .wrap{max-width:780px}
+.legal h1{font-size:clamp(1.9rem,5vw,3rem);margin-bottom:14px}
+.legal .updated{color:var(--ink-mute);font-size:.95rem;margin-bottom:44px}
+.legal h2{font-size:clamp(1.3rem,2.6vw,1.7rem);margin:44px 0 14px}
+.legal h3{font-size:1.1rem;margin:26px 0 8px}
+.legal p{font-size:1.05rem;line-height:1.55;margin-bottom:14px}
+.legal ul{margin:0 0 14px;display:grid;gap:8px}
+.legal ul li{position:relative;padding-left:22px;color:var(--ink-soft);font-size:1.05rem;line-height:1.5}
+.legal ul li::before{
+  content:"";position:absolute;left:4px;top:.62em;width:5px;height:5px;border-radius:50%;
+  background:var(--brand-bright);
+}
+.legal a{color:var(--accent);text-decoration:none}
+.legal a:hover{text-decoration:underline}
+.legal .box{
+  margin:28px 0;padding:24px 28px;border-radius:var(--radius-sm);
+  background:var(--bg-alt);
+}
+.legal .box p{margin:0;font-size:1rem;color:var(--ink-soft)}
+.legal .box strong{color:var(--ink);font-weight:600}
+/* Auf den Rechtsseiten liegt die Kopfzeile nicht über einem dunklen Hero,
+   deshalb sofort in Textfarbe statt in Weiß. */
+body.plain header{
+  animation:none;
+  --hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);
+  --hdr-line:var(--line);--hdr-accent:var(--accent);
+}
+
+/* ============================================================
+   16. Unterseiten mit normalem Seitenkopf
+   ============================================================ */
+.page-top{padding-top:calc(var(--header-h) + clamp(52px,8vw,96px))}
+.backlink{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:22px;
+  color:var(--accent);text-decoration:none;font-size:1.02rem;
+}
+.backlink::before{
+  content:"";width:8px;height:8px;
+  border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
+  transform:rotate(45deg);transition:transform .2s ease;
+}
+.backlink:hover{text-decoration:underline}
+.backlink:hover::before{transform:rotate(45deg) translate(2px,-2px)}
+
+/* ---------- 09-preferences.css ---------- */
+/* Nutzerpräferenzen und Druck – muss zuletzt geladen werden */
+
 /* ============================================================
    14. Nutzerpräferenzen
    ============================================================ */
@@ -580,38 +909,27 @@ footer{padding:32px 0;background:var(--bg-alt)}
   .rise{opacity:1;transform:none}
 }
 @media print{
-  header,.progress,.aurora,.grid-lines{display:none}
-  .hero,.contact{background:#fff;color:#000}
-}
+  header,.progress,.aurora,.grid-lines,.mobile-nav,.theme-btn,.menu-btn{display:none}
 
-/* ============================================================
-   15. Rechtstexte (impressum.html, datenschutz.html)
-   ============================================================ */
-.legal{padding:calc(clamp(56px,8vw,96px) + var(--header-h)) 0 clamp(64px,9vw,110px)}
-.legal .wrap{max-width:780px}
-.legal h1{font-size:clamp(1.9rem,5vw,3rem);margin-bottom:14px}
-.legal .updated{color:var(--ink-mute);font-size:.95rem;margin-bottom:44px}
-.legal h2{font-size:clamp(1.3rem,2.6vw,1.7rem);margin:44px 0 14px}
-.legal h3{font-size:1.1rem;margin:26px 0 8px}
-.legal p{font-size:1.05rem;line-height:1.55;margin-bottom:14px}
-.legal ul{margin:0 0 14px;display:grid;gap:8px}
-.legal ul li{position:relative;padding-left:22px;color:var(--ink-soft);font-size:1.05rem;line-height:1.5}
-.legal ul li::before{
-  content:"";position:absolute;left:4px;top:.62em;width:5px;height:5px;border-radius:50%;
-  background:var(--brand-bright);
-}
-.legal a{color:var(--brand-bright);text-decoration:none}
-.legal a:hover{text-decoration:underline}
-.legal .box{
-  margin:28px 0;padding:24px 28px;border-radius:var(--radius-sm);
-  background:var(--bg-alt);
-}
-.legal .box p{margin:0;font-size:1rem;color:var(--ink-soft)}
-.legal .box strong{color:var(--ink);font-weight:600}
-/* Auf den Rechtsseiten liegt die Kopfzeile nicht über einem dunklen Hero,
-   deshalb sofort in Textfarbe statt in Weiß. */
-body.plain header{
-  animation:none;
-  --hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);
-  --hdr-line:var(--line);--hdr-accent:var(--accent);
+  /* Der negative Abstand gleicht sonst eine Kopfzeile aus, die hier fehlt. */
+  main{margin-top:0}
+  .hero{padding-top:0}
+
+  /* Dunkle Flächen kosten Toner und werden von Browsern ohnehin oft verworfen. */
+  .hero,.contact,.feature,.check-foot{background:#fff !important;color:#000 !important}
+  .hero h1,.contact h2,.feature h3,.consequences dt{color:#000 !important}
+  .hero-sub,.contact p,.feature p,.feature ul li,.consequences dd,.standards li{color:#333 !important}
+  .card,.check > div,.situations li,.box{
+    background:#fff !important;border:1px solid #ccc;box-shadow:none
+  }
+
+  /* Ziele bleiben auf Papier lesbar – bei Rechtstexten ist das der Kernnutzen. */
+  main a[href^="http"]::after,
+  main a[href$=".html"]::after{content:" (" attr(href) ")";font-size:.85em;color:#555}
+  main a[href^="#"]::after{content:none}
+
+  /* Zusammenhängendes zusammenhalten */
+  h1,h2,h3{break-after:avoid-page}
+  .card,.situations li,.box,.step,details{break-inside:avoid-page}
+  section{break-inside:auto}
 }

@@ -1,0 +1,49 @@
+/* Rechtstexte und Unterseiten mit normalem Seitenkopf */
+
+/* ============================================================
+   15. Rechtstexte (impressum.html, datenschutz.html)
+   ============================================================ */
+.legal{padding:calc(clamp(56px,8vw,96px) + var(--header-h)) 0 clamp(64px,9vw,110px)}
+.legal .wrap{max-width:780px}
+.legal h1{font-size:clamp(1.9rem,5vw,3rem);margin-bottom:14px}
+.legal .updated{color:var(--ink-mute);font-size:.95rem;margin-bottom:44px}
+.legal h2{font-size:clamp(1.3rem,2.6vw,1.7rem);margin:44px 0 14px}
+.legal h3{font-size:1.1rem;margin:26px 0 8px}
+.legal p{font-size:1.05rem;line-height:1.55;margin-bottom:14px}
+.legal ul{margin:0 0 14px;display:grid;gap:8px}
+.legal ul li{position:relative;padding-left:22px;color:var(--ink-soft);font-size:1.05rem;line-height:1.5}
+.legal ul li::before{
+  content:"";position:absolute;left:4px;top:.62em;width:5px;height:5px;border-radius:50%;
+  background:var(--brand-bright);
+}
+.legal a{color:var(--accent);text-decoration:none}
+.legal a:hover{text-decoration:underline}
+.legal .box{
+  margin:28px 0;padding:24px 28px;border-radius:var(--radius-sm);
+  background:var(--bg-alt);
+}
+.legal .box p{margin:0;font-size:1rem;color:var(--ink-soft)}
+.legal .box strong{color:var(--ink);font-weight:600}
+/* Auf den Rechtsseiten liegt die Kopfzeile nicht über einem dunklen Hero,
+   deshalb sofort in Textfarbe statt in Weiß. */
+body.plain header{
+  animation:none;
+  --hdr-bg:1;--hdr-ink:var(--ink);--hdr-soft:var(--ink-soft);
+  --hdr-line:var(--line);--hdr-accent:var(--accent);
+}
+
+/* ============================================================
+   16. Unterseiten mit normalem Seitenkopf
+   ============================================================ */
+.page-top{padding-top:calc(var(--header-h) + clamp(52px,8vw,96px))}
+.backlink{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:22px;
+  color:var(--accent);text-decoration:none;font-size:1.02rem;
+}
+.backlink::before{
+  content:"";width:8px;height:8px;
+  border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor;
+  transform:rotate(45deg);transition:transform .2s ease;
+}
+.backlink:hover{text-decoration:underline}
+.backlink:hover::before{transform:rotate(45deg) translate(2px,-2px)}

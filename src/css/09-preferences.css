@@ -1,0 +1,46 @@
+/* Nutzerpräferenzen und Druck – muss zuletzt geladen werden */
+
+/* ============================================================
+   14. Nutzerpräferenzen
+   ============================================================ */
+@media (prefers-reduced-transparency:reduce){
+  header::before,.badge,.btn-ghost,.contact-card{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+  }
+  header::before{background:var(--bg)}
+  .contact-card{background:rgba(255,255,255,.1)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .rise{opacity:1;transform:none}
+}
+@media print{
+  header,.progress,.aurora,.grid-lines,.mobile-nav,.theme-btn,.menu-btn{display:none}
+
+  /* Der negative Abstand gleicht sonst eine Kopfzeile aus, die hier fehlt. */
+  main{margin-top:0}
+  .hero{padding-top:0}
+
+  /* Dunkle Flächen kosten Toner und werden von Browsern ohnehin oft verworfen. */
+  .hero,.contact,.feature,.check-foot{background:#fff !important;color:#000 !important}
+  .hero h1,.contact h2,.feature h3,.consequences dt{color:#000 !important}
+  .hero-sub,.contact p,.feature p,.feature ul li,.consequences dd,.standards li{color:#333 !important}
+  .card,.check > div,.situations li,.box{
+    background:#fff !important;border:1px solid #ccc;box-shadow:none
+  }
+
+  /* Ziele bleiben auf Papier lesbar – bei Rechtstexten ist das der Kernnutzen. */
+  main a[href^="http"]::after,
+  main a[href$=".html"]::after{content:" (" attr(href) ")";font-size:.85em;color:#555}
+  main a[href^="#"]::after{content:none}
+
+  /* Zusammenhängendes zusammenhalten */
+  h1,h2,h3{break-after:avoid-page}
+  .card,.situations li,.box,.step,details{break-inside:avoid-page}
+  section{break-inside:auto}
+}
