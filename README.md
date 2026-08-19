@@ -172,6 +172,26 @@ Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
   Abschnitt aus dem Bild ist. Sonst laufen sie über die gesamte Seitenlänge
   weiter und kosten dauerhaft Rechenzeit.
 
+### Druck
+
+Rechtstexte werden ausgedruckt und abgeheftet, deshalb hat der Druckstil eigene
+Regeln: Kopfzeile und Zierelemente entfallen, dunkle Flächen werden weiß, und
+Links im Inhalt bekommen ihre Adresse in Klammern nachgestellt – auf Papier ist
+ein Verweis sonst wertlos. Umbrüche innerhalb von Kacheln, Schritten und
+Hinweiskästen sind unterbunden.
+
+### Sprache
+
+- **NIS2** wird durchgängig beim Namen genannt, nicht als „die Richtlinie“
+  bezeichnet. NIS2 ist zwar eine EU-Richtlinie, binden tut deutsche Unternehmen
+  aber das nationale Umsetzungsgesetz – die verkürzte Formulierung wäre für ein
+  Haus, das Regulatorik verkauft, angreifbar.
+- „ISO 27001“ steht allein, „ISO-27001-Nachweis“ als Kompositum mit
+  Bindestrichen. In der Standards-Leiste steht die formale Bezeichnung
+  „ISO/IEC 27001“.
+- Maßangaben wie `10&nbsp;Mio.&nbsp;€` und `24&nbsp;Stunden` enthalten
+  geschützte Leerzeichen, damit sie nicht über Zeilen zerrissen werden.
+
 ### Barrierefreiheit und Fallbacks
 
 - Bewegung liegt hinter `prefers-reduced-motion`, Glaseffekte hinter
