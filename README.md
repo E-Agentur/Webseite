@@ -35,7 +35,7 @@ tools/          Prüfsuite (eigene package.json, damit der Netlify-Build
 Erzeugt (nicht direkt bearbeiten):
   index.html, it-sicherheit.html, betroffenheit.html, danke.html,
   impressum.html, datenschutz.html, 404.html
-  assets/site.css, assets/site.js
+  assets/site.<hash>.css, assets/site.<hash>.js
 ```
 
 ### Bauen
@@ -49,9 +49,20 @@ Kein npm, keine Abhängigkeiten, kein Watcher. Netlify führt den Befehl laut
 
 **Warum ein Build?** Kopfzeile, Fußzeile und Icons lagen vorher in jeder Seite
 erneut – ein neuer Navigationspunkt bedeutete acht Änderungen an vier Dateien.
-Jetzt steht jeder Baustein genau einmal. Die gebündelten `site.css` und
-`site.js` sorgen dafür, dass die feine Aufteilung im Quellcode den Besucher
-trotzdem nur eine Anfrage kostet.
+Jetzt steht jeder Baustein genau einmal. Die gebündelten `site.<hash>.css` und
+`site.<hash>.js` sorgen dafür, dass die feine Aufteilung im Quellcode den
+Besucher trotzdem nur eine Anfrage kostet.
+
+Der Build nimmt den Bündeln außerdem Kommentare und Einzug (37,5 → 29,8 kB CSS,
+gepackt 9,8 → 7,3 kB) und setzt einen Hash des Inhalts in den Dateinamen. Der
+Name ändert sich also genau dann, wenn sich der Inhalt ändert – deshalb darf
+`netlify.toml` die Assets ein Jahr lang als `immutable` ausliefern, statt sie
+stündlich neu bestätigen zu lassen. Alte Stände löscht der Build.
+
+Zuletzt trägt er den SHA-256-Wert des Inline-Skripts, das das Farbschema vor
+dem ersten Paint setzt, in die `Content-Security-Policy` in `netlify.toml` ein.
+Netlify liest diese Datei, *bevor* der Build läuft; der eingetragene Wert muss
+darum mitcommittet werden. Vergisst man das, meldet es die Prüfsuite.
 
 ### Prüfen
 
@@ -62,11 +73,14 @@ npx playwright install chromium
 npm run check
 ```
 
-Die Suite startet einen lokalen Server, öffnet jede Seite in Chromium und prüft
-fünf Dinge: Auslieferung ohne fehlgeschlagene Anfragen oder Konsolenfehler,
-kein horizontaler Überlauf über zehn Breiten in beiden Farbschemata,
-Layout-Plausibilität, Textkontraste gegen WCAG AA und das Verhalten des
-Formulars. Ist bereits ein Chromium vorhanden, genügt
+Die Suite startet einen lokalen Server – samt der Kopfzeilen aus
+`netlify.toml`, damit sie dieselbe Seite prüft, die im Netz steht – öffnet jede
+Seite in Chromium und prüft sieben Dinge: Auslieferung ohne fehlgeschlagene
+Anfragen oder Konsolenfehler, kein horizontaler Überlauf über zehn Breiten in
+beiden Farbschemata, Layout-Plausibilität, Textkontraste gegen WCAG AA, das
+Verhalten des Formulars, die Auslieferung selbst (verwiesene Assets vorhanden,
+CSP ohne `unsafe-inline` und mit passendem Prüfwert, keine `style`-Attribute)
+und den Lichtkegel unter dem Zeiger. Ist bereits ein Chromium vorhanden, genügt
 `CHROMIUM_PATH=/pfad/zu/chrome npm run check`.
 
 Die Layout-Plausibilität prüft, ob die `h1` hinter der Kopfzeile verschwindet,

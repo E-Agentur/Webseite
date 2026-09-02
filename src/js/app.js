@@ -48,19 +48,28 @@
     });
   }
 
-  /* --- Lichtkegel auf Karten folgt dem Zeiger --- */
+  /* --- Lichtkegel auf Karten folgt dem Zeiger ---
+     Die Drosselung muss ausserhalb der Nutzlast stehen: liegt das Merkmal am
+     Objekt, das jedes Ereignis neu erzeugt, ist es immer ungesetzt. Dann fragt
+     jedes Ereignis ein eigenes requestAnimationFrame an, und ab dem zweiten
+     Rueckruf desselben Frames ist die Nutzlast bereits geleert. Chromium fasst
+     pointermove je Frame zusammen und verdeckt das; ein Stift oder eine Maus
+     mit hoher Abtastrate tut das nicht. */
   if (window.matchMedia('(hover: hover)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var pending = null;
+    var queued = false;
     document.addEventListener('pointermove', function (e) {
       var card = e.target.closest ? e.target.closest('.card') : null;
       if (!card) return;
       pending = { card: card, x: e.clientX, y: e.clientY };
-      if (pending.queued) return;
-      pending.queued = true;
+      if (queued) return;
+      queued = true;
       requestAnimationFrame(function () {
+        queued = false;
         var t = pending;
         pending = null;
+        if (!t) return;
         var r = t.card.getBoundingClientRect();
         t.card.style.setProperty('--mx', (t.x - r.left) + 'px');
         t.card.style.setProperty('--my', (t.y - r.top) + 'px');
@@ -70,38 +79,35 @@
 
   /* --- Aurora anhalten, sobald der Hero aus dem Bild gescrollt ist --- */
   if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
+    var auroraIo = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         entry.target.classList.toggle('offscreen', !entry.isIntersecting);
       });
     }, { rootMargin: '120px' });
     document.querySelectorAll('.aurora').forEach(function (a) {
-      io.observe(a.parentElement);
+      auroraIo.observe(a.parentElement);
     });
   }
 
-  /* --- Fallback: Reveal ohne scroll-driven animations --- */
+  /* --- Fallback: Reveal ohne scroll-driven animations ---
+     Die Regeln dazu stehen im Stylesheet unter .js-reveal; das Skript setzt
+     nur die Klassen. Ein zur Laufzeit eingehaengtes style-Element waere ein
+     weiterer Stilumbruch und zwaenge die Auslieferung zu style-src
+     'unsafe-inline'. */
   var supportsSDA = CSS.supports && CSS.supports('animation-timeline', 'view()');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!supportsSDA && !reduce && 'IntersectionObserver' in window) {
     var targets = document.querySelectorAll('.reveal, .stagger > *');
-    var style = document.createElement('style');
-    style.textContent =
-      '.js-reveal{opacity:0;transform:translateY(26px);' +
-      'transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1)}' +
-      '.js-reveal.in{opacity:1;transform:none}';
-    document.head.appendChild(style);
-
-    var io = new IntersectionObserver(function (entries) {
+    var revealIo = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
         var delay = (Array.prototype.indexOf.call(el.parentNode.children, el) % 3) * 90;
         setTimeout(function () { el.classList.add('in'); }, delay);
-        io.unobserve(el);
+        revealIo.unobserve(el);
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
 
-    targets.forEach(function (el) { el.classList.add('js-reveal'); io.observe(el); });
+    targets.forEach(function (el) { el.classList.add('js-reveal'); revealIo.observe(el); });
   }
 })();

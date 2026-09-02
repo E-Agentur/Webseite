@@ -65,3 +65,22 @@ section{padding:clamp(78px,11vw,140px) 0;position:relative;scroll-margin-top:cal
     .stagger > :nth-child(3n+3){animation-range:entry 10% entry 70%}
   }
 }
+
+/* Fallback ohne scroll-driven animations: app.js vergibt .js-reveal und spaeter
+   .in. Die Regeln stehen hier und nicht als eingehaengtes style-Element im
+   Skript – sonst bliebe die Auslieferung an style-src 'unsafe-inline'
+   gebunden. Die letzte Regel faengt den Fall ab, dass jemand die Bewegungs-
+   einstellung nach dem Laden umstellt: sichtbar bleibt sichtbar. */
+.js-reveal{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1);
+}
+.js-reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .js-reveal{opacity:1;transform:none;transition:none}
+}
+
+/* Zwei Helfer statt style-Attributen im Markup – siehe Kopfzeilen in
+   netlify.toml: ohne Attribute kommt style-src ohne 'unsafe-inline' aus. */
+.mt-22{margin-top:22px}
+.sprite{position:absolute}

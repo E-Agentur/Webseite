@@ -9,9 +9,11 @@
 
 # Sicherheitskopfzeilen. Die Content-Security-Policy passt zur Seite, wie sie
 # gebaut ist: keine Inhalte von Dritten, Stile und Skripte nur von der eigenen
-# Herkunft. 'unsafe-inline' bleibt für script-src nötig, weil das Skript gegen
-# das Farb-Aufblitzen inline im <head> stehen muss, und für style-src wegen
-# einzelner style-Attribute im Markup.
+# Herkunft, ohne 'unsafe-inline'. Das Skript gegen das Farb-Aufblitzen muss
+# inline im <head> stehen; es steht mit seinem Prüfwert in script-src, den
+# „node build.mjs“ hier einträgt. Stile kommen ohne Ausnahme aus, seit im
+# Markup keine style-Attribute mehr stehen und das Skript kein style-Element
+# mehr einhängt.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -20,7 +22,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), camera=(), microphone=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-qAm1D9YXWE5lgYKcbk11ZYOn1EvdA5PFz5KP8XrCpko='; style-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 
 # Die Quelldateien liegen im veröffentlichten Verzeichnis, sind aber keine
 # Seiten. Ohne diesen Kopf würden sie als doppelter Inhalt indexiert.
@@ -29,7 +31,10 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Der Dateiname der Bündel trägt einen Hash ihres Inhalts (site.<hash>.css).
+# Eine Änderung erzeugt einen neuen Namen, daher darf der alte beliebig lange
+# im Zwischenspeicher bleiben.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600"
+    Cache-Control = "public, max-age=31536000, immutable"
