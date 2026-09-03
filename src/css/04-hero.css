@@ -36,11 +36,19 @@
 }
 
 .badge{
-  display:inline-flex;align-items:center;gap:9px;
+  /* inline-block statt inline-flex: bricht der Text auf zwei Zeilen um – auf
+     schmalen Geräten der Regelfall –, zentriert align-items den Punkt über
+     beide Zeilen und er schwebt sichtbar neben dem Text. Als inline-block
+     fließt er in der ersten Zeile mit. Ein Kasten muss es bleiben, weil .rise
+     ihn per transform einblendet. */
+  display:inline-block;
   font-size:clamp(1rem,2.4vw,1.22rem);font-weight:600;letter-spacing:-.01em;
   color:#2997ff;
 }
-.dot{width:7px;height:7px;border-radius:50%;background:#30d158;flex:none;position:relative}
+.dot{
+  display:inline-block;width:7px;height:7px;margin-right:9px;vertical-align:middle;
+  border-radius:50%;background:#30d158;position:relative;
+}
 @media (prefers-reduced-motion:no-preference){
   .dot::after{
     content:"";position:absolute;inset:0;border-radius:50%;background:inherit;
@@ -69,8 +77,8 @@
 }
 .btn svg{width:15px;height:15px;transition:transform .25s ease}
 .btn:hover svg{transform:translateX(2px)}
-.btn-primary{color:#fff;background:var(--brand-bright)}
-.btn-primary:hover{background:var(--brand)}
+.btn-primary{color:#fff;background:var(--cta)}
+.btn-primary:hover{background:var(--cta-hover)}
 .btn-ghost{color:#fff;background:rgba(255,255,255,.001);border-color:rgba(255,255,255,.42)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 

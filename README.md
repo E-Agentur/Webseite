@@ -26,7 +26,8 @@ src/
     header.html   Kopfzeile samt Navigation
     footer.html   Fußzeile
     sprite.html   alle SVG-Icons
-    ld-*.html     strukturierte Daten (JSON-LD) je Seite
+    ld-*.html     strukturierte Daten (JSON-LD) je Seite; die Fragen und
+                  Antworten erzeugt der Build selbst aus dem Markup
   pages/        je Seite nur der Inhalt, mit JSON-Kopf für Titel und Pfad
 
 build.mjs       Build ohne jede Abhängigkeit
@@ -86,11 +87,29 @@ ohne Verweis ins Leere, `canonical` gesetzt, jede indexierbare Seite in
 `sitemap.xml`). Ist bereits ein Chromium vorhanden, genügt
 `CHROMIUM_PATH=/pfad/zu/chrome npm run check`.
 
+**Fragen und Antworten** zeichnet der Build als `FAQPage` aus, gelesen aus den
+`<details>`-Blöcken der Seite. Von Hand danebengeschrieben liefe die Kopie
+irgendwann auseinander – und ausgezeichnet werden darf nur, was auch auf der
+Seite steht.
+
 **Warum die Auffindbarkeits-Prüfung?** Die Unterseite benannte ihren Anbieter
 über `@id: https://kr3is.com/#organisation` – einen Knoten, den keine Seite
 führte. Im Quelltext sieht so ein Verweis richtig aus, für Suchmaschinen ist er
 leer. Die Startseite führt den Knoten jetzt, und die Prüfung hält alle
 `@id`-Verweise gegen die tatsächlich definierten Knoten.
+
+### Startklar?
+
+Nach den Befunden gibt die Suite eine zweite Liste aus: die Platzhalter in
+eckigen Klammern, die vor dem Livegang ersetzt sein müssen – Firmenname,
+Anschrift, Registereintrag, die Namen der beiden Ansprechpartner. Fünf davon
+stehen auf der Startseite, sichtbar für jeden Besucher.
+
+Sie zählen bewusst **nicht** als Befund. Niemand kann sie im Code auflösen,
+dazu braucht es die Angaben des Unternehmens; wäre die Suite ihretwegen
+dauerhaft rot, sagte ein roter Lauf nichts mehr über Rückschritte aus. Vor dem
+Deploy muss die Liste trotzdem leer sein – ein unvollständiges Impressum ist
+abmahnfähig.
 
 Die Layout-Plausibilität prüft, ob die `h1` hinter der Kopfzeile verschwindet,
 ob es genau eine `h1` gibt, ob Überschriftenebenen übersprungen werden und wie

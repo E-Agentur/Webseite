@@ -19,6 +19,11 @@
  *   8. Auffindbarkeit – JSON-LD gültig, jede @id-Verweisung aufgelöst, jede
  *                       indexierbare Seite in sitemap.xml und mit canonical
  *
+ * Danach folgt ein getrennter Bericht: die Platzhalter in eckigen Klammern,
+ * die vor dem Livegang ersetzt sein müssen. Sie sind kein Befund – niemand
+ * hier kann sie auflösen, dazu braucht es die Angaben des Unternehmens –,
+ * aber ein roter Punkt, den man vor dem Deploy gesehen haben muss.
+ *
  * Punkt 3 gibt es, weil die ersten drei Prüfungen eine Seite durchwinken, die
  * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
  * ging, meldete keine von ihnen etwas.
@@ -329,9 +334,35 @@ console.log('Zeigerbewegung über den Karten geprüft.');
 }
 console.log('Auffindbarkeit geprüft: JSON-LD, canonical, sitemap.');
 
+/* ---------- Startklar: Platzhalter ----------
+   Getrennt von den Befunden, damit die Suite ihre eigentliche Aufgabe behält:
+   Rückschritte zu melden. Wäre sie wegen der Platzhalter dauerhaft rot, sagte
+   ein roter Lauf nichts mehr. Vor dem Livegang muss diese Liste leer sein. */
+const placeholders = [];
+{
+  const root = new URL('..', import.meta.url).pathname;
+  for (const page of PAGES) {
+    const html = await readFile(join(root, page), 'utf8');
+    const body = html.slice(html.indexOf('<body'));
+    const found = [...body.matchAll(/\[[A-Za-zÄÖÜäöü][^\]\n]{2,80}\]/g)].map((m) => m[0]);
+    if (found.length) placeholders.push([page, found]);
+  }
+}
+
 await browser.close();
 server.close();
 
 console.log('\n=== ERGEBNIS ===');
 if (problems.length) { console.log(problems.join('\n')); process.exitCode = 1; }
 else console.log('Keine Befunde.');
+
+if (placeholders.length) {
+  const total = placeholders.reduce((n, [, f]) => n + f.length, 0);
+  console.log(`\n=== NICHT STARTKLAR: ${total} Platzhalter ===`);
+  for (const [page, found] of placeholders) {
+    const counted = [...new Set(found)]
+      .map((x) => `${x}${found.filter((y) => y === x).length > 1 ? ` (${found.filter((y) => y === x).length}x)` : ''}`);
+    console.log(`  ${page.padEnd(20)} ${found.length.toString().padStart(2)}  ${counted.join(' ')}`);
+  }
+  console.log('  Diese Angaben müssen vor dem Livegang ersetzt sein.');
+}

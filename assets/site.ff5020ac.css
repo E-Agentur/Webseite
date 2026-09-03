@@ -3,6 +3,8 @@
 --brand:#0064d2;
 --brand-bright:#0a84ff;
 --brand-cyan:#30c9c9;
+--cta:var(--brand);
+--cta-hover:#0057b5;
 --maxw:1120px;
 --radius:22px;
 --radius-sm:14px;
@@ -187,10 +189,10 @@ transition:opacity .2s ease;
 .nav-cta{
 display:inline-flex;align-items:center;
 padding:5px 13px;border-radius:980px;text-decoration:none;font-size:.82rem;font-weight:400;
-color:#fff;background:var(--brand-bright);
+color:#fff;background:var(--cta);
 transition:background-color .2s ease;
 }
-.nav-cta:hover{background:var(--brand)}
+.nav-cta:hover{background:var(--cta-hover)}
 .icon-btn{
 width:30px;height:30px;flex:none;display:grid;place-items:center;
 border:none;border-radius:7px;background:transparent;color:var(--hdr-soft);
@@ -262,11 +264,14 @@ background-size:84px 84px;
 mask-image:radial-gradient(ellipse 74% 60% at 50% 40%,#000 20%,transparent 72%);
 }
 .badge{
-display:inline-flex;align-items:center;gap:9px;
+display:inline-block;
 font-size:clamp(1rem,2.4vw,1.22rem);font-weight:600;letter-spacing:-.01em;
 color:#2997ff;
 }
-.dot{width:7px;height:7px;border-radius:50%;background:#30d158;flex:none;position:relative}
+.dot{
+display:inline-block;width:7px;height:7px;margin-right:9px;vertical-align:middle;
+border-radius:50%;background:#30d158;position:relative;
+}
 @media (prefers-reduced-motion:no-preference){
 .dot::after{
 content:"";position:absolute;inset:0;border-radius:50%;background:inherit;
@@ -292,8 +297,8 @@ transition:background-color .2s ease,border-color .2s ease,opacity .2s ease;
 }
 .btn svg{width:15px;height:15px;transition:transform .25s ease}
 .btn:hover svg{transform:translateX(2px)}
-.btn-primary{color:#fff;background:var(--brand-bright)}
-.btn-primary:hover{background:var(--brand)}
+.btn-primary{color:#fff;background:var(--cta)}
+.btn-primary:hover{background:var(--cta-hover)}
 .btn-ghost{color:#fff;background:rgba(255,255,255,.001);border-color:rgba(255,255,255,.42)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 .standards{margin-top:clamp(56px,8vw,88px)}

@@ -105,6 +105,32 @@ function expand(text, vars, depth = 0) {
   return /<!--\s*include:|\{\{/.test(out) ? expand(out, vars, depth + 1) : out;
 }
 
+/* ---------- Fragen und Antworten auszeichnen ----------
+   schema.org/FAQPage aus dem Markup erzeugen statt danebenzuschreiben: eine
+   von Hand gepflegte Kopie läuft irgendwann auseinander, und ausgezeichnet
+   werden darf nur, was auch auf der Seite steht. Die Seite nutzt <details>
+   ausschließlich für diesen Abschnitt. */
+const plain = (html) => html
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+function faqJsonLd(content) {
+  const items = [...content.matchAll(
+    /<details>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)];
+  if (!items.length) return '';
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map(([, q, a]) => ({
+      '@type': 'Question',
+      name: plain(q),
+      acceptedAnswer: { '@type': 'Answer', text: plain(a) },
+    })),
+  };
+  return `<script type="application/ld+json">\n${JSON.stringify(data, null, 2)}\n</script>`;
+}
+
 /* ---------- Seiten bauen ---------- */
 function buildPages(assets) {
   const shell = read('src/partials/_shell.html');
@@ -125,6 +151,8 @@ function buildPages(assets) {
       ...meta,
       content: raw.slice(m[0].length).trim(),
     };
+    const faq = faqJsonLd(vars.content);
+    if (faq) vars.headExtra = [vars.headExtra, faq].filter(Boolean).join('\n');
     const html = expand(shell, vars)
       .replace(/ class=""/g, '')          // leere Attribute nicht ausliefern
       .replace(/\n{3,}/g, '\n\n');
