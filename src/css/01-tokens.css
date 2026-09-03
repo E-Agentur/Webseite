@@ -9,6 +9,15 @@
   --brand-bright:#0a84ff;
   --brand-cyan:#30c9c9;
 
+  /* Flächen mit weißer Schrift. --brand-bright trägt weißen Text nur mit
+     3,65:1 und verfehlt damit WCAG AA (4,5:1 unter 24px). Diese beiden Blau
+     tragen ihn mit 5,59:1 bzw. 6,93:1 – der Zeiger macht es also heller
+     wahrnehmbar und zugleich kontrastreicher. --brand-bright bleibt für
+     Verläufe, Fokusringe und Text auf hellem Grund, wo die Rechnung anders
+     ausfällt. */
+  --cta:var(--brand);
+  --cta-hover:#0057b5;
+
   /* Maße */
   --maxw:1120px;
   --radius:22px;

@@ -83,10 +83,10 @@ header::before{
 .nav-cta{
   display:inline-flex;align-items:center;
   padding:5px 13px;border-radius:980px;text-decoration:none;font-size:.82rem;font-weight:400;
-  color:#fff;background:var(--brand-bright);
+  color:#fff;background:var(--cta);
   transition:background-color .2s ease;
 }
-.nav-cta:hover{background:var(--brand)}
+.nav-cta:hover{background:var(--cta-hover)}
 
 .icon-btn{
   width:30px;height:30px;flex:none;display:grid;place-items:center;

@@ -13,6 +13,16 @@
  *                       keine Sprünge in der Überschriftenebene, Zeilenlänge
  *   4. Kontrast       – gemessene Text-/Hintergrundpaare gegen WCAG AA
  *   5. Formular       – Netlify-Merkmale, Pflichtfelder, Labels, Honigtopf
+ *   6. Auslieferung   – Assets aufloesbar, CSP ohne 'unsafe-inline' und mit
+ *                       passendem Prüfwert, keine style-Attribute
+ *   7. Zeiger         – Lichtkegel auf den Karten ohne Skriptfehler
+ *   8. Auffindbarkeit – JSON-LD gültig, jede @id-Verweisung aufgelöst, jede
+ *                       indexierbare Seite in sitemap.xml und mit canonical
+ *
+ * Danach folgt ein getrennter Bericht: die Platzhalter in eckigen Klammern,
+ * die vor dem Livegang ersetzt sein müssen. Sie sind kein Befund – niemand
+ * hier kann sie auflösen, dazu braucht es die Angaben des Unternehmens –,
+ * aber ein roter Punkt, den man vor dem Deploy gesehen haben muss.
  *
  * Punkt 3 gibt es, weil die ersten drei Prüfungen eine Seite durchwinken, die
  * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
@@ -20,7 +30,9 @@
  */
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
+import { createHash } from 'node:crypto';
 import { chromium } from 'playwright';
 
 const ROOT = new URL('..', import.meta.url).pathname;
@@ -34,6 +46,27 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css',
 
 const problems = [];
 const note = (m) => problems.push(m);
+
+/* Die Kopfzeilen aus netlify.toml gehören zur Seite. Liefert der Prüfserver sie
+   nicht mit, prüft er etwas anderes als das Netz: eine zu enge Policy fällt
+   dann erst in der Produktion auf. Verstöße erscheinen als Konsolenfehler und
+   landen damit in Prüfung 1. */
+/* Ausführbare Inline-Skripte: ohne src, und ohne type oder mit einem
+   JavaScript-Typ. Ein <script type="application/ld+json"> ist ein Datenblock. */
+const JS_TYPE = /^(text\/javascript|application\/javascript|module)$/i;
+function* inlineScripts(html) {
+  for (const m of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+    const [, attrs, code] = m;
+    if (/\bsrc=/.test(attrs)) continue;
+    const type = attrs.match(/\btype="([^"]*)"/)?.[1];
+    if (type && !JS_TYPE.test(type.trim())) continue;
+    yield [attrs, code];
+  }
+}
+
+const TOML = await readFile(new URL('../netlify.toml', import.meta.url), 'utf8');
+const CSP = TOML.match(/Content-Security-Policy = "([^"]*)"/)?.[1];
+if (!CSP) note('netlify.toml: Content-Security-Policy nicht gefunden');
 
 /* Relative Leuchtdichte und Kontrastverhältnis nach WCAG 2.1 */
 const luminance = (c) => {
@@ -50,7 +83,10 @@ const server = createServer(async (req, res) => {
   const path = join(ROOT, normalize(decodeURI(req.url.split('?')[0])).replace(/^(\.\.[/\\])+/, ''));
   try {
     const body = await readFile(path);
-    res.writeHead(200, { 'Content-Type': TYPES[extname(path)] ?? 'application/octet-stream' });
+    res.writeHead(200, {
+      'Content-Type': TYPES[extname(path)] ?? 'application/octet-stream',
+      ...(CSP ? { 'Content-Security-Policy': CSP } : {}),
+    });
     res.end(body);
   } catch {
     res.writeHead(404).end('nicht gefunden');
@@ -76,7 +112,9 @@ for (const page of PAGES) {
       p.on('requestfailed', (r) => note(`${where}: Anfrage fehlgeschlagen ${r.url()}`));
       p.on('response', (r) => r.status() >= 400 && note(`${where}: ${r.status()} ${r.url()}`));
       await p.goto(url(page), { waitUntil: 'networkidle' });
-      await p.addStyleTag({ content: 'html{scroll-behavior:auto !important}' });
+      /* Kein style-Element einhängen: die ausgelieferte CSP verbietet inline
+         Stile. Eine Zuweisung über das CSSOM fällt nicht darunter. */
+      await p.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; });
       await p.evaluate(() => scrollTo(0, document.body.scrollHeight));
       await p.waitForTimeout(120);
       const over = await p.evaluate(() =>
@@ -177,9 +215,154 @@ console.log(`Kontraste geprüft: ${PAIRS.length * 2} Paare gegen WCAG AA.`);
 }
 console.log('Formular geprüft.');
 
+/* ---------- 6: Auslieferung – Assets, CSP, Markup ---------- */
+{
+  const root = new URL('..', import.meta.url).pathname;
+  for (const page of PAGES) {
+    const html = await readFile(join(root, page), 'utf8');
+
+    /* Der Dateiname der Bündel trägt einen Inhalts-Hash. Wer src/ ändert und
+       den Build vergisst, verweist auf einen Namen, den es nicht mehr gibt. */
+    for (const [, href] of html.matchAll(/(?:href|src)="((?:assets|og)[^"]*)"/g)) {
+      if (!existsSync(join(root, href))) note(`${page}: verweist auf fehlendes ${href}`);
+    }
+
+    /* style-Attribute zwängen die Auslieferung zurück zu style-src
+       'unsafe-inline'. Was sie regeln, gehört ins Stylesheet. */
+    const styles = html.match(/ style="[^"]*"/g);
+    if (styles) note(`${page}: ${styles.length} style-Attribut(e) – ${styles[0].trim()}`);
+
+    /* Jedes ausführbare Inline-Skript muss mit seinem Prüfwert in script-src
+       stehen. Datenblöcke wie application/ld+json führt kein Browser aus und
+       prüft sie deshalb auch nicht gegen script-src. */
+    for (const [attrs, code] of inlineScripts(html)) {
+      void attrs;
+      const digest = `'sha256-${createHash('sha256').update(code, 'utf8').digest('base64')}'`;
+      if (CSP && !CSP.includes(digest)) {
+        note(`${page}: Inline-Skript ${digest} fehlt in der CSP – „node build.mjs“ vergessen?`);
+      }
+    }
+  }
+  if (CSP && CSP.includes("'unsafe-inline'")) note("CSP enthält 'unsafe-inline'");
+  if (CSP && !/max-age=31536000/.test(TOML)) note('Assets werden nicht langfristig zwischengespeichert');
+}
+console.log('Auslieferung geprüft: Assets, CSP, Markup.');
+
+/* ---------- 7: Zeiger über den Karten ----------
+   Der Lichtkegel folgt dem Zeiger über requestAnimationFrame. Fasst ein Browser
+   pointermove nicht je Frame zusammen – ein Stift, eine Maus mit hoher
+   Abtastrate –, treffen mehrere Ereignisse denselben Frame. Genau da lag ein
+   Fehler; deshalb wird hier nicht die Maus bewegt, sondern gezielt gestapelt. */
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const p = await ctx.newPage();
+  const errors = [];
+  p.on('pageerror', (e) => errors.push(e.message));
+  p.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await p.goto(url('index.html'), { waitUntil: 'networkidle' });
+  await p.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    const card = document.querySelector('.card');
+    card.scrollIntoView();
+    const r = card.getBoundingClientRect();
+    for (let i = 0; i < 8; i++) {
+      card.dispatchEvent(new PointerEvent('pointermove',
+        { bubbles: true, clientX: r.left + 10 + i, clientY: r.top + 10 + i }));
+    }
+  });
+  /* Auf den Frame warten statt eine Frist zu raten: der Rückruf hängt an
+     requestAnimationFrame, und wann der Browser den nächsten Frame zeichnet,
+     entscheidet nicht die Prüfung. Eine feste Wartezeit hat hier schon einmal
+     grundlos angeschlagen. */
+  try {
+    await p.waitForFunction(
+      () => document.querySelector('.card').style.getPropertyValue('--mx') !== '',
+      null, { timeout: 5000 });
+  } catch {
+    note('Zeiger über Karte: --mx wurde nicht gesetzt');
+  }
+  if (errors.length) note(`Zeiger über Karte: ${errors[0]}`);
+  await ctx.close();
+}
+console.log('Zeigerbewegung über den Karten geprüft.');
+
+/* ---------- 8: Auffindbarkeit ----------
+   Strukturierte Daten verweisen mit @id aufeinander. Ein Verweis, den keine
+   Seite definiert, sieht im Quelltext richtig aus und bleibt für Suchmaschinen
+   leer – genau das war der Fall, als die Unterseite ihren Anbieter über
+   „#organisation“ benannte und die Startseite den Knoten nirgends führte. */
+{
+  const root = new URL('..', import.meta.url).pathname;
+  const defined = new Set();
+  const referenced = [];
+
+  const walk = (node, page) => {
+    if (Array.isArray(node)) return node.forEach((n) => walk(n, page));
+    if (!node || typeof node !== 'object') return;
+    if (node['@id']) (node['@type'] ? defined : { add: () => {} }).add(node['@id']);
+    if (node['@id'] && !node['@type']) referenced.push([page, node['@id']]);
+    Object.values(node).forEach((v) => walk(v, page));
+  };
+
+  const indexable = [];
+  for (const page of PAGES) {
+    const html = await readFile(join(root, page), 'utf8');
+    for (const m of html.matchAll(
+      /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      try { walk(JSON.parse(m[1]), page); }
+      catch (e) { note(`${page}: JSON-LD ist kein gültiges JSON – ${e.message}`); }
+    }
+    if (!/name="robots"[^>]*noindex/.test(html)) {
+      indexable.push(page);
+      if (!/<link rel="canonical"/.test(html)) note(`${page}: kein canonical`);
+    }
+  }
+  for (const [page, id] of referenced) {
+    if (!defined.has(id)) note(`${page}: JSON-LD verweist auf ${id}, das keine Seite führt`);
+  }
+
+  /* Wer eine Seite hinzufügt, denkt selten an die sitemap. */
+  const sitemap = await readFile(join(root, 'sitemap.xml'), 'utf8');
+  for (const page of indexable) {
+    const loc = page === 'index.html' ? 'https://kr3is.com/' : `https://kr3is.com/${page}`;
+    if (!sitemap.includes(`<loc>${loc}</loc>`)) note(`${page}: fehlt in sitemap.xml`);
+  }
+  for (const [, loc] of sitemap.matchAll(/<loc>https:\/\/kr3is\.com\/([^<]*)<\/loc>/g)) {
+    const page = loc === '' ? 'index.html' : loc;
+    if (!existsSync(join(root, page))) note(`sitemap.xml führt ${loc}, das es nicht gibt`);
+  }
+}
+console.log('Auffindbarkeit geprüft: JSON-LD, canonical, sitemap.');
+
+/* ---------- Startklar: Platzhalter ----------
+   Getrennt von den Befunden, damit die Suite ihre eigentliche Aufgabe behält:
+   Rückschritte zu melden. Wäre sie wegen der Platzhalter dauerhaft rot, sagte
+   ein roter Lauf nichts mehr. Vor dem Livegang muss diese Liste leer sein. */
+const placeholders = [];
+{
+  const root = new URL('..', import.meta.url).pathname;
+  for (const page of PAGES) {
+    const html = await readFile(join(root, page), 'utf8');
+    const body = html.slice(html.indexOf('<body'));
+    const found = [...body.matchAll(/\[[A-Za-zÄÖÜäöü][^\]\n]{2,80}\]/g)].map((m) => m[0]);
+    if (found.length) placeholders.push([page, found]);
+  }
+}
+
 await browser.close();
 server.close();
 
 console.log('\n=== ERGEBNIS ===');
 if (problems.length) { console.log(problems.join('\n')); process.exitCode = 1; }
 else console.log('Keine Befunde.');
+
+if (placeholders.length) {
+  const total = placeholders.reduce((n, [, f]) => n + f.length, 0);
+  console.log(`\n=== NICHT STARTKLAR: ${total} Platzhalter ===`);
+  for (const [page, found] of placeholders) {
+    const counted = [...new Set(found)]
+      .map((x) => `${x}${found.filter((y) => y === x).length > 1 ? ` (${found.filter((y) => y === x).length}x)` : ''}`);
+    console.log(`  ${page.padEnd(20)} ${found.length.toString().padStart(2)}  ${counted.join(' ')}`);
+  }
+  console.log('  Diese Angaben müssen vor dem Livegang ersetzt sein.');
+}
