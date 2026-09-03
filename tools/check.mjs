@@ -16,6 +16,8 @@
  *   6. Auslieferung   – Assets aufloesbar, CSP ohne 'unsafe-inline' und mit
  *                       passendem Prüfwert, keine style-Attribute
  *   7. Zeiger         – Lichtkegel auf den Karten ohne Skriptfehler
+ *   8. Auffindbarkeit – JSON-LD gültig, jede @id-Verweisung aufgelöst, jede
+ *                       indexierbare Seite in sitemap.xml und mit canonical
  *
  * Punkt 3 gibt es, weil die ersten drei Prüfungen eine Seite durchwinken, die
  * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
@@ -253,7 +255,8 @@ console.log('Auslieferung geprüft: Assets, CSP, Markup.');
   p.on('pageerror', (e) => errors.push(e.message));
   p.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
   await p.goto(url('index.html'), { waitUntil: 'networkidle' });
-  await p.evaluate(async () => {
+  await p.evaluate(() => {
+    document.documentElement.style.scrollBehavior = 'auto';
     const card = document.querySelector('.card');
     card.scrollIntoView();
     const r = card.getBoundingClientRect();
@@ -261,15 +264,70 @@ console.log('Auslieferung geprüft: Assets, CSP, Markup.');
       card.dispatchEvent(new PointerEvent('pointermove',
         { bubbles: true, clientX: r.left + 10 + i, clientY: r.top + 10 + i }));
     }
-    await new Promise((done) => setTimeout(done, 300));
   });
-  const moved = await p.evaluate(() =>
-    document.querySelector('.card').style.getPropertyValue('--mx'));
+  /* Auf den Frame warten statt eine Frist zu raten: der Rückruf hängt an
+     requestAnimationFrame, und wann der Browser den nächsten Frame zeichnet,
+     entscheidet nicht die Prüfung. Eine feste Wartezeit hat hier schon einmal
+     grundlos angeschlagen. */
+  try {
+    await p.waitForFunction(
+      () => document.querySelector('.card').style.getPropertyValue('--mx') !== '',
+      null, { timeout: 5000 });
+  } catch {
+    note('Zeiger über Karte: --mx wurde nicht gesetzt');
+  }
   if (errors.length) note(`Zeiger über Karte: ${errors[0]}`);
-  if (!moved) note('Zeiger über Karte: --mx wurde nicht gesetzt');
   await ctx.close();
 }
 console.log('Zeigerbewegung über den Karten geprüft.');
+
+/* ---------- 8: Auffindbarkeit ----------
+   Strukturierte Daten verweisen mit @id aufeinander. Ein Verweis, den keine
+   Seite definiert, sieht im Quelltext richtig aus und bleibt für Suchmaschinen
+   leer – genau das war der Fall, als die Unterseite ihren Anbieter über
+   „#organisation“ benannte und die Startseite den Knoten nirgends führte. */
+{
+  const root = new URL('..', import.meta.url).pathname;
+  const defined = new Set();
+  const referenced = [];
+
+  const walk = (node, page) => {
+    if (Array.isArray(node)) return node.forEach((n) => walk(n, page));
+    if (!node || typeof node !== 'object') return;
+    if (node['@id']) (node['@type'] ? defined : { add: () => {} }).add(node['@id']);
+    if (node['@id'] && !node['@type']) referenced.push([page, node['@id']]);
+    Object.values(node).forEach((v) => walk(v, page));
+  };
+
+  const indexable = [];
+  for (const page of PAGES) {
+    const html = await readFile(join(root, page), 'utf8');
+    for (const m of html.matchAll(
+      /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      try { walk(JSON.parse(m[1]), page); }
+      catch (e) { note(`${page}: JSON-LD ist kein gültiges JSON – ${e.message}`); }
+    }
+    if (!/name="robots"[^>]*noindex/.test(html)) {
+      indexable.push(page);
+      if (!/<link rel="canonical"/.test(html)) note(`${page}: kein canonical`);
+    }
+  }
+  for (const [page, id] of referenced) {
+    if (!defined.has(id)) note(`${page}: JSON-LD verweist auf ${id}, das keine Seite führt`);
+  }
+
+  /* Wer eine Seite hinzufügt, denkt selten an die sitemap. */
+  const sitemap = await readFile(join(root, 'sitemap.xml'), 'utf8');
+  for (const page of indexable) {
+    const loc = page === 'index.html' ? 'https://kr3is.com/' : `https://kr3is.com/${page}`;
+    if (!sitemap.includes(`<loc>${loc}</loc>`)) note(`${page}: fehlt in sitemap.xml`);
+  }
+  for (const [, loc] of sitemap.matchAll(/<loc>https:\/\/kr3is\.com\/([^<]*)<\/loc>/g)) {
+    const page = loc === '' ? 'index.html' : loc;
+    if (!existsSync(join(root, page))) note(`sitemap.xml führt ${loc}, das es nicht gibt`);
+  }
+}
+console.log('Auffindbarkeit geprüft: JSON-LD, canonical, sitemap.');
 
 await browser.close();
 server.close();

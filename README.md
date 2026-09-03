@@ -26,6 +26,7 @@ src/
     header.html   Kopfzeile samt Navigation
     footer.html   Fußzeile
     sprite.html   alle SVG-Icons
+    ld-*.html     strukturierte Daten (JSON-LD) je Seite
   pages/        je Seite nur der Inhalt, mit JSON-Kopf für Titel und Pfad
 
 build.mjs       Build ohne jede Abhängigkeit
@@ -75,13 +76,21 @@ npm run check
 
 Die Suite startet einen lokalen Server – samt der Kopfzeilen aus
 `netlify.toml`, damit sie dieselbe Seite prüft, die im Netz steht – öffnet jede
-Seite in Chromium und prüft sieben Dinge: Auslieferung ohne fehlgeschlagene
+Seite in Chromium und prüft acht Dinge: Auslieferung ohne fehlgeschlagene
 Anfragen oder Konsolenfehler, kein horizontaler Überlauf über zehn Breiten in
 beiden Farbschemata, Layout-Plausibilität, Textkontraste gegen WCAG AA, das
 Verhalten des Formulars, die Auslieferung selbst (verwiesene Assets vorhanden,
 CSP ohne `unsafe-inline` und mit passendem Prüfwert, keine `style`-Attribute)
-und den Lichtkegel unter dem Zeiger. Ist bereits ein Chromium vorhanden, genügt
+den Lichtkegel unter dem Zeiger und die Auffindbarkeit (JSON-LD gültig und
+ohne Verweis ins Leere, `canonical` gesetzt, jede indexierbare Seite in
+`sitemap.xml`). Ist bereits ein Chromium vorhanden, genügt
 `CHROMIUM_PATH=/pfad/zu/chrome npm run check`.
+
+**Warum die Auffindbarkeits-Prüfung?** Die Unterseite benannte ihren Anbieter
+über `@id: https://kr3is.com/#organisation` – einen Knoten, den keine Seite
+führte. Im Quelltext sieht so ein Verweis richtig aus, für Suchmaschinen ist er
+leer. Die Startseite führt den Knoten jetzt, und die Prüfung hält alle
+`@id`-Verweise gegen die tatsächlich definierten Knoten.
 
 Die Layout-Plausibilität prüft, ob die `h1` hinter der Kopfzeile verschwindet,
 ob es genau eine `h1` gibt, ob Überschriftenebenen übersprungen werden und wie

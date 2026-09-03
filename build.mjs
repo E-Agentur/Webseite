@@ -94,7 +94,9 @@ function expand(text, vars, depth = 0) {
   if (depth > 10) throw new Error('Bausteine sind zirkulär verschachtelt');
   let out = text.replace(/[ \t]*<!--\s*include:\s*([\w-]+)\s*-->/g, (_, name) => {
     if (!(name in partials)) throw new Error(`Baustein "${name}" fehlt in src/partials/`);
-    return partials[name];
+    /* Der Zeilenumbruch am Dateiende gehört zur Datei, nicht zum Baustein –
+       sonst reißt jeder Einsatz eine Leerzeile in die Seite. */
+    return partials[name].replace(/\n+$/, '');
   });
   out = out.replace(/\{\{(\w+)\}\}/g, (m, key) => {
     if (!(key in vars)) throw new Error(`Variable "${key}" ist nicht gesetzt`);
