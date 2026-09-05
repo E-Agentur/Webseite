@@ -42,8 +42,9 @@ import { chromium } from 'playwright';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PORT = 8899;
-const PAGES = ['index.html', 'it-sicherheit.html', 'betroffenheit.html',
-               'danke.html', 'impressum.html', 'datenschutz.html', '404.html'];
+const PAGES = ['index.html', 'it-sicherheit.html', 'ki-automatisierung.html',
+               'betroffenheit.html', 'danke.html', 'impressum.html',
+               'datenschutz.html', '404.html'];
 const WIDTHS = [1600, 1440, 1200, 1024, 900, 768, 640, 480, 390, 360];
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css',
                 '.js': 'text/javascript', '.png': 'image/png',
