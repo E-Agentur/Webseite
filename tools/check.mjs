@@ -24,6 +24,7 @@
  *   9. Auslieferbares – CSP-Hash passt zum Inline-Skript, Sitemap vollständig
  *  10. Ohne Skript   – kein Bedienelement, das ohne JavaScript nichts tut
  *  11. Build         – die erzeugten Dateien sind auf dem Stand von src/
+ *  12. Totes CSS     – keine Regel für eine Klasse, die es nicht gibt
  *
  * Punkt 3 gibt es, weil die übrigen Prüfungen eine Seite durchwinken, die
  * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
@@ -485,6 +486,39 @@ console.log('Verhalten ohne JavaScript geprüft.');
   if (build.status !== 0) note(`Build: ${(build.stderr || build.stdout).trim()}`);
 }
 console.log('Stand der erzeugten Dateien geprüft.');
+
+/* ---------- 12: Totes CSS ---------- */
+/* Regeln für Klassen, die es im Markup nicht mehr gibt, fallen niemandem auf:
+   Die Seite sieht richtig aus, das Stylesheet wächst still weiter. Gefunden
+   wurden so .num, .split und .d5 – Reste entfernter Bausteine.
+
+   Gezählt werden nur Klassen aus den Selektoren. Attributselektoren und
+   Zeichenketten werden vorher entfernt, sonst gilt das ".html" aus
+   a[href$=".html"] als Klasse. Klassen, die erst das Skript setzt, kommen aus
+   app.js dazu. Es gibt bewusst keine Ausnahmeliste: Wer eine Klasse auf Vorrat
+   anlegt, soll sie benutzen oder weglassen. */
+{
+  const cssSource = readFileSync(join(ROOT, 'assets/site.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  const selectors = [...cssSource.matchAll(/(?:^|})\s*([^{}@][^{}]*?)\{/g)]
+    .map((m) => m[1])
+    .join(' ')
+    .replace(/\[[^\]]*\]/g, ' ')
+    .replace(/"[^"]*"|'[^']*'/g, ' ');
+  const declared = new Set([...selectors.matchAll(/\.(-?[A-Za-z_][\w-]*)/g)].map((m) => m[1]));
+
+  const used = new Set();
+  for (const page of PAGES)
+    for (const m of readFileSync(join(ROOT, page), 'utf8').matchAll(/class="([^"]*)"/g))
+      for (const c of m[1].split(/\s+/)) if (c) used.add(c);
+
+  const script = readFileSync(join(ROOT, 'assets/site.js'), 'utf8');
+  for (const m of script.matchAll(/classList\.(?:add|toggle|remove)\('([\w-]+)'/g)) used.add(m[1]);
+
+  const orphans = [...declared].filter((c) => !used.has(c)).sort();
+  for (const c of orphans) note(`CSS: .${c} ist definiert, aber weder im Markup noch im Skript gesetzt`);
+  console.log(`Totes CSS geprüft: ${declared.size} Klassen in Selektoren, ${used.size} tatsächlich gesetzt.`);
+}
 
 await browser.close();
 server.close();

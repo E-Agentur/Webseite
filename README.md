@@ -91,6 +91,7 @@ Geprüft wird:
 10. **Ohne Skript** – kein Bedienelement, das ohne JavaScript nichts tut; jede
     Seite kommt vollständig an
 11. **Build** – die erzeugten Dateien sind auf dem Stand von `src/`
+12. **Totes CSS** – keine Regel für eine Klasse, die es nicht gibt
 
 Punkt 3 gibt es, weil die übrigen Prüfungen eine Seite durchwinken, die
 lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal
@@ -106,11 +107,34 @@ oben bis zur ersten deckenden Fläche. Liegt darin ein Verlauf, ist die Farbe
 nicht eindeutig; solche Knoten werden gezählt und übergangen, statt einen
 erfundenen Wert zu melden.
 
+Punkt 12 gibt es, weil totes CSS niemandem auffällt: Die Seite sieht richtig
+aus, das Stylesheet wächst still weiter. Gefunden wurden so `.num`, `.split`
+und `.d5` – Reste entfernter Bausteine. Eine Ausnahmeliste gibt es bewusst
+nicht: Wer eine Klasse auf Vorrat anlegt, soll sie benutzen oder weglassen.
+
 Punkt 6 gibt es, weil die übrigen Prüfungen nie einen Zeiger bewegen. Der
 Lichtkegel auf den Kacheln hing an einer Drossel, deren Wächterabfrage nie
 zutraf: Jede Bewegung meldete ein eigenes Bild an, und wer im selben Bild als
 Zweiter drankam, las eine bereits geleerte Ablage. Zwanzig Ereignisse
 erzeugten zwanzig Bilder und neunzehn Skriptfehler – sichtbar war davon nichts.
+
+### Startbereitschaft
+
+```
+node tools/launch.mjs
+```
+
+Sammelt, was vor dem Livegang noch offen ist – Platzhalter, Redaktionshinweise
+in den Rechtstexten, unvollständige `tel:`-Verweise, absichtliche Lücken in den
+strukturierten Daten – und liest das aus den Dateien statt aus dieser Liste.
+Eine Liste im README veraltet, sobald jemand einen Platzhalter ersetzt und das
+Nachtragen vergisst.
+
+Bewusst **kein** Teil von `npm run check`: Diese Punkte sind vor dem Livegang
+richtig so und dürfen die laufende Prüfung nicht rot färben. Der Exitcode ist
+trotzdem 1, solange etwas offen ist – damit taugt der Bericht als letzte Sperre
+vor der Veröffentlichung. Der Abschnitt „Vor dem Livegang" weiter unten nennt
+zusätzlich, was nur ein Mensch prüfen kann.
 
 ### Seitensyntax
 

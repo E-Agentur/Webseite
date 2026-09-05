@@ -3,9 +3,6 @@
 /* ============================================================
    9. KI-Abschnitt
    ============================================================ */
-.split{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(34px,5vw,64px);align-items:start}
-@media (max-width:900px){.split{grid-template-columns:1fr}}
-
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:56px}
 @media (max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}

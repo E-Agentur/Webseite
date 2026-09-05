@@ -92,7 +92,7 @@
   .rise{opacity:0;transform:translateY(18px);animation:rise-in .45s cubic-bezier(.16,.84,.44,1) forwards}
   .rise:nth-child(1){animation-delay:.02s}
   .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
-  .d4{animation-delay:.24s}.d5{animation-delay:.3s}
+  .d4{animation-delay:.24s}
 }
 
 /* Aurora und Pulspunkt anhalten, sobald der Hero aus dem Bild ist – sonst

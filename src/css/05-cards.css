@@ -44,11 +44,6 @@
 .ico svg{width:32px;height:32px;stroke-width:1.4}
 @media (hover:hover){.card:hover .ico{transform:scale(1.06)}}
 
-.num{
-  position:absolute;top:30px;right:32px;
-  font-size:.85rem;font-weight:500;letter-spacing:.02em;
-  color:var(--ink-mute);
-}
 
 /* ============================================================
    8. Bento-Raster (Leistungen)
