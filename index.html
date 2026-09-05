@@ -33,6 +33,112 @@
   })();
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://kr3is.com/#organisation",
+      "name": "Kr3is",
+      "url": "https://kr3is.com/",
+      "email": "kontakt@kr3is.com",
+      "description": "Informationssicherheit, sichere KI-Automatisierung und IT-Betrieb für mittelständische Unternehmen.",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "knowsAbout": [
+        "Informationssicherheit",
+        "NIS2",
+        "ISO/IEC 27001",
+        "BSI IT-Grundschutz",
+        "DSGVO",
+        "EU AI Act",
+        "KI-Automatisierung"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://kr3is.com/#website",
+      "url": "https://kr3is.com/",
+      "name": "Kr3is",
+      "inLanguage": "de-DE",
+      "publisher": {
+        "@id": "https://kr3is.com/#organisation"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://kr3is.com/#webpage",
+      "url": "https://kr3is.com/",
+      "name": "Kr3is – IT-Sicherheit, KI-Automatisierung und IT-Betrieb für den Mittelstand",
+      "isPartOf": {
+        "@id": "https://kr3is.com/#website"
+      },
+      "about": {
+        "@id": "https://kr3is.com/#organisation"
+      },
+      "inLanguage": "de-DE"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://kr3is.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Wir sind Zulieferer und selbst nicht betroffen. Betrifft uns NIS2 trotzdem?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Häufig ja – nicht direkt über das Gesetz, sondern über Ihre Kunden. Betroffene Unternehmen müssen die Sicherheit ihrer Lieferkette berücksichtigen und geben Anforderungen vertraglich weiter. In der Praxis erreicht Sie das Thema dann über den Einkauf Ihres Auftraggebers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wir haben keine eigene IT-Abteilung. Können wir überhaupt ein ISMS betreiben?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja. Ein Managementsystem muss zur Organisation passen, nicht umgekehrt. Bei kleineren Unternehmen halten wir die Dokumentation bewusst schlank und übernehmen die Teile, für die intern niemand zuständig ist."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kostet ein Erstgespräch?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nichts. Im Erstgespräch klären wir Ihre Ausgangslage und welche Anforderungen gelten. Erst wenn daraus ein konkretes Vorhaben wird, erhalten Sie ein Angebot mit festem Umfang."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert der Weg zur ISO-27001-Zertifizierung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Das hängt vom Ausgangspunkt ab: vom Reifegrad Ihrer Dokumentation, vom Umfang des Geltungsbereichs und davon, wie viel Ihr Team selbst übernimmt. Nach der Standortbestimmung nennen wir Ihnen einen belastbaren Zeitraum statt einer Zahl vorab."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dürfen wir KI-Werkzeuge einsetzen, ohne gegen den Datenschutz zu verstoßen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In vielen Fällen ja – es kommt auf den Anwendungsfall, den Verarbeitungsort und die Vertragsgestaltung an. Entscheidend ist, welche Daten das Werkzeug überhaupt zu sehen bekommt und was mit ihnen danach geschieht. Genau das klären wir, bevor ein Agent Zugriff auf interne Systeme erhält."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Beraten Sie nur oder übernehmen Sie auch den laufenden Betrieb?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Beides. Manche Kunden lassen sich einmalig prüfen und setzen selbst um, andere geben Monitoring, Patchmanagement und Backup dauerhaft an uns ab. Sie können auch mit dem einen anfangen und später das andere ergänzen."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -42,7 +148,7 @@
 
 <!-- Icon-Sammlung: inline, damit keine externen Anfragen entstehen.
      Gemeinsam für alle Seiten – so kann kein Icon auf einer Seite fehlen. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
     <g id="i-shield"><path d="M12 3l7.5 3v5.6c0 4.4-3.1 8.1-7.5 9-4.4-.9-7.5-4.6-7.5-9V6z"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4"/></g>
     <!-- Bildmarke: geschlossener Kreis, der weiterläuft – der Zyklus aus „Sicherheit ist kein Projektende“ -->
@@ -185,7 +291,7 @@
       <article class="card feature">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-shield"/></svg></span>
         <div>
-          <span class="kicker" style="margin-bottom:8px">Schwerpunkt</span>
+          <span class="kicker">Schwerpunkt</span>
           <h3>IT-Sicherheit</h3>
           <p>Von der Bestandsaufnahme über den Aufbau tragfähiger Strukturen bis zum
              laufenden Betrieb – abgestimmt auf Größe und Reifegrad Ihres Unternehmens.</p>
@@ -206,7 +312,7 @@
       <article class="card feature">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cpu"/></svg></span>
         <div>
-          <span class="kicker" style="margin-bottom:8px">Schwerpunkt</span>
+          <span class="kicker">Schwerpunkt</span>
           <h3>Sichere KI-Automatisierung</h3>
           <p>KI-Agenten produktiv einsetzen, ohne die Kontrolle über Daten und Prozesse abzugeben.</p>
           <ul>
@@ -421,7 +527,7 @@
       </article>
     </div>
 
-    <div class="grid3 stagger" style="margin-top:22px">
+    <div class="grid3 stagger gap-top">
       <article class="card">
         <h3>Direkter Kontakt</h3>
         <p>Sie sprechen durchgehend mit denselben Ansprechpartnern – ohne Ticketsystem
@@ -502,7 +608,7 @@
 
       <div class="contact-grid">
         <div>
-          <span class="kicker" style="color:#7fc4ff">Kontakt</span>
+          <span class="kicker">Kontakt</span>
           <h2>Sprechen wir über Ihre Ausgangslage</h2>
           <p>In einem unverbindlichen Erstgespräch klären wir, welche Anforderungen für
              Ihr Unternehmen gelten und wo der sinnvollste Einstiegspunkt liegt.</p>

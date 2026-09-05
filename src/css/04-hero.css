@@ -69,8 +69,8 @@
 }
 .btn svg{width:15px;height:15px;transition:transform .25s ease}
 .btn:hover svg{transform:translateX(2px)}
-.btn-primary{color:#fff;background:var(--brand-bright)}
-.btn-primary:hover{background:var(--brand)}
+.btn-primary{color:#fff;background:var(--brand)}
+.btn-primary:hover{background:var(--brand-deep)}
 .btn-ghost{color:#fff;background:rgba(255,255,255,.001);border-color:rgba(255,255,255,.42)}
 .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.7)}
 

@@ -1,0 +1,31 @@
+[
+  {
+    "@type": "Organization",
+    "@id": "https://kr3is.com/#organisation",
+    "name": "Kr3is",
+    "url": "https://kr3is.com/",
+    "email": "kontakt@kr3is.com",
+    "description": "Informationssicherheit, sichere KI-Automatisierung und IT-Betrieb für mittelständische Unternehmen.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Deutschland"
+    },
+    "knowsAbout": [
+      "Informationssicherheit",
+      "NIS2",
+      "ISO/IEC 27001",
+      "BSI IT-Grundschutz",
+      "DSGVO",
+      "EU AI Act",
+      "KI-Automatisierung"
+    ]
+  },
+  {
+    "@type": "WebSite",
+    "@id": "https://kr3is.com/#website",
+    "url": "https://kr3is.com/",
+    "name": "Kr3is",
+    "inLanguage": "de-DE",
+    "publisher": { "@id": "https://kr3is.com/#organisation" }
+  }
+]

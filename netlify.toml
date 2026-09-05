@@ -9,9 +9,14 @@
 
 # Sicherheitskopfzeilen. Die Content-Security-Policy passt zur Seite, wie sie
 # gebaut ist: keine Inhalte von Dritten, Stile und Skripte nur von der eigenen
-# Herkunft. 'unsafe-inline' bleibt für script-src nötig, weil das Skript gegen
-# das Farb-Aufblitzen inline im <head> stehen muss, und für style-src wegen
-# einzelner style-Attribute im Markup.
+# Herkunft – und ohne 'unsafe-inline'.
+#
+# Das Skript gegen das Farb-Aufblitzen muss inline im <head> stehen, ist aber
+# auf allen Seiten byteidentisch und deshalb über genau einen Hash freigegeben.
+# Ändert es sich, passt der Hash nicht mehr und das Skript wird blockiert – die
+# Prüfsuite vergleicht beides und schlägt vorher an (tools/check.mjs).
+# style-src kommt ohne Freigabe aus, seit es keine style-Attribute im Markup
+# und kein zur Laufzeit erzeugtes <style>-Element mehr gibt.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -20,12 +25,18 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), camera=(), microphone=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-qAm1D9YXWE5lgYKcbk11ZYOn1EvdA5PFz5KP8XrCpko='; style-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 
-# Die Quelldateien liegen im veröffentlichten Verzeichnis, sind aber keine
-# Seiten. Ohne diesen Kopf würden sie als doppelter Inhalt indexiert.
+# Quelldateien und Prüfsuite liegen im veröffentlichten Verzeichnis, sind aber
+# keine Seiten. robots.txt hält Crawler fern; das allein verhindert aber nur das
+# Lesen, nicht das Indexieren verlinkter Adressen – dafür braucht es den Kopf.
 [[headers]]
   for = "/src/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/tools/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 

@@ -51,16 +51,23 @@
   /* --- Lichtkegel auf Karten folgt dem Zeiger --- */
   if (window.matchMedia('(hover: hover)').matches &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    /* pending hält die jüngste Position, queued merkt sich das bereits
+       angemeldete Bild. Beides muss getrennt bleiben: läge queued auf
+       pending, ginge das Merkmal bei jeder Bewegung mit dem alten Objekt
+       verloren und jede Bewegung meldete ein eigenes Bild an. */
     var pending = null;
+    var queued = false;
     document.addEventListener('pointermove', function (e) {
       var card = e.target.closest ? e.target.closest('.card') : null;
       if (!card) return;
       pending = { card: card, x: e.clientX, y: e.clientY };
-      if (pending.queued) return;
-      pending.queued = true;
+      if (queued) return;
+      queued = true;
       requestAnimationFrame(function () {
+        queued = false;
         var t = pending;
         pending = null;
+        if (!t) return;
         var r = t.card.getBoundingClientRect();
         t.card.style.setProperty('--mx', (t.x - r.left) + 'px');
         t.card.style.setProperty('--my', (t.y - r.top) + 'px');
@@ -70,13 +77,13 @@
 
   /* --- Aurora anhalten, sobald der Hero aus dem Bild gescrollt ist --- */
   if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
+    var auroraIO = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         entry.target.classList.toggle('offscreen', !entry.isIntersecting);
       });
     }, { rootMargin: '120px' });
     document.querySelectorAll('.aurora').forEach(function (a) {
-      io.observe(a.parentElement);
+      auroraIO.observe(a.parentElement);
     });
   }
 
@@ -84,24 +91,21 @@
   var supportsSDA = CSS.supports && CSS.supports('animation-timeline', 'view()');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!supportsSDA && !reduce && 'IntersectionObserver' in window) {
+    /* Die Regeln zu .js-reveal stehen in 02-base.css. Sie hier als
+       <style>-Element einzusetzen, hieße style-src 'unsafe-inline' zu
+       verlangen; wirksam werden sie ohnehin erst mit der Klasse. */
     var targets = document.querySelectorAll('.reveal, .stagger > *');
-    var style = document.createElement('style');
-    style.textContent =
-      '.js-reveal{opacity:0;transform:translateY(26px);' +
-      'transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1)}' +
-      '.js-reveal.in{opacity:1;transform:none}';
-    document.head.appendChild(style);
 
-    var io = new IntersectionObserver(function (entries) {
+    var revealIO = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         var el = entry.target;
         var delay = (Array.prototype.indexOf.call(el.parentNode.children, el) % 3) * 90;
         setTimeout(function () { el.classList.add('in'); }, delay);
-        io.unobserve(el);
+        revealIO.unobserve(el);
       });
     }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
 
-    targets.forEach(function (el) { el.classList.add('js-reveal'); io.observe(el); });
+    targets.forEach(function (el) { el.classList.add('js-reveal'); revealIO.observe(el); });
   }
 })();

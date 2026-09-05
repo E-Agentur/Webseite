@@ -67,7 +67,7 @@
 }
 .feature h3{color:#f5f5f7;font-size:1.6rem}
 .feature p{color:#a1a1a6}
-.feature .kicker{color:#2997ff}
+.feature .kicker{color:#2997ff;margin-bottom:8px}
 .feature .ico{width:52px;height:52px;margin:0;color:#2997ff}
 .feature .ico svg{width:44px;height:44px}
 .feature ul{margin-top:16px;grid-template-columns:repeat(2,1fr);gap:9px 30px}

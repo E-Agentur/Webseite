@@ -34,10 +34,14 @@
     background:#fff !important;border:1px solid #ccc;box-shadow:none
   }
 
-  /* Ziele bleiben auf Papier lesbar – bei Rechtstexten ist das der Kernnutzen. */
-  main a[href^="http"]::after,
-  main a[href$=".html"]::after{content:" (" attr(href) ")";font-size:.85em;color:#555}
-  main a[href^="#"]::after{content:none}
+  /* Ziele bleiben auf Papier lesbar – bei Rechtstexten ist das der Kernnutzen.
+     Interne Verweise sind relativ notiert; auf Papier ist "impressum.html"
+     wertlos, deshalb wird die Herkunft davorgesetzt. */
+  main a[href^="http"]::after{content:" (" attr(href) ")";font-size:.85em;color:#555}
+  main a[href$=".html"]::after{content:" (https://kr3is.com/" attr(href) ")";font-size:.85em;color:#555}
+  main a[href^="#"]::after,
+  main a[href^="mailto:"]::after,
+  main a[href^="tel:"]::after{content:none}
 
   /* Zusammenhängendes zusammenhalten */
   h1,h2,h3{break-after:avoid-page}

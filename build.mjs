@@ -12,6 +12,12 @@
  * Seitensyntax: eine JSON-Kopfzeile <!--{ ... }--> am Dateianfang, danach der
  * Inhalt. Bausteine werden mit <!-- include: name --> eingesetzt, Variablen mit
  * {{name}}. Bausteine dürfen ihrerseits Bausteine und Variablen enthalten.
+ *
+ * Der Schlüssel "schema" im Kopf ist keine Variable, sondern eine Liste von
+ * JSON-LD-Knoten. Sie werden mit den seitenübergreifenden Knoten aus
+ * src/partials/schema.json zu genau einem @graph je Seite verbunden und als
+ * {{schema}} eingesetzt. Ein einziger Graph je Seite stellt sicher, dass
+ * Verweise über "@id" – etwa der Anbieter eines Service – auch aufgehen.
  */
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { join, basename } from 'node:path';
@@ -49,6 +55,15 @@ function expand(text, vars, depth = 0) {
   return /<!--\s*include:|\{\{/.test(out) ? expand(out, vars, depth + 1) : out;
 }
 
+/* ---------- Strukturierte Daten ---------- */
+const baseNodes = JSON.parse(read('src/partials/schema.json'));
+
+function schemaBlock(pageNodes) {
+  const graph = [...baseNodes, ...(pageNodes ?? [])];
+  const body = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, null, 2);
+  return `<script type="application/ld+json">\n${body}\n</script>`;
+}
+
 /* ---------- Seiten bauen ---------- */
 function buildPages() {
   const shell = read('src/partials/_shell.html');
@@ -57,7 +72,10 @@ function buildPages() {
     const raw = read(join('src/pages', file));
     const m = raw.match(/^<!--(\{[\s\S]*?\})-->\n?/);
     if (!m) throw new Error(`${file}: JSON-Kopf <!--{ ... }--> fehlt`);
-    const meta = JSON.parse(m[1]);
+    const { schema, ...meta } = JSON.parse(m[1]);
+    if (schema !== undefined && !Array.isArray(schema)) {
+      throw new Error(`${file}: "schema" muss eine Liste von JSON-LD-Knoten sein`);
+    }
     const vars = {
       bodyClass: '',
       mainClass: '',
@@ -66,6 +84,7 @@ function buildPages() {
       noindex: '',
       headExtra: '',
       ...meta,
+      schema: schemaBlock(schema),
       content: raw.slice(m[0].length).trim(),
     };
     const html = expand(shell, vars)
@@ -80,4 +99,4 @@ mkdirSync('assets', { recursive: true });
 const css = bundle('src/css', 'assets/site.css', 'Reihenfolge');
 const js = bundle('src/js', 'assets/site.js', 'Dateien');
 const pages = buildPages();
-console.log(`Gebaut: ${pages} Seiten, ${css} CSS-Bausteine, ${js} Skript(e).`);
+console.log(`Gebaut: ${pages} Seiten, ${css} CSS-Bausteine, ${js} Skript(e), ${baseNodes.length} Basis-Schemaknoten.`);
