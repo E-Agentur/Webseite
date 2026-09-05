@@ -25,7 +25,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), camera=(), microphone=(), interest-cohort=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-qAm1D9YXWE5lgYKcbk11ZYOn1EvdA5PFz5KP8XrCpko='; style-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'sha256-oiUoq9tPMq9+hEUwp/gx+Cu9tk8jA7U1WsL/vOXyjJg='; style-src 'self'; img-src 'self' data:; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 
 # Quelldateien und Prüfsuite liegen im veröffentlichten Verzeichnis, sind aber
 # keine Seiten. robots.txt hält Crawler fern; das allein verhindert aber nur das

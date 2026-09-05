@@ -113,7 +113,10 @@ header::before{
 
 @media (max-width:960px){
   .nav-links,.nav-cta{display:none}
-  .menu-btn{display:grid}
+  /* Nur mit Skript: app.js klappt das Menü auf. Ohne Skript bliebe eine
+     Schaltfläche stehen, die nichts tut – der Inhalt ist auch so erreichbar,
+     über das Logo, die Sprungmarken der Seite und die Fußzeile. */
+  html[data-js] .menu-btn{display:grid}
   .mobile-nav{
     display:block;position:absolute;left:0;right:0;top:var(--header-h);
     background:var(--surface);border-bottom:1px solid var(--line);

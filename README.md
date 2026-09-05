@@ -42,11 +42,18 @@ Erzeugt (nicht direkt bearbeiten):
 ### Bauen
 
 ```
-node build.mjs
+node build.mjs            baut
+node build.mjs --check    baut nichts, meldet nur Abweichungen
 ```
 
 Kein npm, keine Abhängigkeiten, kein Watcher. Netlify führt den Befehl laut
 `netlify.toml` bei jedem Deploy selbst aus.
+
+`--check` schreibt nichts und endet mit Exitcode 1, sobald eine erzeugte Datei
+nicht mehr zum Quellstand passt. Das ist nötig, weil die erzeugten Dateien
+eingecheckt sind: Wer `src/` ändert und den Build vergisst, hinterlässt sie
+veraltet – und die Prüfsuite prüfte dann einen Stand, den niemand mehr
+bearbeitet. Sie ruft `--check` deshalb selbst auf.
 
 **Warum ein Build?** Kopfzeile, Fußzeile und Icons lagen vorher in jeder Seite
 erneut – ein neuer Navigationspunkt bedeutete acht Änderungen an vier Dateien.
@@ -81,6 +88,9 @@ Geprüft wird:
 7. **Formular** – Netlify-Merkmale, Pflichtfelder, Labels, Honigtopf
 8. **Auszeichnung** – JSON-LD gültig, jede `@id`-Verweisung löst auf
 9. **Auslieferbares** – CSP-Hash passt zum Inline-Skript, Sitemap vollständig
+10. **Ohne Skript** – kein Bedienelement, das ohne JavaScript nichts tut; jede
+    Seite kommt vollständig an
+11. **Build** – die erzeugten Dateien sind auf dem Stand von `src/`
 
 Punkt 3 gibt es, weil die übrigen Prüfungen eine Seite durchwinken, die
 lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal
@@ -256,7 +266,15 @@ Hinweiskästen sind unterbunden.
 - Bewegung liegt hinter `prefers-reduced-motion`, Glaseffekte hinter
   `prefers-reduced-transparency`.
 - Scroll-Animationen stehen in `@supports`; ohne Unterstützung greift ein
-  IntersectionObserver-Fallback, ohne JavaScript ist alles sofort sichtbar.
+  IntersectionObserver-Fallback. Ohne JavaScript trägt die Seite trotzdem: Das
+  Reveal läuft über `animation-timeline: view()` und damit rein über CSS, die
+  Kopfzeile hat eine `@supports not`-Stufe, und alle Inhalte sind erreichbar.
+- Das mobile Menü ist die **eine** Ausnahme – es bedient app.js. Das Skript im
+  `<head>` setzt deshalb `data-js` auf `<html>`, und das Stylesheet zeigt die
+  Menü-Schaltfläche nur, wenn diese Markierung da ist. Ohne Skript stünde dort
+  sonst eine Schaltfläche, die nichts tut; erreichbar bleiben die Inhalte über
+  Logo, die Sprungmarken der Seite und die Fußzeile. Wird das Inline-Skript
+  geändert, ändert sich sein CSP-Hash – siehe unten.
 - Sprunglink, sichtbare Fokusringe, `aria-expanded` am mobilen Menü, `Esc`
   schließt und gibt den Fokus an die Schaltfläche zurück.
 - Bei offenem mobilem Menü wird alles außer der Kopfzeile per `inert`

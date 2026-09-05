@@ -22,6 +22,8 @@
  *   7. Formular       – Netlify-Merkmale, Pflichtfelder, Labels, Honigtopf
  *   8. Auszeichnung   – JSON-LD gültig, jede @id-Verweisung löst auf
  *   9. Auslieferbares – CSP-Hash passt zum Inline-Skript, Sitemap vollständig
+ *  10. Ohne Skript   – kein Bedienelement, das ohne JavaScript nichts tut
+ *  11. Build         – die erzeugten Dateien sind auf dem Stand von src/
  *
  * Punkt 3 gibt es, weil die übrigen Prüfungen eine Seite durchwinken, die
  * lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal verloren
@@ -33,6 +35,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { extname, join, normalize } from 'node:path';
 import { chromium } from 'playwright';
 
@@ -434,6 +437,54 @@ console.log('Strukturierte Daten geprüft.');
     })) note(`sitemap.xml führt "${loc}" – dazu gibt es keine Seite`);
   console.log(`Sitemap geprüft: ${listed.length} Adressen.`);
 }
+
+/* ---------- 10: Ohne JavaScript ---------- */
+/* Die Seite ist so gebaut, dass sie ohne Skript trägt – Reveal und Kopfzeile
+   laufen über CSS. Eine Ausnahme gibt es: Das mobile Menü bedient app.js. Ohne
+   Skript stand dort eine Schaltfläche, die nichts tat. Geprüft wird deshalb,
+   dass ohne Skript keine Bedienelemente sichtbar bleiben, die es braucht –
+   und dass die Seite ansonsten vollständig ankommt. */
+for (const page of PAGES) {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false });
+  const p = await ctx.newPage();
+  const cdp = await ctx.newCDPSession(p);
+  p.on('requestfailed', (r) => note(`${page} ohne JS: Anfrage fehlgeschlagen ${r.url()}`));
+  await p.goto(url(page), { waitUntil: 'networkidle' });
+  const { result } = await cdp.send('Runtime.evaluate', {
+    returnByValue: true,
+    expression: `(() => {
+      /* Sichtbar heißt: gerendert und nicht von einem Vorfahren ausgeblendet. */
+      const gezeigt = (el) => {
+        if (!el) return false;
+        if (!el.getClientRects().length) return false;
+        return getComputedStyle(el).visibility === 'visible';
+      };
+      return JSON.stringify({
+        menuBtn: gezeigt(document.querySelector('.menu-btn')),
+        h1: (document.querySelector('h1') || {}).textContent ? true : false,
+        fuss: document.querySelectorAll('footer a[href]').length,
+        ueberlauf: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      });
+    })()`,
+  });
+  const r = JSON.parse(result.value);
+  if (r.menuBtn) note(`${page} ohne JS: Menü-Schaltfläche sichtbar, ohne Skript tut sie nichts`);
+  if (!r.h1) note(`${page} ohne JS: keine h1`);
+  if (r.fuss < 2) note(`${page} ohne JS: Fußzeile führt ${r.fuss} Links`);
+  if (r.ueberlauf > 0) note(`${page} ohne JS: horizontaler Überlauf ${r.ueberlauf}px`);
+  await ctx.close();
+}
+console.log('Verhalten ohne JavaScript geprüft.');
+
+/* ---------- 11: Erzeugte Dateien gegen src/ ---------- */
+/* Geprüft werden die gebauten Dateien. Sind sie veraltet, prüft die Suite
+   einen Stand, den niemand mehr bearbeitet hat. */
+{
+  const build = spawnSync(process.execPath, [join(ROOT, 'build.mjs'), '--check'],
+                          { cwd: ROOT, encoding: 'utf8' });
+  if (build.status !== 0) note(`Build: ${(build.stderr || build.stdout).trim()}`);
+}
+console.log('Stand der erzeugten Dateien geprüft.');
 
 await browser.close();
 server.close();
