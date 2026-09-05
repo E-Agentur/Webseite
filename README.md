@@ -249,7 +249,12 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
 - **Schwerpunkt-Zeichen** über der Überschrift (`.triad`) – ein Ring aus drei
   Farbdritteln, eines je Schwerpunkt, zusammen der geschlossene Kreis. Es nimmt
   den Namen und das Zyklus-Zeichen der Kopfzeile auf und ersetzt die frühere
-  Textzeile „IT-Sicherheit · KI-Automatisierung · Compliance“.
+  Textzeile „IT-Sicherheit · KI-Automatisierung · Compliance“. Die Felder heißen
+  jetzt **IT-Sicherheit, KI-Automatisierung und Regulatorik** – alle drei Wörter
+  stehen so bereits im übrigen Text. „Compliance“ stand genau einmal auf der
+  ganzen Seite, nämlich hier; überall sonst heißt es „Regulatorik“. Ein einzelnes
+  englisches Wort in einem sonst durchgehend deutschen Wortschatz fällt auf, und
+  es war zudem die einzige Zustandsbeschreibung neben zwei Arbeitsgebieten.
   Der Ring hat r=16, sein Umfang ist also 100,53; ein Drittel wären 33,51, der
   sichtbare Bogen ist mit 28 etwas kürzer, damit Lücken bleiben. Jedes Drittel
   wird allein über `stroke-dashoffset` gesetzt, nicht über eine Drehung – so
