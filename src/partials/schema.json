@@ -3,6 +3,7 @@
     "@type": "Organization",
     "@id": "https://kr3is.com/#organisation",
     "name": "Kr3is",
+    "legalName": "Kr3is UG (haftungsbeschränkt)",
     "url": "https://kr3is.com/",
     "email": "kontakt@kr3is.com",
     "description": "Informationssicherheit, sichere KI-Automatisierung und IT-Betrieb für mittelständische Unternehmen.",
@@ -26,6 +27,8 @@
     "url": "https://kr3is.com/",
     "name": "Kr3is",
     "inLanguage": "de-DE",
-    "publisher": { "@id": "https://kr3is.com/#organisation" }
+    "publisher": {
+      "@id": "https://kr3is.com/#organisation"
+    }
   }
 ]

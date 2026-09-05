@@ -88,7 +88,7 @@ const abschnitt = (titel, zeilen, rat) => {
   const fehlend = ['address', 'telephone', 'legalName']
     .filter((k) => !(k in org))
     .map((k) => `Organization.${k}`);
-  abschnitt('Strukturierte Daten ohne Anschrift, Telefon, Rechtsform', fehlend,
+  abschnitt('Strukturierte Daten, absichtlich fehlende Angaben', fehlend,
     'Bewusst weggelassen – lieber nichts als falsch. Nach dem Ergänzen der '
     + 'Platzhalter in src/partials/schema.json nachtragen.');
 }

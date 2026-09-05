@@ -189,8 +189,14 @@ Die Startseite führt **zwei gleichrangige Schwerpunkte**:
    ausführlichen Abschnitt weiter unten auf derselben Seite führt.
 
 Beide nutzen dieselbe Komponente (`.card.feature` im Container `.focus`), damit
-kein Thema optisch dominiert. Wer einen dritten Schwerpunkt ergänzen will, fügt
-einfach ein weiteres `.card.feature` in `.focus` ein.
+kein Thema optisch dominiert, und beide führen unter derselben Beschriftung
+weiter („Mehr dazu“). Wer einen dritten Schwerpunkt ergänzen will, fügt einfach
+ein weiteres `.card.feature` in `.focus` ein.
+
+**Ungleich bleibt das Ziel:** IT-Sicherheit führt auf eine eigene Seite, KI-Auto-
+matisierung nur auf einen Abschnitt derselben Seite. Eine eigene Unterseite für
+die KI-Automatisierung gibt es noch nicht – solange das so ist, verspricht die
+gleiche Beschriftung zwei verschiedene Tiefen.
 
 Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
@@ -240,6 +246,26 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
   beide schwach dosiert, damit die Typografie trägt. Die Kopfzeile liegt
   transparent darüber und färbt sich beim Scrollen ein (Scroll-Timeline über
   `@property`-registrierte Custom Properties, damit die Farben interpolieren).
+- **Schwerpunkt-Zeichen** über der Überschrift (`.triad`) – ein Ring aus drei
+  Farbdritteln, eines je Schwerpunkt, zusammen der geschlossene Kreis. Es nimmt
+  den Namen und das Zyklus-Zeichen der Kopfzeile auf und ersetzt die frühere
+  Textzeile „IT-Sicherheit · KI-Automatisierung · Compliance“. Die Felder heißen
+  jetzt **IT-Sicherheit, KI-Automatisierung und IT-Betrieb** – dieselben drei, die
+  auch der `<title>`, der `og:title` und die Kopfzeile dieser Datei nennen.
+  „Compliance“ war doppelt unpassend: Es stand genau einmal auf der ganzen Seite,
+  während dasselbe Thema überall sonst deutsch benannt ist, und es war die
+  einzige Zustandsbeschreibung neben zwei Arbeitsgebieten. „Regulatorik“ wäre
+  ebenfalls schief gewesen, weil es hier kein gleichrangiges drittes Feld ist,
+  sondern eine der sechs Leistungen **innerhalb** der IT-Sicherheit
+  („Regulatorik & NIS2“).
+  Der Ring hat r=16, sein Umfang ist also 100,53; ein Drittel wären 33,51, der
+  sichtbare Bogen ist mit 28 etwas kürzer, damit Lücken bleiben. Jedes Drittel
+  wird allein über `stroke-dashoffset` gesetzt, nicht über eine Drehung – so
+  braucht es weder `transform-box` noch `transform-origin` auf einem
+  SVG-Element, und das Einzeichnen kann über `stroke-dasharray` laufen, ohne mit
+  der Positionierung ins Gehege zu kommen. Der Ring ist `aria-hidden`, die drei
+  Beschriftungen bleiben gewöhnlicher Text. Unter 560 px rückt das Zeichen über
+  die Beschriftungen; nebeneinander drängte es sie auf zwei ungleiche Zeilen.
 - **Reveal beim Scrollen** – native CSS Scroll-Driven Animations
   (`animation-timeline: view()`), gestaffelt über `animation-range`.
 - **Bento-Raster** auf `it-sicherheit.html` für die sechs Leistungskarten.
@@ -259,9 +285,10 @@ Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
   Überschrift ist das größte Element im ersten Bild; eine lange Einblendung
   verzögert direkt, wann sie sichtbar wird. Vorher dauerte das über eine
   Sekunde auf einer Seite, die nach 0,23 s fertig geladen ist.
-- Aurora und Pulspunkt werden per `IntersectionObserver` angehalten, sobald ihr
-  Abschnitt aus dem Bild ist. Sonst laufen sie über die gesamte Seitenlänge
-  weiter und kosten dauerhaft Rechenzeit.
+- Die Aurora wird per `IntersectionObserver` angehalten, sobald ihr Abschnitt
+  aus dem Bild ist. Sonst läuft sie über die gesamte Seitenlänge weiter und
+  kostet dauerhaft Rechenzeit. Das Schwerpunkt-Zeichen braucht das nicht: Sein
+  Bogen wird einmal gezeichnet und steht dann still.
 
 ### Druck
 
@@ -395,7 +422,6 @@ muss sie erweitert werden. Beides anwaltlich prüfen lassen.
 
 Alle in eckigen Klammern:
 
-- `[Rechtsform]` in der Fußzeile – steht nur noch einmal in `src/partials/footer.html`
 - `[Vorname Nachname]` sowie die Initialen `VN` in den Profil-Kacheln
 - `[+49 ___ _______]` – auch der `tel:`-Link steht noch auf `tel:+49`,
   auf der Startseite wie auf `it-sicherheit.html`
@@ -405,8 +431,15 @@ Alle in eckigen Klammern:
 - in der Datenschutzerklärung Hosting-Anbieter, Formularanbieter samt
   Drittlandgrundlage, Löschfristen, zuständige Aufsichtsbehörde, Stand-Datum
 
-Anschrift, Telefon und Rechtsform fehlen bewusst auch in den strukturierten
-Daten (JSON-LD) – lieber weglassen als falsch auszeichnen. Nach dem Ergänzen in
+Firmierung und Rechtsform stehen: **Kr3is UG (haftungsbeschränkt)**, in Fußzeile,
+Impressum, Datenschutzerklärung und als `legalName` am `Organization`-Knoten.
+Der Zusatz „(haftungsbeschränkt)“ ist keine Zierde: § 5a Abs. 1 GmbHG schreibt
+ihn vor und lässt ihn nicht abkürzen; fehlt er, haftet nach der Rechtsprechung
+des BGH der Vertreter persönlich für den erzeugten Rechtsschein. Er gehört
+deshalb überall hin, wo die Firma genannt wird.
+
+Anschrift und Telefon fehlen weiterhin bewusst in den strukturierten Daten
+(JSON-LD) – lieber weglassen als falsch auszeichnen. Nach dem Ergänzen in
 `src/partials/schema.json` am Knoten `Organization` nachtragen.
 
 ### 5. Sonstiges
