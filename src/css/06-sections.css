@@ -229,5 +229,7 @@ footer{padding:32px 0;background:var(--bg-alt)}
 .foot a:hover{color:var(--accent)}
 
 /* Verweis auf das Formular im Kontaktblock */
-.contact-note a{color:#2997ff;text-decoration:none}
-.contact-note a:hover{text-decoration:underline}
+/* Der Verweis auf das Formular ist eine Schaltfläche wie im Hero, keine
+   Textstelle im Fließtext – er ist die zweite Handlungsaufforderung des
+   Abschnitts und soll so aussehen. */
+.contact-cta{margin-top:18px}

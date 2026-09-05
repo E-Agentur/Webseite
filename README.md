@@ -189,8 +189,14 @@ Die Startseite führt **zwei gleichrangige Schwerpunkte**:
    ausführlichen Abschnitt weiter unten auf derselben Seite führt.
 
 Beide nutzen dieselbe Komponente (`.card.feature` im Container `.focus`), damit
-kein Thema optisch dominiert. Wer einen dritten Schwerpunkt ergänzen will, fügt
-einfach ein weiteres `.card.feature` in `.focus` ein.
+kein Thema optisch dominiert, und beide führen unter derselben Beschriftung
+weiter („Mehr dazu“). Wer einen dritten Schwerpunkt ergänzen will, fügt einfach
+ein weiteres `.card.feature` in `.focus` ein.
+
+**Ungleich bleibt das Ziel:** IT-Sicherheit führt auf eine eigene Seite, KI-Auto-
+matisierung nur auf einen Abschnitt derselben Seite. Eine eigene Unterseite für
+die KI-Automatisierung gibt es noch nicht – solange das so ist, verspricht die
+gleiche Beschriftung zwei verschiedene Tiefen.
 
 Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
@@ -240,6 +246,18 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
   beide schwach dosiert, damit die Typografie trägt. Die Kopfzeile liegt
   transparent darüber und färbt sich beim Scrollen ein (Scroll-Timeline über
   `@property`-registrierte Custom Properties, damit die Farben interpolieren).
+- **Schwerpunkt-Zeichen** über der Überschrift (`.triad`) – ein Ring aus drei
+  Farbdritteln, eines je Schwerpunkt, zusammen der geschlossene Kreis. Es nimmt
+  den Namen und das Zyklus-Zeichen der Kopfzeile auf und ersetzt die frühere
+  Textzeile „IT-Sicherheit · KI-Automatisierung · Compliance“.
+  Der Ring hat r=16, sein Umfang ist also 100,53; ein Drittel wären 33,51, der
+  sichtbare Bogen ist mit 28 etwas kürzer, damit Lücken bleiben. Jedes Drittel
+  wird allein über `stroke-dashoffset` gesetzt, nicht über eine Drehung – so
+  braucht es weder `transform-box` noch `transform-origin` auf einem
+  SVG-Element, und das Einzeichnen kann über `stroke-dasharray` laufen, ohne mit
+  der Positionierung ins Gehege zu kommen. Der Ring ist `aria-hidden`, die drei
+  Beschriftungen bleiben gewöhnlicher Text. Unter 560 px rückt das Zeichen über
+  die Beschriftungen; nebeneinander drängte es sie auf zwei ungleiche Zeilen.
 - **Reveal beim Scrollen** – native CSS Scroll-Driven Animations
   (`animation-timeline: view()`), gestaffelt über `animation-range`.
 - **Bento-Raster** auf `it-sicherheit.html` für die sechs Leistungskarten.
@@ -259,9 +277,10 @@ Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
   Überschrift ist das größte Element im ersten Bild; eine lange Einblendung
   verzögert direkt, wann sie sichtbar wird. Vorher dauerte das über eine
   Sekunde auf einer Seite, die nach 0,23 s fertig geladen ist.
-- Aurora und Pulspunkt werden per `IntersectionObserver` angehalten, sobald ihr
-  Abschnitt aus dem Bild ist. Sonst laufen sie über die gesamte Seitenlänge
-  weiter und kosten dauerhaft Rechenzeit.
+- Die Aurora wird per `IntersectionObserver` angehalten, sobald ihr Abschnitt
+  aus dem Bild ist. Sonst läuft sie über die gesamte Seitenlänge weiter und
+  kostet dauerhaft Rechenzeit. Das Schwerpunkt-Zeichen braucht das nicht: Sein
+  Bogen wird einmal gezeichnet und steht dann still.
 
 ### Druck
 

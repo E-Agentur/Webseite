@@ -346,19 +346,54 @@ header::before{
           mask-image:radial-gradient(ellipse 74% 60% at 50% 40%,#000 20%,transparent 72%);
 }
 
-.badge{
-  display:inline-flex;align-items:center;gap:9px;
-  font-size:clamp(1rem,2.4vw,1.22rem);font-weight:600;letter-spacing:-.01em;
-  color:#2997ff;
+/* Ein Ring, drei Drittel – das Zeichen zu den drei Schwerpunkten.
+
+   r=16 ergibt den Umfang 2*PI*16 = 100.53, ein Drittel also 33.51. Der
+   sichtbare Bogen ist mit 28 etwas kürzer, damit zwischen den Dritteln Lücken
+   bleiben. Gesetzt wird jedes Drittel allein über stroke-dashoffset, nicht über
+   eine Drehung: So braucht es weder transform-box noch transform-origin auf
+   einem SVG-Element, und das Einzeichnen kann über stroke-dasharray laufen,
+   ohne mit der Positionierung ins Gehege zu kommen. */
+.triad{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:10px 18px;margin-bottom:10px;
 }
-.dot{width:7px;height:7px;border-radius:50%;background:#30d158;flex:none;position:relative}
-@media (prefers-reduced-motion:no-preference){
-  .dot::after{
-    content:"";position:absolute;inset:0;border-radius:50%;background:inherit;
-    animation:ping 2.6s cubic-bezier(0,0,.2,1) infinite;
-  }
+.triad-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 20px}
+.triad-mark{width:36px;height:36px;flex:none;display:block}
+/* Ohne die Drehung begänne das erste Drittel rechts, auf drei Uhr. Der schwache
+   Schein hebt das Zeichen von der dunklen Bühne ab, ohne dass es gegen die
+   Überschrift antritt. */
+.triad-mark svg{
+  width:100%;height:100%;display:block;transform:rotate(-90deg);
+  filter:drop-shadow(0 0 7px rgba(41,151,255,.28));
 }
-@keyframes ping{to{transform:scale(3.2);opacity:0}}
+.tr-arc{
+  stroke-width:3.6;stroke-linecap:round;
+  animation:tr-draw .85s cubic-bezier(.16,.84,.44,1) both;
+}
+@keyframes tr-draw{from{stroke-dasharray:0 100.53}to{stroke-dasharray:28 72.53}}
+.tr-a{stroke:#2997ff;stroke-dashoffset:0}
+.tr-b{stroke:#30c9c9;stroke-dashoffset:-33.51;animation-delay:.1s}
+.tr-c{stroke:#7fc4ff;stroke-dashoffset:-67.02;animation-delay:.2s}
+
+.triad-item{
+  font-size:clamp(.92rem,1.7vw,1.04rem);font-weight:500;letter-spacing:-.01em;
+  color:#c3d4e8;white-space:nowrap;position:relative;
+}
+/* Dünne Striche zwischen den Feldern statt Mittelpunkten – sie tragen die
+   Trennung, ohne wie Satzzeichen gelesen zu werden. */
+.triad-item + .triad-item::before{
+  content:"";position:absolute;left:-10px;top:50%;translate:0 -50%;
+  width:1px;height:13px;background:rgba(255,255,255,.22);
+}
+/* Schmale Fenster: Das Zeichen rückt über die Beschriftungen. Nebeneinander
+   drängte es die drei Felder auf zwei ungleiche Zeilen; untereinander stehen
+   sie in einer. */
+@media (max-width:560px){
+  .triad{flex-direction:column;gap:9px}
+  .triad-list{gap:5px 14px}
+  .triad-item + .triad-item::before{left:-7px;height:11px}
+}
 
 .hero h1{margin-top:10px;color:#f5f5f7}
 .hero h1 .grad{
@@ -406,10 +441,10 @@ header::before{
   .d4{animation-delay:.24s}
 }
 
-/* Aurora und Pulspunkt anhalten, sobald der Hero aus dem Bild ist – sonst
-   laufen sie über die gesamte Seitenlänge weiter und kosten dauerhaft Strom. */
-.offscreen .aurora i,
-.offscreen .dot::after{animation-play-state:paused}
+/* Aurora anhalten, sobald der Hero aus dem Bild ist – sonst läuft sie über die
+   gesamte Seitenlänge weiter und kostet dauerhaft Strom. Das Schwerpunkt-Zeichen
+   braucht das nicht: Sein Bogen wird einmal gezeichnet und steht dann still. */
+.offscreen .aurora i{animation-play-state:paused}
 @keyframes rise-in{to{opacity:1;transform:none}}
 
 /* Zweitbutton außerhalb des dunklen Hero – dort braucht er Kontur in Textfarbe. */
@@ -739,8 +774,10 @@ footer{padding:32px 0;background:var(--bg-alt)}
 .foot a:hover{color:var(--accent)}
 
 /* Verweis auf das Formular im Kontaktblock */
-.contact-note a{color:#2997ff;text-decoration:none}
-.contact-note a:hover{text-decoration:underline}
+/* Der Verweis auf das Formular ist eine Schaltfläche wie im Hero, keine
+   Textstelle im Fließtext – er ist die zweite Handlungsaufforderung des
+   Abschnitts und soll so aussehen. */
+.contact-cta{margin-top:18px}
 
 /* ---------- 07-forms.css ---------- */
 /* Formulare – Betroffenheitsprüfung */

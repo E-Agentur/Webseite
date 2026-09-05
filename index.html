@@ -233,7 +233,27 @@
   <div class="grid-lines" aria-hidden="true"></div>
 
   <div class="wrap">
-    <span class="badge rise"><span class="dot" aria-hidden="true"></span>IT-Sicherheit · KI-Automatisierung · Compliance</span>
+    <!--
+      Der Name ist Programm: ein Kreis, in drei Teilen. Jedes Drittel des Rings
+      steht für einen Schwerpunkt und trägt dessen Farbe; zusammen ergeben sie
+      den geschlossenen Kreis. Das greift auch das Zyklus-Zeichen der Kopfzeile
+      auf. Der Ring ist Zierwerk und deshalb aria-hidden, die Beschriftungen
+      bleiben gewöhnlicher Text – vorlesbar und auffindbar.
+    -->
+    <div class="triad rise">
+      <span class="triad-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle class="tr-arc tr-a" cx="20" cy="20" r="16"/>
+          <circle class="tr-arc tr-b" cx="20" cy="20" r="16"/>
+          <circle class="tr-arc tr-c" cx="20" cy="20" r="16"/>
+        </svg>
+      </span>
+      <span class="triad-list">
+        <span class="triad-item">IT-Sicherheit</span>
+        <span class="triad-item">KI-Automatisierung</span>
+        <span class="triad-item">Compliance</span>
+      </span>
+    </div>
 
     <h1 class="rise d1">Informationssicherheit,<br><span class="grad">die im Alltag funktioniert.</span></h1>
 
@@ -242,10 +262,10 @@
        fachlich fundiert und ohne unnötige Komplexität.</p>
 
     <div class="cta-row rise d3">
-      <a href="#kontakt" class="btn btn-primary">Erstgespräch vereinbaren
+      <a href="betroffenheit.html" class="btn btn-primary">Erstgespräch vereinbaren
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
       </a>
-      <a href="#leistungen" class="btn btn-ghost">Leistungen ansehen</a>
+      <a href="it-sicherheit.html" class="btn btn-ghost">Leistungen ansehen</a>
     </div>
 
     <div class="standards rise d4">
@@ -310,7 +330,7 @@
             <li>Notfall &amp; Awareness</li>
           </ul>
         </div>
-        <a href="it-sicherheit.html" class="feature-link">Alle Leistungen
+        <a href="it-sicherheit.html" class="feature-link">Mehr dazu
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
         </a>
       </article>
@@ -622,8 +642,10 @@
           <p>In einem unverbindlichen Erstgespräch klären wir, welche Anforderungen für
              Ihr Unternehmen gelten und wo der sinnvollste Einstiegspunkt liegt.</p>
           <p class="contact-note">Antwort in der Regel innerhalb eines Werktages.
-             Lieber strukturiert? <a href="betroffenheit.html">Angaben zum Unternehmen
-             übermitteln</a> – dann kommen wir vorbereitet ins Gespräch.</p>
+             Lieber strukturiert? Dann kommen wir vorbereitet ins Gespräch.</p>
+          <a href="betroffenheit.html" class="btn btn-ghost contact-cta">Angaben zum Unternehmen übermitteln
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
         </div>
 
         <div class="contact-card">
