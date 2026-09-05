@@ -34,8 +34,8 @@ tools/          Prüfsuite (eigene package.json, damit der Netlify-Build
                 keine Abhängigkeiten installiert)
 
 Erzeugt (nicht direkt bearbeiten):
-  index.html, it-sicherheit.html, betroffenheit.html, danke.html,
-  impressum.html, datenschutz.html, 404.html
+  index.html, it-sicherheit.html, ki-automatisierung.html, betroffenheit.html,
+  danke.html, impressum.html, datenschutz.html, 404.html
   assets/site.css, assets/site.js
 ```
 
@@ -185,18 +185,25 @@ Die Startseite führt **zwei gleichrangige Schwerpunkte**:
 
 1. **IT-Sicherheit** – ein Feld, das die sechs Leistungsbereiche nur benennt und
    auf `it-sicherheit.html` verweist. Die ausführlichen Karten liegen dort.
-2. **Sichere KI-Automatisierung** – ein Feld gleicher Bauart, das in den
-   ausführlichen Abschnitt weiter unten auf derselben Seite führt.
+2. **Sichere KI-Automatisierung** – ein Feld gleicher Bauart, das auf
+   `ki-automatisierung.html` verweist. Die ausführlichen Karten liegen dort.
 
 Beide nutzen dieselbe Komponente (`.card.feature` im Container `.focus`), damit
 kein Thema optisch dominiert, und beide führen unter derselben Beschriftung
 weiter („Mehr dazu“). Wer einen dritten Schwerpunkt ergänzen will, fügt einfach
 ein weiteres `.card.feature` in `.focus` ein.
 
-**Ungleich bleibt das Ziel:** IT-Sicherheit führt auf eine eigene Seite, KI-Auto-
-matisierung nur auf einen Abschnitt derselben Seite. Eine eigene Unterseite für
-die KI-Automatisierung gibt es noch nicht – solange das so ist, verspricht die
-gleiche Beschriftung zwei verschiedene Tiefen.
+Beide Wege sind jetzt gleich tief: Karte → eigene Unterseite → sechs Bereiche
+mit je vier Punkten. Vorher führte die KI-Karte nur an einen Abschnitt derselben
+Seite, während dieselbe Beschriftung bei der IT-Sicherheit eine ganze Seite
+versprach.
+
+Der Abschnitt `#ki-automatisierung` auf der Startseite bleibt bestehen – die
+Kopfzeile verweist darauf – und ist die Übersicht: sechs Bereiche mit je einem
+Absatz. Die Unterseite führt dieselben sechs Bereiche mit je vier konkreten
+Punkten aus, so wie `it-sicherheit.html` die sechs Leistungen ausführt, die die
+Karte nur benennt. Am Ende des Abschnitts steht ein Verweis auf die Unterseite,
+damit er keine Sackgasse ist.
 
 Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
