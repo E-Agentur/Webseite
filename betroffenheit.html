@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-DE">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,13 +24,88 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <script>
-  /* Setzt das Farbschema vor dem ersten Paint – verhindert Aufblitzen beim Laden. */
+  /* Läuft vor dem ersten Paint. Zwei Aufgaben:
+     - data-js markiert, dass Skripte laufen. Ohne die Markierung blendet das
+       Stylesheet die Menü-Schaltfläche aus: Sie wird von app.js bedient und
+       wäre ohne Skript eine Schaltfläche, die nichts tut.
+     - data-theme setzt das gemerkte Farbschema, sonst blitzt beim Laden die
+       falsche Farbe auf. */
   (function () {
+    document.documentElement.setAttribute('data-js', '');
     try {
       var t = localStorage.getItem('theme');
       if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   })();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://kr3is.com/#organisation",
+      "name": "Kr3is",
+      "url": "https://kr3is.com/",
+      "email": "kontakt@kr3is.com",
+      "description": "Informationssicherheit, sichere KI-Automatisierung und IT-Betrieb für mittelständische Unternehmen.",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "knowsAbout": [
+        "Informationssicherheit",
+        "NIS2",
+        "ISO/IEC 27001",
+        "BSI IT-Grundschutz",
+        "DSGVO",
+        "EU AI Act",
+        "KI-Automatisierung"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://kr3is.com/#website",
+      "url": "https://kr3is.com/",
+      "name": "Kr3is",
+      "inLanguage": "de-DE",
+      "publisher": {
+        "@id": "https://kr3is.com/#organisation"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://kr3is.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Betroffenheit prüfen lassen",
+          "item": "https://kr3is.com/betroffenheit.html"
+        }
+      ]
+    },
+    {
+      "@type": "ContactPage",
+      "@id": "https://kr3is.com/betroffenheit.html#webpage",
+      "url": "https://kr3is.com/betroffenheit.html",
+      "name": "NIS2-Betroffenheit prüfen lassen",
+      "isPartOf": {
+        "@id": "https://kr3is.com/#website"
+      },
+      "about": {
+        "@id": "https://kr3is.com/#organisation"
+      },
+      "inLanguage": "de-DE"
+    }
+  ]
+}
 </script>
 
 <link rel="stylesheet" href="assets/site.css">
@@ -42,7 +117,7 @@
 
 <!-- Icon-Sammlung: inline, damit keine externen Anfragen entstehen.
      Gemeinsam für alle Seiten – so kann kein Icon auf einer Seite fehlen. -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
     <g id="i-shield"><path d="M12 3l7.5 3v5.6c0 4.4-3.1 8.1-7.5 9-4.4-.9-7.5-4.6-7.5-9V6z"/><path d="m8.8 12.2 2.2 2.2 4.2-4.4"/></g>
     <!-- Bildmarke: geschlossener Kreis, der weiterläuft – der Zyklus aus „Sicherheit ist kein Projektende“ -->
@@ -206,9 +281,12 @@
               <label for="umsatz">Jahresumsatz</label>
               <select id="umsatz" name="Jahresumsatz">
                 <option value="">Keine Angabe</option>
-                <option>bis 10&nbsp;Mio.&nbsp;€</option>
-                <option>10 bis 50&nbsp;Mio.&nbsp;€</option>
-                <option>über 50&nbsp;Mio.&nbsp;€</option>
+                <!-- Ohne &nbsp;: der Wert wandert so in die Einsendung, und ein
+                     geschütztes Leerzeichen macht dort jede Auswertung mühsam.
+                     Optionen brechen ohnehin nicht um. -->
+                <option>bis 10 Mio. €</option>
+                <option>10 bis 50 Mio. €</option>
+                <option>über 50 Mio. €</option>
               </select>
             </div>
           </div>
@@ -241,7 +319,7 @@
             </div>
           </div>
 
-          <div class="row" style="margin-top:22px">
+          <div class="row gap-top">
             <div class="field">
               <label for="isms">Bestehendes ISMS oder Zertifizierung?</label>
               <select id="isms" name="ISMS">

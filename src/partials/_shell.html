@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de-DE">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,8 +24,14 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <script>
-  /* Setzt das Farbschema vor dem ersten Paint – verhindert Aufblitzen beim Laden. */
+  /* Läuft vor dem ersten Paint. Zwei Aufgaben:
+     - data-js markiert, dass Skripte laufen. Ohne die Markierung blendet das
+       Stylesheet die Menü-Schaltfläche aus: Sie wird von app.js bedient und
+       wäre ohne Skript eine Schaltfläche, die nichts tut.
+     - data-theme setzt das gemerkte Farbschema, sonst blitzt beim Laden die
+       falsche Farbe auf. */
   (function () {
+    document.documentElement.setAttribute('data-js', '');
     try {
       var t = localStorage.getItem('theme');
       if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
@@ -33,6 +39,7 @@
   })();
 </script>
 
+{{schema}}
 {{headExtra}}
 <link rel="stylesheet" href="assets/site.css">
 </head>

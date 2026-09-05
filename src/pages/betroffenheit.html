@@ -6,7 +6,39 @@
   "path": "betroffenheit.html",
   "home": "index.html",
   "navPrefix": "index.html",
-  "bodyClass": "plain"
+  "bodyClass": "plain",
+  "schema": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://kr3is.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Betroffenheit prüfen lassen",
+          "item": "https://kr3is.com/betroffenheit.html"
+        }
+      ]
+    },
+    {
+      "@type": "ContactPage",
+      "@id": "https://kr3is.com/betroffenheit.html#webpage",
+      "url": "https://kr3is.com/betroffenheit.html",
+      "name": "NIS2-Betroffenheit prüfen lassen",
+      "isPartOf": {
+        "@id": "https://kr3is.com/#website"
+      },
+      "about": {
+        "@id": "https://kr3is.com/#organisation"
+      },
+      "inLanguage": "de-DE"
+    }
+  ]
 }-->
 
 <section class="page-top">
@@ -100,9 +132,12 @@
               <label for="umsatz">Jahresumsatz</label>
               <select id="umsatz" name="Jahresumsatz">
                 <option value="">Keine Angabe</option>
-                <option>bis 10&nbsp;Mio.&nbsp;€</option>
-                <option>10 bis 50&nbsp;Mio.&nbsp;€</option>
-                <option>über 50&nbsp;Mio.&nbsp;€</option>
+                <!-- Ohne &nbsp;: der Wert wandert so in die Einsendung, und ein
+                     geschütztes Leerzeichen macht dort jede Auswertung mühsam.
+                     Optionen brechen ohnehin nicht um. -->
+                <option>bis 10 Mio. €</option>
+                <option>10 bis 50 Mio. €</option>
+                <option>über 50 Mio. €</option>
               </select>
             </div>
           </div>
@@ -135,7 +170,7 @@
             </div>
           </div>
 
-          <div class="row" style="margin-top:22px">
+          <div class="row gap-top">
             <div class="field">
               <label for="isms">Bestehendes ISMS oder Zertifizierung?</label>
               <select id="isms" name="ISMS">

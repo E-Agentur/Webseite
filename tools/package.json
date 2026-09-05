@@ -4,7 +4,8 @@
   "type": "module",
   "description": "Prüfungen für die gebauten Seiten. Bewusst getrennt vom Wurzelverzeichnis, damit der Netlify-Build keine Abhängigkeiten installiert.",
   "scripts": {
-    "check": "node check.mjs"
+    "check": "node check.mjs",
+    "launch": "node launch.mjs"
   },
   "devDependencies": {
     "playwright": "^1.49.0"

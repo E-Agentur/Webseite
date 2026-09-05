@@ -5,7 +5,11 @@
    ============================================================ */
 :root{
   /* Marke */
+  /* --brand trägt weißen Text mit 5,59:1, --brand-deep mit 7,93:1 – beide
+     erfüllen WCAG AA. --brand-bright käme nur auf 3,65:1 und bleibt deshalb
+     Linien, Rahmen und Fokusringen vorbehalten, nie Grund für weißen Text. */
   --brand:#0064d2;
+  --brand-deep:#00509f;
   --brand-bright:#0a84ff;
   --brand-cyan:#30c9c9;
 

@@ -26,6 +26,7 @@ src/
     header.html   Kopfzeile samt Navigation
     footer.html   Fußzeile
     sprite.html   alle SVG-Icons
+    schema.json   JSON-LD-Knoten, die auf jeder Seite gelten
   pages/        je Seite nur der Inhalt, mit JSON-Kopf für Titel und Pfad
 
 build.mjs       Build ohne jede Abhängigkeit
@@ -41,11 +42,18 @@ Erzeugt (nicht direkt bearbeiten):
 ### Bauen
 
 ```
-node build.mjs
+node build.mjs            baut
+node build.mjs --check    baut nichts, meldet nur Abweichungen
 ```
 
 Kein npm, keine Abhängigkeiten, kein Watcher. Netlify führt den Befehl laut
 `netlify.toml` bei jedem Deploy selbst aus.
+
+`--check` schreibt nichts und endet mit Exitcode 1, sobald eine erzeugte Datei
+nicht mehr zum Quellstand passt. Das ist nötig, weil die erzeugten Dateien
+eingecheckt sind: Wer `src/` ändert und den Build vergisst, hinterlässt sie
+veraltet – und die Prüfsuite prüfte dann einen Stand, den niemand mehr
+bearbeitet. Sie ruft `--check` deshalb selbst auf.
 
 **Warum ein Build?** Kopfzeile, Fußzeile und Icons lagen vorher in jeder Seite
 erneut – ein neuer Navigationspunkt bedeutete acht Änderungen an vier Dateien.
@@ -62,18 +70,71 @@ npx playwright install chromium
 npm run check
 ```
 
-Die Suite startet einen lokalen Server, öffnet jede Seite in Chromium und prüft
-fünf Dinge: Auslieferung ohne fehlgeschlagene Anfragen oder Konsolenfehler,
-kein horizontaler Überlauf über zehn Breiten in beiden Farbschemata,
-Layout-Plausibilität, Textkontraste gegen WCAG AA und das Verhalten des
-Formulars. Ist bereits ein Chromium vorhanden, genügt
+Die Suite startet einen lokalen Server und öffnet jede Seite in Chromium. Der
+Server liefert dabei dieselben Kopfzeilen aus wie Netlify – die
+Content-Security-Policy wird aus `netlify.toml` gelesen, damit auffällt, was sie
+blockiert. Ist bereits ein Chromium vorhanden, genügt
 `CHROMIUM_PATH=/pfad/zu/chrome npm run check`.
 
-Die Layout-Plausibilität prüft, ob die `h1` hinter der Kopfzeile verschwindet,
-ob es genau eine `h1` gibt, ob Überschriftenebenen übersprungen werden und wie
-lang die längste Textzeile wird. Dieser Teil existiert, weil die übrigen
-Prüfungen eine Seite durchwinken, die lediglich falsch gestaltet ist: Als das
-Layout der Rechtstexte einmal verlorenging, meldete keine von ihnen etwas.
+Geprüft wird:
+
+1. **Auslieferung** – keine fehlgeschlagenen Anfragen, keine Konsolenfehler
+2. **Layout** – kein horizontaler Überlauf über zehn Breiten, beide Schemata
+3. **Plausibilität** – `h1` nicht hinter der Kopfzeile, genau eine `h1`, keine
+   Sprünge in der Überschriftenebene, Zeilenlänge
+4. **Kontrast** – jeder sichtbare Textknoten gegen WCAG AA, beide Schemata
+5. **Trefferflächen** – Bedienelemente gegen die 24 px aus WCAG 2.2 (2.5.8)
+6. **Zeigerbewegung** – keine Skriptfehler, Drossel greift
+7. **Formular** – Netlify-Merkmale, Pflichtfelder, Labels, Honigtopf
+8. **Auszeichnung** – JSON-LD gültig, jede `@id`-Verweisung löst auf
+9. **Auslieferbares** – CSP-Hash passt zum Inline-Skript, Sitemap vollständig
+10. **Ohne Skript** – kein Bedienelement, das ohne JavaScript nichts tut; jede
+    Seite kommt vollständig an
+11. **Build** – die erzeugten Dateien sind auf dem Stand von `src/`
+12. **Totes CSS** – keine Regel für eine Klasse, die es nicht gibt
+
+Punkt 3 gibt es, weil die übrigen Prüfungen eine Seite durchwinken, die
+lediglich falsch gestaltet ist: Als das Layout der Rechtstexte einmal
+verlorenging, meldete keine von ihnen etwas.
+
+Punkt 4 misst aus demselben Grund **jeden** Textknoten statt einer Handvoll
+ausgewählter Paare. Die frühere Auswahl enthielt keinen einzigen Button – und
+genau die verfehlten AA. Was hinter einem Text liegt, verrät der Elternbaum
+dabei nicht zuverlässig: Die Kopfzeile ist durchsichtig und schwebt über dem
+dunklen Hero, im Baum steht über ihr aber der weiße `body`. Gemessen wird
+deshalb der Stapel aus `elementsFromPoint` am Rechteck der Glyphen selbst, von
+oben bis zur ersten deckenden Fläche. Liegt darin ein Verlauf, ist die Farbe
+nicht eindeutig; solche Knoten werden gezählt und übergangen, statt einen
+erfundenen Wert zu melden.
+
+Punkt 12 gibt es, weil totes CSS niemandem auffällt: Die Seite sieht richtig
+aus, das Stylesheet wächst still weiter. Gefunden wurden so `.num`, `.split`
+und `.d5` – Reste entfernter Bausteine. Eine Ausnahmeliste gibt es bewusst
+nicht: Wer eine Klasse auf Vorrat anlegt, soll sie benutzen oder weglassen.
+
+Punkt 6 gibt es, weil die übrigen Prüfungen nie einen Zeiger bewegen. Der
+Lichtkegel auf den Kacheln hing an einer Drossel, deren Wächterabfrage nie
+zutraf: Jede Bewegung meldete ein eigenes Bild an, und wer im selben Bild als
+Zweiter drankam, las eine bereits geleerte Ablage. Zwanzig Ereignisse
+erzeugten zwanzig Bilder und neunzehn Skriptfehler – sichtbar war davon nichts.
+
+### Startbereitschaft
+
+```
+node tools/launch.mjs
+```
+
+Sammelt, was vor dem Livegang noch offen ist – Platzhalter, Redaktionshinweise
+in den Rechtstexten, unvollständige `tel:`-Verweise, absichtliche Lücken in den
+strukturierten Daten – und liest das aus den Dateien statt aus dieser Liste.
+Eine Liste im README veraltet, sobald jemand einen Platzhalter ersetzt und das
+Nachtragen vergisst.
+
+Bewusst **kein** Teil von `npm run check`: Diese Punkte sind vor dem Livegang
+richtig so und dürfen die laufende Prüfung nicht rot färben. Der Exitcode ist
+trotzdem 1, solange etwas offen ist – damit taugt der Bericht als letzte Sperre
+vor der Veröffentlichung. Der Abschnitt „Vor dem Livegang" weiter unten nennt
+zusätzlich, was nur ein Mensch prüfen kann.
 
 ### Seitensyntax
 
@@ -98,6 +159,11 @@ In Bausteinen und Seiten stehen `<!-- include: name -->` für einen Baustein aus
 Baustein oder eine Variable, bricht der Build mit einer klaren Meldung ab,
 statt eine kaputte Seite zu erzeugen.
 
+Der Schlüssel `schema` ist keine Variable, sondern eine **Liste von
+JSON-LD-Knoten**. `build.mjs` verbindet sie mit den Knoten aus
+`src/partials/schema.json` zu einem `@graph` und setzt ihn als `{{schema}}` ein.
+So steht die Auszeichnung lesbar im Quelltext statt als escapte Zeichenkette.
+
 Bewusst **nicht** ausgelagert:
 
 - Das Skript gegen das Farb-Aufblitzen bleibt inline im `<head>` – ausgelagert
@@ -106,7 +172,12 @@ Bewusst **nicht** ausgelagert:
   href="icons.svg#…">`) funktioniert sie nicht mehr über `file://` und ist auch
   sonst empfindlich; verschwindende Icons sind das Risiko nicht wert.
 - Die strukturierten Daten (JSON-LD) bleiben inline, weil Suchmaschinen sie sonst
-  nicht zuverlässig auslesen.
+  nicht zuverlässig auslesen. Sie stehen je Seite in **genau einem** `@graph`:
+  Die seitenübergreifenden Knoten liegen in `src/partials/schema.json`, die
+  seitenspezifischen im Schlüssel `schema` des JSON-Kopfs, und `build.mjs` fügt
+  beides zusammen. Ein Graph je Seite ist nötig, damit Verweise über `@id`
+  aufgehen – der `Service` auf `it-sicherheit.html` nannte einmal einen
+  Anbieter, den keine Seite definierte: gültiges JSON, das ins Leere zeigte.
 
 ## Aufbau der Startseite
 
@@ -127,6 +198,21 @@ Kontakt.
 
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
+
+Die Content-Security-Policy in `netlify.toml` kommt deshalb ohne
+`'unsafe-inline'` aus – bei einem Haus, das Informationssicherheit verkauft,
+wäre die Freigabe in der eigenen Policy ein unnötiger Angriffspunkt. Zwei
+Dinge halten das aufrecht und sind beim Ändern zu beachten:
+
+- Das Skript gegen das Farb-Aufblitzen ist auf allen Seiten byteidentisch und
+  über genau **einen Hash** freigegeben. Ändert es sich, passt der Hash nicht
+  mehr und der Browser blockiert es – die Seite erschiene kurz in der falschen
+  Farbe. Die Prüfsuite vergleicht beides und schlägt vorher an.
+- Es gibt **kein `style`-Attribut im Markup** und **kein zur Laufzeit erzeugtes
+  `<style>`-Element**. Die Regeln für den Reveal-Rückfall stehen deshalb in
+  `02-base.css`; das Skript setzt nur noch die Klasse. Was ein Skript über die
+  CSSOM setzt (`element.style.setProperty`), bleibt erlaubt – der Lichtkegel
+  auf den Kacheln funktioniert also weiter.
 
 Netlify liefert das gesamte Verzeichnis aus, `src/` und `tools/` also mit. Beide
 sind über `robots.txt` und einen `X-Robots-Tag`-Kopf aus dem Index genommen,
@@ -161,6 +247,11 @@ Abschnittseinleitungen bei linksbündigem Fließtext, rahmenlose Kacheln auf
   ab 900 px, darunter vertikal.
 - **Helles und dunkles Schema**, folgt der Systemeinstellung, manuell
   umschaltbar, in `localStorage` gemerkt.
+- **Blau in drei Stufen.** `--brand` (`#0064d2`) trägt weißen Text mit 5,59:1,
+  `--brand-deep` (`#00509f`) als Hover-Stufe mit 7,93:1. `--brand-bright`
+  (`#0a84ff`) käme nur auf 3,65:1 und bleibt deshalb Linien, Rahmen und
+  Fokusringen vorbehalten – nie Grund für weißen Text. Die Buttons lagen
+  vorher auf `--brand-bright` und erfüllten AA erst im Hover.
 
 Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
 
@@ -177,7 +268,9 @@ Zwei Entscheidungen zur Laufzeit, die man beim Ändern kennen sollte:
 Rechtstexte werden ausgedruckt und abgeheftet, deshalb hat der Druckstil eigene
 Regeln: Kopfzeile und Zierelemente entfallen, dunkle Flächen werden weiß, und
 Links im Inhalt bekommen ihre Adresse in Klammern nachgestellt – auf Papier ist
-ein Verweis sonst wertlos. Umbrüche innerhalb von Kacheln, Schritten und
+ein Verweis sonst wertlos. Interne Verweise sind relativ notiert; ihnen wird
+die Herkunft vorangestellt, weil „impressum.html“ auf Papier niemandem hilft.
+`mailto:` und `tel:` bleiben ausgenommen, ihre Adresse steht bereits im Text. Umbrüche innerhalb von Kacheln, Schritten und
 Hinweiskästen sind unterbunden.
 
 ### Sprache
@@ -197,14 +290,25 @@ Hinweiskästen sind unterbunden.
 - Bewegung liegt hinter `prefers-reduced-motion`, Glaseffekte hinter
   `prefers-reduced-transparency`.
 - Scroll-Animationen stehen in `@supports`; ohne Unterstützung greift ein
-  IntersectionObserver-Fallback, ohne JavaScript ist alles sofort sichtbar.
+  IntersectionObserver-Fallback. Ohne JavaScript trägt die Seite trotzdem: Das
+  Reveal läuft über `animation-timeline: view()` und damit rein über CSS, die
+  Kopfzeile hat eine `@supports not`-Stufe, und alle Inhalte sind erreichbar.
+- Das mobile Menü ist die **eine** Ausnahme – es bedient app.js. Das Skript im
+  `<head>` setzt deshalb `data-js` auf `<html>`, und das Stylesheet zeigt die
+  Menü-Schaltfläche nur, wenn diese Markierung da ist. Ohne Skript stünde dort
+  sonst eine Schaltfläche, die nichts tut; erreichbar bleiben die Inhalte über
+  Logo, die Sprungmarken der Seite und die Fußzeile. Wird das Inline-Skript
+  geändert, ändert sich sein CSP-Hash – siehe unten.
 - Sprunglink, sichtbare Fokusringe, `aria-expanded` am mobilen Menü, `Esc`
   schließt und gibt den Fokus an die Schaltfläche zurück.
 - Bei offenem mobilem Menü wird alles außer der Kopfzeile per `inert`
   stillgelegt. Ohne das wandert der Fokus hinter die Überlagerung – sichtbar ist
   dann nichts, der Fokus aber weg.
-- Textkontraste erfüllen WCAG AA in beiden Schemata. Geprüft wird über alle
-  Seiten; der niedrigste gemessene Wert liegt bei 4,66:1.
+- Textkontraste erfüllen WCAG AA in beiden Schemata. Geprüft wird jeder
+  sichtbare Textknoten über alle Seiten – rund 700 je Durchlauf.
+- Bedienelemente, die nicht im Fließtext stehen, erfüllen die 24 px aus
+  WCAG 2.2 (2.5.8). Die Fußzeilenlinks kamen auf 22 px und haben dafür einen
+  Innenabstand bekommen, der die Zeile optisch unverändert lässt.
 - Genau eine `h1` je Seite, keine Sprünge in der Überschriftenebene. Auf
   `it-sicherheit.html` sorgt dafür eine nur für Screenreader sichtbare `h2`.
 
@@ -279,8 +383,8 @@ Alle in eckigen Klammern:
   Drittlandgrundlage, Löschfristen, zuständige Aufsichtsbehörde, Stand-Datum
 
 Anschrift, Telefon und Rechtsform fehlen bewusst auch in den strukturierten
-Daten (JSON-LD) – lieber weglassen als falsch auszeichnen. Nach dem Ergänzen
-dort nachtragen.
+Daten (JSON-LD) – lieber weglassen als falsch auszeichnen. Nach dem Ergänzen in
+`src/partials/schema.json` am Knoten `Organization` nachtragen.
 
 ### 5. Sonstiges
 

@@ -41,6 +41,11 @@ section{padding:clamp(78px,11vw,140px) 0;position:relative;scroll-margin-top:cal
 }
 .skip:focus{left:0}
 
+.sprite{position:absolute}
+
+/* Ersetzt den früheren Inline-Stil – so bleibt style-src ohne 'unsafe-inline'. */
+.gap-top{margin-top:22px}
+
 .sr-only{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
@@ -65,3 +70,13 @@ section{padding:clamp(78px,11vw,140px) 0;position:relative;scroll-margin-top:cal
     .stagger > :nth-child(3n+3){animation-range:entry 10% entry 70%}
   }
 }
+
+/* Rückfall ohne scroll-driven animations. Die Klasse setzt erst das Skript,
+   die Regeln liegen aber hier statt in einem zur Laufzeit erzeugten
+   <style>-Element: ein solches wäre unter einer Content-Security-Policy
+   ohne 'unsafe-inline' für style-src blockiert. */
+.js-reveal{
+  opacity:0;transform:translateY(26px);
+  transition:opacity .7s cubic-bezier(.16,.84,.44,1),transform .7s cubic-bezier(.16,.84,.44,1);
+}
+.js-reveal.in{opacity:1;transform:none}
