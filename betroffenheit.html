@@ -221,8 +221,8 @@
 
         <fieldset>
           <legend>Ihr Unternehmen</legend>
-          <p class="legend-note">Sektor, Größe und Konzernzugehörigkeit entscheiden
-             gemeinsam über die Einstufung.</p>
+          <p class="legend-note">Sektor, Größe, Finanzkennzahlen und
+             Konzernzugehörigkeit entscheiden gemeinsam über die Einstufung.</p>
 
           <div class="field">
             <label for="unternehmen">Unternehmen <span class="req" aria-hidden="true">*</span></label>
@@ -291,15 +291,34 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="gruppe">Teil einer Unternehmensgruppe?</label>
-            <select id="gruppe" name="Unternehmensgruppe">
-              <option value="">Keine Angabe</option>
-              <option>Nein, eigenständig</option>
-              <option>Ja, Teil einer Gruppe</option>
-              <option>Unklar</option>
-            </select>
-            <span class="hint">Verflechtungen können die Schwellenwerte verändern.</span>
+          <div class="row">
+            <!-- Die Bilanzsumme steht hier, weil das Größenkriterium sie braucht:
+                 Unterhalb von 50 Beschäftigten zählt die Einstufung nur, wenn
+                 Umsatz UND Bilanzsumme über 10 Mio. € liegen. Ohne dieses Feld
+                 ließe sich aus der Einsendung gar nicht ablesen, ob die Schwelle
+                 erreicht ist. -->
+            <div class="field">
+              <label for="bilanz">Jahresbilanzsumme</label>
+              <select id="bilanz" name="Jahresbilanzsumme">
+                <option value="">Keine Angabe</option>
+                <option>bis 10 Mio. €</option>
+                <option>10 bis 43 Mio. €</option>
+                <option>über 43 Mio. €</option>
+              </select>
+              <span class="hint">Zählt zusammen mit dem Umsatz – beide Werte müssen
+                über 10&nbsp;Mio.&nbsp;€ liegen, damit die Größenschwelle allein
+                darüber erreicht wird.</span>
+            </div>
+            <div class="field">
+              <label for="gruppe">Teil einer Unternehmensgruppe?</label>
+              <select id="gruppe" name="Unternehmensgruppe">
+                <option value="">Keine Angabe</option>
+                <option>Nein, eigenständig</option>
+                <option>Ja, Teil einer Gruppe</option>
+                <option>Unklar</option>
+              </select>
+              <span class="hint">Verflechtungen können die Schwellenwerte verändern.</span>
+            </div>
           </div>
         </fieldset>
 

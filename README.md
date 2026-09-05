@@ -107,16 +107,16 @@ oben bis zur ersten deckenden Fläche. Liegt darin ein Verlauf, ist die Farbe
 nicht eindeutig; solche Knoten werden gezählt und übergangen, statt einen
 erfundenen Wert zu melden.
 
-Punkt 12 gibt es, weil totes CSS niemandem auffällt: Die Seite sieht richtig
-aus, das Stylesheet wächst still weiter. Gefunden wurden so `.num`, `.split`
-und `.d5` – Reste entfernter Bausteine. Eine Ausnahmeliste gibt es bewusst
-nicht: Wer eine Klasse auf Vorrat anlegt, soll sie benutzen oder weglassen.
-
 Punkt 6 gibt es, weil die übrigen Prüfungen nie einen Zeiger bewegen. Der
 Lichtkegel auf den Kacheln hing an einer Drossel, deren Wächterabfrage nie
 zutraf: Jede Bewegung meldete ein eigenes Bild an, und wer im selben Bild als
 Zweiter drankam, las eine bereits geleerte Ablage. Zwanzig Ereignisse
 erzeugten zwanzig Bilder und neunzehn Skriptfehler – sichtbar war davon nichts.
+
+Punkt 12 gibt es, weil totes CSS niemandem auffällt: Die Seite sieht richtig
+aus, das Stylesheet wächst still weiter. Gefunden wurden so `.num`, `.split`
+und `.d5` – Reste entfernter Bausteine. Eine Ausnahmeliste gibt es bewusst
+nicht: Wer eine Klasse auf Vorrat anlegt, soll sie benutzen oder weglassen.
 
 ### Startbereitschaft
 
@@ -334,12 +334,35 @@ erfährt davon.
 
 ### 1. NIS2-Angaben prüfen
 
-Der Abschnitt „NIS2“ nennt Schwellenwerte (50 Beschäftigte bzw. 10 Mio. €
-Umsatz), die 24-Stunden-Frühwarnung und die Pflichten der Geschäftsleitung.
-Diese Angaben stammen aus Sekundärquellen und sind **gegen den Gesetzestext des
-NIS2UmsuCG zu prüfen**. Für ein Unternehmen, dessen Produkt regulatorische
+Der Abschnitt „NIS2“ nennt Schwellenwerte, die 24-Stunden-Frühwarnung und die
+Pflichten der Geschäftsleitung. Diese Angaben stammen aus Sekundärquellen und
+sind **gegen den Gesetzestext zu prüfen** – maßgeblich ist § 28 BSIG in der
+Fassung des NIS2UmsuCG. Für ein Unternehmen, dessen Produkt regulatorische
 Genauigkeit ist, wäre eine falsche Zahl hier besonders schädlich. Konkrete
 Fristdaten wurden bewusst weggelassen, weil sie sich verschieben können.
+
+**Eine Angabe war bereits zu weit gefasst und wurde berichtigt.** Der Text
+fragte nach „mindestens 50 Beschäftigte **oder** mehr als zehn Millionen Euro
+Jahresumsatz“. Die Finanzkennzahlen sind jedoch **kumulativ**: Unterhalb von 50
+Beschäftigten greift das Größenkriterium nur, wenn Jahresumsatz **und**
+Jahresbilanzsumme jeweils über 10 Mio. € liegen. Grundlage ist die
+KMU-Definition der Empfehlung 2003/361/EG, auf die NIS2 verweist – ein
+Unternehmen mit 12 Mio. € Umsatz und 8 Mio. € Bilanzsumme bleibt danach ein
+kleines Unternehmen. Die alte Fassung hätte solche Unternehmen fälschlich als
+betroffen ausgewiesen.
+
+Aus demselben Grund fragt `betroffenheit.html` jetzt auch die
+**Jahresbilanzsumme** ab. Ohne sie ließ sich aus einer Einsendung gar nicht
+ablesen, ob die Schwelle erreicht ist.
+
+Die Sektorenliste im Abschnitt nennt außerdem nicht mehr „Logistik“ – das ist
+keine Bezeichnung aus den Anlagen; an ihrer Stelle stehen jetzt „Post- und
+Kurierdienste“, passend zur Auswahlliste im Formular.
+
+Die Korrektur beruht auf drei übereinstimmenden Sekundärquellen, **nicht auf
+dem Gesetzestext selbst** – Gesetzestext und KMU-Empfehlung waren aus der
+Arbeitsumgebung nicht erreichbar. Sie ersetzt die anwaltliche Prüfung also
+nicht, engt die Aussage aber in die sichere Richtung ein.
 
 ### 2. Formular datenschutzrechtlich absichern
 
