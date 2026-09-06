@@ -55,7 +55,9 @@
 .focus{display:grid;gap:16px;margin-top:56px}
 
 .feature{
-  display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;
+  /* Oben ausgerichtet, damit das Zeichen neben der Überschrift steht statt in
+     der Mitte der Kachel zu schweben. Der Abschluss geht dafür ans Ende. */
+  display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:start;
   padding:40px 36px;
   background:linear-gradient(150deg,#0b1a2e,#08131f 60%,#0a1c2a);
   color:#f5f5f7;
@@ -72,6 +74,7 @@
   display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
   font-weight:400;font-size:1.06rem;color:#2997ff;text-decoration:none;
 }
+.feature-link{align-self:end}
 .feature-link:hover{text-decoration:underline}
 .feature-link svg{width:15px;height:15px}
 @media (hover:hover){.feature:hover{transform:none;box-shadow:none}}

@@ -40,7 +40,12 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Die Bündel tragen einen Hash des Inhalts im Namen. Ändert sich eine Zeile,
+# ändert sich der Dateiname – deshalb dürfen sie unveränderlich und lange
+# zwischengespeichert werden. Vorher hießen sie fest site.css und site.js und
+# lagen eine Stunde im Cache: Das HTML wird bei jedem Aufruf neu geholt, das
+# Stylesheet nicht, und dazwischen sieht die Seite halb aktualisiert aus.
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=3600"
+    Cache-Control = "public, max-age=31536000, immutable"

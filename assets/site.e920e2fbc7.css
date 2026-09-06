@@ -509,7 +509,9 @@ header::before{
 .focus{display:grid;gap:16px;margin-top:56px}
 
 .feature{
-  display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:center;
+  /* Oben ausgerichtet, damit das Zeichen neben der Überschrift steht statt in
+     der Mitte der Kachel zu schweben. Der Abschluss geht dafür ans Ende. */
+  display:grid;grid-template-columns:auto 1fr auto;gap:34px;align-items:start;
   padding:40px 36px;
   background:linear-gradient(150deg,#0b1a2e,#08131f 60%,#0a1c2a);
   color:#f5f5f7;
@@ -526,6 +528,7 @@ header::before{
   display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
   font-weight:400;font-size:1.06rem;color:#2997ff;text-decoration:none;
 }
+.feature-link{align-self:end}
 .feature-link:hover{text-decoration:underline}
 .feature-link svg{width:15px;height:15px}
 @media (hover:hover){.feature:hover{transform:none;box-shadow:none}}
@@ -571,6 +574,15 @@ header::before{
   background:var(--bg-alt);font-size:1.06rem;line-height:1.45;color:var(--ink);
 }
 .alt .situations li{background:var(--surface)}
+/* Jede Lage führt dorthin, wo die Antwort steht. Der Verweis liegt als Fläche
+   über der ganzen Kachel, damit nicht nur die Textzeile trifft; die Kachel ist
+   dafür ohnehin position:relative. */
+.situations a{color:inherit;text-decoration:none}
+.situations a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.situations li{transition:background-color .2s ease}
+@media (hover:hover){.situations li:hover{background:var(--surface-2)}}
+.alt .situations li:hover{background:var(--bg-alt)}
+.situations li:has(a:focus-visible){outline:2px solid var(--brand-bright);outline-offset:3px}
 .situations li::before{
   content:"";position:absolute;left:30px;top:33px;width:14px;height:8px;
   border-left:2px solid var(--brand-bright);border-bottom:2px solid var(--brand-bright);

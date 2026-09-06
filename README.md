@@ -36,7 +36,7 @@ tools/          Prüfsuite (eigene package.json, damit der Netlify-Build
 Erzeugt (nicht direkt bearbeiten):
   index.html, it-sicherheit.html, ki-automatisierung.html, betroffenheit.html,
   danke.html, impressum.html, datenschutz.html, 404.html
-  assets/site.css, assets/site.js
+  assets/site.<hash>.css, assets/site.<hash>.js
 ```
 
 ### Bauen
@@ -57,9 +57,19 @@ bearbeitet. Sie ruft `--check` deshalb selbst auf.
 
 **Warum ein Build?** Kopfzeile, Fußzeile und Icons lagen vorher in jeder Seite
 erneut – ein neuer Navigationspunkt bedeutete acht Änderungen an vier Dateien.
-Jetzt steht jeder Baustein genau einmal. Die gebündelten `site.css` und
-`site.js` sorgen dafür, dass die feine Aufteilung im Quellcode den Besucher
-trotzdem nur eine Anfrage kostet.
+Jetzt steht jeder Baustein genau einmal. Die gebündelten Dateien sorgen dafür,
+dass die feine Aufteilung im Quellcode den Besucher trotzdem nur eine Anfrage
+kostet.
+
+**Warum ein Hash im Dateinamen?** Die Bündel heißen `site.<hash>.css` und
+`site.<hash>.js`, wobei der Hash aus ihrem Inhalt entsteht. Deshalb dürfen sie
+laut `netlify.toml` ein Jahr lang unveränderlich zwischengespeichert werden:
+Ändert sich eine Zeile, ändert sich der Name, und der Browser holt die Datei
+neu. Vorher hießen sie fest `site.css` und `site.js` und lagen eine Stunde im
+Cache. Das HTML wird bei jedem Aufruf revalidiert, das Stylesheet nicht – in
+diesem Fenster traf frisches HTML auf altes CSS, und die Seite sah halb
+aktualisiert aus. Der Build löscht Bündel früherer Stände; `--check` meldet
+sie, statt sie zu entfernen.
 
 ### Prüfen
 
@@ -199,11 +209,16 @@ Seite, während dieselbe Beschriftung bei der IT-Sicherheit eine ganze Seite
 versprach.
 
 Der Abschnitt `#ki-automatisierung` auf der Startseite bleibt bestehen – die
-Kopfzeile verweist darauf – und ist die Übersicht: sechs Bereiche mit je einem
-Absatz. Die Unterseite führt dieselben sechs Bereiche mit je vier konkreten
-Punkten aus, so wie `it-sicherheit.html` die sechs Leistungen ausführt, die die
-Karte nur benennt. Am Ende des Abschnitts steht ein Verweis auf die Unterseite,
-damit er keine Sackgasse ist.
+Kopfzeile verweist darauf – trägt aber nur noch das **Warum**: Einleitung,
+Empfehlung, Verweis auf die Unterseite. Die sechs Bereiche standen dort ein
+zweites Mal mit je einem Absatz; der Abschnitt war dadurch mit 1634 px der
+größte der Startseite und ließ die KI schwerer wiegen als die IT-Sicherheit,
+die nur ihre Karte hat. Jetzt sind es 972 px, und beide Schwerpunkte stehen
+gleich: einmal als Karte, ausgeführt auf der eigenen Unterseite.
+
+Die sechs Ausgangslagen sind verlinkt – jede auf die Stelle, die sie
+beantwortet. Vorher war der Abschnitt, der einen Besucher am ehesten abholt,
+eine Sackgasse.
 
 Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,

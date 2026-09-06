@@ -499,7 +499,16 @@ console.log('Stand der erzeugten Dateien geprüft.');
    app.js dazu. Es gibt bewusst keine Ausnahmeliste: Wer eine Klasse auf Vorrat
    anlegt, soll sie benutzen oder weglassen. */
 {
-  const cssSource = readFileSync(join(ROOT, 'assets/site.css'), 'utf8')
+  /* Die Bündel tragen einen Hash im Namen; die Startseite verrät den aktuellen.
+     Damit prüft dieser Schritt nebenbei, dass der Verweis auf eine Datei zeigt,
+     die es wirklich gibt. */
+  const startseite = readFileSync(join(ROOT, 'index.html'), 'utf8');
+  const cssDatei = startseite.match(/href="(assets\/site\.[0-9a-f]+\.css)"/)?.[1];
+  const jsDatei = startseite.match(/src="(assets\/site\.[0-9a-f]+\.js)"/)?.[1];
+  if (!cssDatei || !jsDatei) {
+    note('index.html verweist nicht auf die gehashten Bündel');
+  }
+  const cssSource = readFileSync(join(ROOT, cssDatei), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '');
   const selectors = [...cssSource.matchAll(/(?:^|})\s*([^{}@][^{}]*?)\{/g)]
     .map((m) => m[1])
@@ -513,7 +522,7 @@ console.log('Stand der erzeugten Dateien geprüft.');
     for (const m of readFileSync(join(ROOT, page), 'utf8').matchAll(/class="([^"]*)"/g))
       for (const c of m[1].split(/\s+/)) if (c) used.add(c);
 
-  const script = readFileSync(join(ROOT, 'assets/site.js'), 'utf8');
+  const script = readFileSync(join(ROOT, jsDatei), 'utf8');
   for (const m of script.matchAll(/classList\.(?:add|toggle|remove)\('([\w-]+)'/g)) used.add(m[1]);
 
   const orphans = [...declared].filter((c) => !used.has(c)).sort();
