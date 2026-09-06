@@ -1,7 +1,7 @@
 /* Rechtstexte und Unterseiten mit normalem Seitenkopf */
 
 /* ============================================================
-   15. Rechtstexte (impressum.html, datenschutz.html)
+   14. Rechtstexte (impressum.html, datenschutz.html)
    ============================================================ */
 .legal{padding:calc(clamp(56px,8vw,96px) + var(--header-h)) 0 clamp(64px,9vw,110px)}
 .legal .wrap{max-width:780px}
@@ -33,7 +33,7 @@ body.plain header{
 }
 
 /* ============================================================
-   16. Unterseiten mit normalem Seitenkopf
+   15. Unterseiten mit normalem Seitenkopf
    ============================================================ */
 .page-top{padding-top:calc(var(--header-h) + clamp(52px,8vw,96px))}
 .backlink{

@@ -1,10 +1,10 @@
 /* Nutzerpräferenzen und Druck – muss zuletzt geladen werden */
 
 /* ============================================================
-   14. Nutzerpräferenzen
+   13. Nutzerpräferenzen
    ============================================================ */
 @media (prefers-reduced-transparency:reduce){
-  header::before,.badge,.btn-ghost,.contact-card{
+  header::before,.btn-ghost,.contact-card{
     -webkit-backdrop-filter:none;backdrop-filter:none;
   }
   header::before{background:var(--bg)}
