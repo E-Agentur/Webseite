@@ -26,6 +26,15 @@
   background:var(--bg-alt);font-size:1.06rem;line-height:1.45;color:var(--ink);
 }
 .alt .situations li{background:var(--surface)}
+/* Jede Lage führt dorthin, wo die Antwort steht. Der Verweis liegt als Fläche
+   über der ganzen Kachel, damit nicht nur die Textzeile trifft; die Kachel ist
+   dafür ohnehin position:relative. */
+.situations a{color:inherit;text-decoration:none}
+.situations a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.situations li{transition:background-color .2s ease}
+@media (hover:hover){.situations li:hover{background:var(--surface-2)}}
+.alt .situations li:hover{background:var(--bg-alt)}
+.situations li:has(a:focus-visible){outline:2px solid var(--brand-bright);outline-offset:3px}
 .situations li::before{
   content:"";position:absolute;left:30px;top:33px;width:14px;height:8px;
   border-left:2px solid var(--brand-bright);border-bottom:2px solid var(--brand-bright);

@@ -6,8 +6,8 @@
  *   node build.mjs --check    baut nichts, meldet nur Abweichungen
  *
  * Setzt die Seiten aus src/ zusammen:
- *   src/css/*.css      -> assets/site.css   (nach Dateinamen sortiert, Reihenfolge zählt)
- *   src/js/*.js        -> assets/site.js
+ *   src/css/*.css      -> assets/site.<hash>.css  (nach Dateinamen sortiert)
+ *   src/js/*.js        -> assets/site.<hash>.js
  *   src/pages/*.html   -> ./*.html          (mit Bausteinen aus src/partials/)
  *
  * Seitensyntax: eine JSON-Kopfzeile <!--{ ... }--> am Dateianfang, danach der
@@ -20,7 +20,8 @@
  * {{schema}} eingesetzt. Ein einziger Graph je Seite stellt sicher, dass
  * Verweise über "@id" – etwa der Anbieter eines Service – auch aufgehen.
  */
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, unlinkSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, basename } from 'node:path';
 
 const BANNER = 'GENERIERT von build.mjs – nicht direkt bearbeiten, sondern src/ ändern.';
@@ -31,6 +32,7 @@ const read = (p) => readFileSync(p, 'utf8');
    ohne dass irgendetwas anschlägt. --check vergleicht deshalb, statt zu
    schreiben, und meldet jede Datei, die nicht zum Quellstand passt. */
 const CHECK = process.argv.includes('--check');
+let assets = null;   // von bundle() gesetzt, von buildPages() in die Seiten eingesetzt
 const stale = [];
 const emit = (path, content) => {
   if (!CHECK) return writeFileSync(path, content);
@@ -38,14 +40,33 @@ const emit = (path, content) => {
   else if (read(path) !== content) stale.push(`${path}: nicht auf dem Stand von src/`);
 };
 
-/* ---------- Stylesheet und Skript bündeln ---------- */
-function bundle(dir, out, comment) {
+/* ---------- Stylesheet und Skript bündeln ----------
+   Der Dateiname trägt einen Hash des Inhalts. Das erlaubt, die Bündel ein Jahr
+   lang unveränderlich zwischenspeichern zu lassen, ohne je einen alten Stand
+   auszuliefern: Ändert sich eine Zeile, ändert sich der Name, und der Browser
+   holt die Datei neu. Vorher hießen sie fest site.css und site.js und lagen
+   eine Stunde im Cache – frisches HTML traf dann auf altes CSS, was aussieht
+   wie eine halb aktualisierte Seite. */
+function bundle(dir, base, ext, comment) {
   const files = readdirSync(dir).filter((f) => !f.startsWith('.')).sort();
   const body = files
     .map((f) => `/* ---------- ${f} ---------- */\n${read(join(dir, f)).trim()}\n`)
     .join('\n');
-  emit(out, `/* ${BANNER} */\n/* ${comment}: ${files.join(', ')} */\n\n${body}`);
-  return files.length;
+  const content = `/* ${BANNER} */\n/* ${comment}: ${files.join(', ')} */\n\n${body}`;
+  const hash = createHash('sha256').update(content).digest('hex').slice(0, 10);
+  const name = `${base}.${hash}${ext}`;
+  emit(join('assets', name), content);
+  return { name, count: files.length };
+}
+
+/* Bündel früherer Stände entfernen, sonst sammeln sie sich im Verzeichnis an
+   und landen mit im Repository. */
+function tidyAssets(behalten) {
+  const alt = readdirSync('assets')
+    .filter((f) => /^site\.[0-9a-f]{10}\.(css|js)$/.test(f) && !behalten.includes(f));
+  if (CHECK) alt.forEach((f) => stale.push(`assets/${f}: Bündel eines früheren Standes`));
+  else alt.forEach((f) => unlinkSync(join('assets', f)));
+  return alt.length;
 }
 
 /* ---------- Bausteine und Variablen einsetzen ---------- */
@@ -97,6 +118,7 @@ function buildPages() {
       noindex: '',
       headExtra: '',
       ...meta,
+      ...assets,
       schema: schemaBlock(schema),
       content: raw.slice(m[0].length).trim(),
     };
@@ -109,16 +131,18 @@ function buildPages() {
 }
 
 if (!CHECK) mkdirSync('assets', { recursive: true });
-const css = bundle('src/css', 'assets/site.css', 'Reihenfolge');
-const js = bundle('src/js', 'assets/site.js', 'Dateien');
+const css = bundle('src/css', 'site', '.css', 'Reihenfolge');
+const js = bundle('src/js', 'site', '.js', 'Dateien');
+assets = { cssFile: css.name, jsFile: js.name };
 const pages = buildPages();
+tidyAssets([css.name, js.name]);
 
 if (CHECK) {
   if (stale.length) {
     console.error(`Veraltet gegenüber src/:\n  ${stale.join('\n  ')}\n\nnode build.mjs ausführen.`);
     process.exit(1);
   }
-  console.log(`Erzeugte Dateien sind auf dem Stand von src/ (${pages} Seiten, ${css + js} Bündel).`);
+  console.log(`Erzeugte Dateien sind auf dem Stand von src/ (${pages} Seiten, ${css.name}, ${js.name}).`);
 } else {
-  console.log(`Gebaut: ${pages} Seiten, ${css} CSS-Bausteine, ${js} Skript(e), ${baseNodes.length} Basis-Schemaknoten.`);
+  console.log(`Gebaut: ${pages} Seiten, ${css.count} CSS-Bausteine, ${js.count} Skript(e), ${baseNodes.length} Basis-Schemaknoten.\n        Bündel: ${css.name}, ${js.name}`);
 }
