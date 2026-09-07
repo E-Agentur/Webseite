@@ -224,6 +224,14 @@ Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
 Kontakt.
 
+Die beiden Schwerpunktseiten verweisen aufeinander. Wer über die Suche direkt
+auf `it-sicherheit.html` landet, kam vorher nur über die Startseite zur
+KI-Seite – die Karte „Der zweite Schwerpunkt“ am Seitenende schließt diese
+Lücke in beide Richtungen. Aus demselben Grund ist die Fußzeile ein Wegweiser
+mit drei Spalten (Leistungen, Unternehmen, Kontakt) statt nur Impressum und
+Datenschutzerklärung: sie ist die Stelle, an der ein Besucher am Ende einer
+Seite nach dem Weiter sucht.
+
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
 

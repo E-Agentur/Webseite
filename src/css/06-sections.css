@@ -209,17 +209,43 @@
 /* ============================================================
    12. Fußzeile
    ============================================================ */
-footer{padding:32px 0;background:var(--bg-alt)}
-.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.82rem;color:var(--ink-mute)}
+footer{padding:56px 0 32px;background:var(--bg-alt)}
+
+/* Wegweiser: Wer über die Suche auf einer Unterseite landet, findet von dort
+   sonst nur über die Startseite zur zweiten. Die Fußzeile ist die Stelle, an
+   der ein Besucher am Ende einer Seite nach dem Weiter sucht. */
+.foot-map{
+  display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:32px;
+  padding-bottom:36px;border-bottom:1px solid var(--line);
+}
+.foot-brand .logo-text{font-size:1.15rem;font-weight:500;letter-spacing:-.01em}
+.foot-brand .logo-text em{font-style:normal;color:var(--brand)}
+.foot-brand p{margin-top:10px;max-width:34ch;font-size:.88rem;line-height:1.55;color:var(--ink-mute)}
+.foot-h{margin-bottom:12px;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.foot-map ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.foot-map li{font-size:.9rem}
+
+.foot{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:16px;margin-top:28px;font-size:.82rem;color:var(--ink-mute);
+}
 .foot nav{display:flex;gap:16px}
 /* Die Fußzeilenlinks sind kein Fließtext, für sie gilt die Mindestgröße
    von 24 px aus WCAG 2.2 (2.5.8) ohne Ausnahme. Der Innenabstand hebt die
    Trefferfläche, ohne die Zeile optisch zu verändern. */
-.foot a{
+.foot a,.foot-map a{
   color:var(--ink-mute);text-decoration:none;transition:color .2s ease;
   display:inline-flex;align-items:center;min-height:24px;padding:1px 4px;margin:0 -4px;
 }
-.foot a:hover{color:var(--accent)}
+.foot a:hover,.foot-map a:hover{color:var(--accent)}
+
+@media (max-width:860px){
+  .foot-map{grid-template-columns:1fr 1fr;gap:28px}
+  .foot-brand{grid-column:1 / -1}
+}
+@media (max-width:520px){
+  .foot-map{grid-template-columns:1fr}
+}
 
 /* Verweis auf das Formular im Kontaktblock */
 /* Der Verweis auf das Formular ist eine Schaltfläche wie im Hero, keine

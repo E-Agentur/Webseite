@@ -90,3 +90,34 @@
   .feature{grid-template-columns:1fr}
   .feature ul{grid-template-columns:1fr}
 }
+
+/* ============================================================
+   8a. Wegweiser zum zweiten Schwerpunkt (Unterseiten)
+   ============================================================ */
+/* Die beiden Schwerpunktseiten kannten einander bisher nicht. Wer über die
+   Suche auf einer landet, soll die andere finden, ohne zurück zur Startseite
+   zu müssen. Die ganze Karte ist der Verweis, nicht nur der Pfeil. */
+.onward{padding:0 0 clamp(56px,7vw,96px)}
+.next-topic{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+  color:inherit;text-decoration:none;
+}
+.next-topic .ico{margin-bottom:0}
+.next-topic h2{margin-bottom:8px;font-size:1.4rem}
+.next-topic p{max-width:62ch;color:var(--ink-mute)}
+.next-arrow{
+  display:grid;place-items:center;flex:none;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  transition:transform .35s cubic-bezier(.16,.84,.44,1);
+}
+.next-arrow svg{width:20px;height:20px}
+@media (hover:hover){
+  .next-topic:hover .next-arrow{transform:translateX(4px)}
+}
+.next-topic:focus-visible{outline:2px solid var(--brand-bright);outline-offset:3px}
+
+@media (max-width:640px){
+  .next-topic{grid-template-columns:auto 1fr;gap:16px}
+  .next-arrow{grid-column:1;justify-self:start;width:40px;height:40px}
+}
