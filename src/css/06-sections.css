@@ -4,9 +4,8 @@
    9. KI-Abschnitt
    ============================================================ */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:56px}
 @media (max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:640px){.grid3,.grid2{grid-template-columns:1fr}}
+@media (max-width:640px){.grid3{grid-template-columns:1fr}}
 
 .note{
   margin:44px auto 0;padding:34px 36px;border-radius:var(--radius);
@@ -174,22 +173,7 @@
 }
 
 /* ============================================================
-   11. Über uns
-   ============================================================ */
-.person{display:flex;gap:24px;align-items:flex-start}
-.avatar{
-  width:68px;height:68px;flex:none;border-radius:50%;display:grid;place-items:center;
-  font-weight:500;font-size:1.2rem;letter-spacing:.01em;color:#fff;
-  background:var(--brand);
-}
-.role{
-  display:inline-block;margin:4px 0 12px;
-  font-size:1rem;font-weight:400;color:var(--ink-mute);
-}
-.person p{font-size:1rem;line-height:1.5}
-
-/* ============================================================
-   12. Kontakt
+   11. Kontakt
    ============================================================ */
 .contact{
   position:relative;isolation:isolate;overflow:hidden;
@@ -223,7 +207,7 @@
 .contact-note{margin-top:28px;font-size:.98rem;color:#86868b}
 
 /* ============================================================
-   13. Fußzeile
+   12. Fußzeile
    ============================================================ */
 footer{padding:32px 0;background:var(--bg-alt)}
 .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.82rem;color:var(--ink-mute)}

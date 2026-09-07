@@ -444,7 +444,7 @@ muss sie erweitert werden. Beides anwaltlich prüfen lassen.
 
 Alle in eckigen Klammern:
 
-- `[Vorname Nachname]` sowie die Initialen `VN` in den Profil-Kacheln
+- `[Vorname Nachname]` im Impressum (Geschäftsführung, Inhalt nach § 18 MStV)
 - `[+49 ___ _______]` – auch der `tel:`-Link steht noch auf `tel:+49`,
   auf der Startseite wie auf `it-sicherheit.html`
 - `[Straße Hausnummer]`, `[PLZ Ort]`

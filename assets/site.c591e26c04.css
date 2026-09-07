@@ -552,9 +552,8 @@ header::before{
    9. KI-Abschnitt
    ============================================================ */
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:56px}
 @media (max-width:900px){.grid3{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:640px){.grid3,.grid2{grid-template-columns:1fr}}
+@media (max-width:640px){.grid3{grid-template-columns:1fr}}
 
 .note{
   margin:44px auto 0;padding:34px 36px;border-radius:var(--radius);
@@ -722,22 +721,7 @@ header::before{
 }
 
 /* ============================================================
-   11. Über uns
-   ============================================================ */
-.person{display:flex;gap:24px;align-items:flex-start}
-.avatar{
-  width:68px;height:68px;flex:none;border-radius:50%;display:grid;place-items:center;
-  font-weight:500;font-size:1.2rem;letter-spacing:.01em;color:#fff;
-  background:var(--brand);
-}
-.role{
-  display:inline-block;margin:4px 0 12px;
-  font-size:1rem;font-weight:400;color:var(--ink-mute);
-}
-.person p{font-size:1rem;line-height:1.5}
-
-/* ============================================================
-   12. Kontakt
+   11. Kontakt
    ============================================================ */
 .contact{
   position:relative;isolation:isolate;overflow:hidden;
@@ -771,7 +755,7 @@ header::before{
 .contact-note{margin-top:28px;font-size:.98rem;color:#86868b}
 
 /* ============================================================
-   13. Fußzeile
+   12. Fußzeile
    ============================================================ */
 footer{padding:32px 0;background:var(--bg-alt)}
 .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.82rem;color:var(--ink-mute)}
@@ -908,7 +892,7 @@ select{
 /* Rechtstexte und Unterseiten mit normalem Seitenkopf */
 
 /* ============================================================
-   15. Rechtstexte (impressum.html, datenschutz.html)
+   14. Rechtstexte (impressum.html, datenschutz.html)
    ============================================================ */
 .legal{padding:calc(clamp(56px,8vw,96px) + var(--header-h)) 0 clamp(64px,9vw,110px)}
 .legal .wrap{max-width:780px}
@@ -940,7 +924,7 @@ body.plain header{
 }
 
 /* ============================================================
-   16. Unterseiten mit normalem Seitenkopf
+   15. Unterseiten mit normalem Seitenkopf
    ============================================================ */
 .page-top{padding-top:calc(var(--header-h) + clamp(52px,8vw,96px))}
 .backlink{
@@ -959,10 +943,10 @@ body.plain header{
 /* Nutzerpräferenzen und Druck – muss zuletzt geladen werden */
 
 /* ============================================================
-   14. Nutzerpräferenzen
+   13. Nutzerpräferenzen
    ============================================================ */
 @media (prefers-reduced-transparency:reduce){
-  header::before,.badge,.btn-ghost,.contact-card{
+  header::before,.btn-ghost,.contact-card{
     -webkit-backdrop-filter:none;backdrop-filter:none;
   }
   header::before{background:var(--bg)}

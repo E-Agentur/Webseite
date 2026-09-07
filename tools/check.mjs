@@ -510,8 +510,18 @@ console.log('Stand der erzeugten Dateien geprüft.');
   }
   const cssSource = readFileSync(join(ROOT, cssDatei), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '');
-  const selectors = [...cssSource.matchAll(/(?:^|})\s*([^{}@][^{}]*?)\{/g)]
-    .map((m) => m[1])
+  // Prelude = Text seit der letzten Klammer. Ein Regex übersieht hier die
+  // erste Regel in einem @media-Block, ein kleiner Tokenizer nicht.
+  const preludes = [];
+  let buf = '';
+  for (const ch of cssSource) {
+    if (ch === '{') { preludes.push(buf); buf = ''; }
+    else if (ch === '}') buf = '';
+    else buf += ch;
+  }
+  const selectors = preludes
+    .map((p) => p.trim())
+    .filter((p) => p && !p.startsWith('@'))
     .join(' ')
     .replace(/\[[^\]]*\]/g, ' ')
     .replace(/"[^"]*"|'[^']*'/g, ' ');
