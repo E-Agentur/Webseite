@@ -357,6 +357,7 @@ console.log('Formular geprüft.');
    ist, sondern dass jede Verweisung darin auch aufgeht: Der Service auf
    it-sicherheit.html nannte einmal einen Anbieter, den keine Seite definierte –
    gültiges JSON, aber ein Knoten, der ins Leere zeigt. */
+let faqGeprueft = 0;
 for (const page of PAGES) {
   const ctx = await browser.newContext();
   const p = await ctx.newPage();
@@ -366,10 +367,12 @@ for (const page of PAGES) {
   if (!blocks.length) { note(`${page}: kein JSON-LD`); await ctx.close(); continue; }
   const defined = new Set();
   const referenced = [];
+  let faqKnoten = null;
   for (const raw of blocks) {
     let data;
     try { data = JSON.parse(raw); }
     catch (e) { note(`${page}: JSON-LD ist ungültig – ${e.message}`); continue; }
+    faqKnoten ??= (data['@graph'] ?? [data]).find((n) => n?.['@type'] === 'FAQPage') ?? null;
     const walk = (node, parentIsRef) => {
       if (Array.isArray(node)) return node.forEach((n) => walk(n, false));
       if (!node || typeof node !== 'object') return;
@@ -385,9 +388,36 @@ for (const page of PAGES) {
   }
   for (const id of new Set(referenced))
     if (!defined.has(id)) note(`${page}: JSON-LD verweist auf "${id}", die Seite definiert den Knoten nicht`);
+
+  /* Der FAQPage-Knoten wird beim Bauen aus dem Markup erzeugt. Diese Prüfung
+     hält die Erzeugung ehrlich: gemessen wird nicht die Quelle, sondern das,
+     was der Browser am Ende anzeigt. Eine Auszeichnung, die vom sichtbaren
+     Text abweicht, verstößt gegen die Richtlinien für strukturierte Daten –
+     im schlechtesten Fall verliert die Seite das erweiterte Suchergebnis. */
+  const sichtbar = await p.evaluate(() =>
+    [...document.querySelectorAll('.faq details')].map((d) => ({
+      frage: d.querySelector('summary').textContent.replace(/\s+/g, ' ').trim(),
+      antwort: [...d.childNodes]
+        .filter((n) => n.nodeName !== 'SUMMARY')
+        .map((n) => n.textContent).join(' ').replace(/\s+/g, ' ').trim(),
+    })));
+  const markiert = (faqKnoten?.mainEntity ?? []).map((q) => ({
+    frage: q.name, antwort: q.acceptedAnswer?.text ?? '',
+  }));
+  if (sichtbar.length !== markiert.length) {
+    note(`${page}: ${sichtbar.length} Fragen sichtbar, ${markiert.length} im JSON-LD ausgezeichnet`);
+  } else {
+    sichtbar.forEach((s, i) => {
+      if (s.frage !== markiert[i].frage)
+        note(`${page}: Frage ${i + 1} lautet im JSON-LD anders als auf der Seite`);
+      if (s.antwort !== markiert[i].antwort)
+        note(`${page}: Antwort ${i + 1} lautet im JSON-LD anders als auf der Seite`);
+    });
+  }
+  faqGeprueft += sichtbar.length;
   await ctx.close();
 }
-console.log('Strukturierte Daten geprüft.');
+console.log(`Strukturierte Daten geprüft, davon ${faqGeprueft} FAQ-Einträge gegen den sichtbaren Text.`);
 
 /* ---------- 9: Auslieferbares ---------- */
 /* Der CSP-Hash steht fest in netlify.toml, das Skript dazu wird gebaut. Gehen

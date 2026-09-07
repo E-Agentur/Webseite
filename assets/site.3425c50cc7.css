@@ -545,6 +545,37 @@ header::before{
   .feature ul{grid-template-columns:1fr}
 }
 
+/* ============================================================
+   8a. Wegweiser zum zweiten Schwerpunkt (Unterseiten)
+   ============================================================ */
+/* Die beiden Schwerpunktseiten kannten einander bisher nicht. Wer über die
+   Suche auf einer landet, soll die andere finden, ohne zurück zur Startseite
+   zu müssen. Die ganze Karte ist der Verweis, nicht nur der Pfeil. */
+.onward{padding:0 0 clamp(56px,7vw,96px)}
+.next-topic{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+  color:inherit;text-decoration:none;
+}
+.next-topic .ico{margin-bottom:0}
+.next-topic h2{margin-bottom:8px;font-size:1.4rem}
+.next-topic p{max-width:62ch;color:var(--ink-mute)}
+.next-arrow{
+  display:grid;place-items:center;flex:none;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  transition:transform .35s cubic-bezier(.16,.84,.44,1);
+}
+.next-arrow svg{width:20px;height:20px}
+@media (hover:hover){
+  .next-topic:hover .next-arrow{transform:translateX(4px)}
+}
+.next-topic:focus-visible{outline:2px solid var(--brand-bright);outline-offset:3px}
+
+@media (max-width:640px){
+  .next-topic{grid-template-columns:auto 1fr;gap:16px}
+  .next-arrow{grid-column:1;justify-self:start;width:40px;height:40px}
+}
+
 /* ---------- 06-sections.css ---------- */
 /* Ausgangslagen, NIS2-Check, FAQ, Zeitstrahl, Über uns, Kontakt, Fußzeile */
 
@@ -757,17 +788,43 @@ header::before{
 /* ============================================================
    12. Fußzeile
    ============================================================ */
-footer{padding:32px 0;background:var(--bg-alt)}
-.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.82rem;color:var(--ink-mute)}
+footer{padding:56px 0 32px;background:var(--bg-alt)}
+
+/* Wegweiser: Wer über die Suche auf einer Unterseite landet, findet von dort
+   sonst nur über die Startseite zur zweiten. Die Fußzeile ist die Stelle, an
+   der ein Besucher am Ende einer Seite nach dem Weiter sucht. */
+.foot-map{
+  display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:32px;
+  padding-bottom:36px;border-bottom:1px solid var(--line);
+}
+.foot-brand .logo-text{font-size:1.15rem;font-weight:500;letter-spacing:-.01em}
+.foot-brand .logo-text em{font-style:normal;color:var(--brand)}
+.foot-brand p{margin-top:10px;max-width:34ch;font-size:.88rem;line-height:1.55;color:var(--ink-mute)}
+.foot-h{margin-bottom:12px;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.foot-map ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.foot-map li{font-size:.9rem}
+
+.foot{
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+  gap:16px;margin-top:28px;font-size:.82rem;color:var(--ink-mute);
+}
 .foot nav{display:flex;gap:16px}
 /* Die Fußzeilenlinks sind kein Fließtext, für sie gilt die Mindestgröße
    von 24 px aus WCAG 2.2 (2.5.8) ohne Ausnahme. Der Innenabstand hebt die
    Trefferfläche, ohne die Zeile optisch zu verändern. */
-.foot a{
+.foot a,.foot-map a{
   color:var(--ink-mute);text-decoration:none;transition:color .2s ease;
   display:inline-flex;align-items:center;min-height:24px;padding:1px 4px;margin:0 -4px;
 }
-.foot a:hover{color:var(--accent)}
+.foot a:hover,.foot-map a:hover{color:var(--accent)}
+
+@media (max-width:860px){
+  .foot-map{grid-template-columns:1fr 1fr;gap:28px}
+  .foot-brand{grid-column:1 / -1}
+}
+@media (max-width:520px){
+  .foot-map{grid-template-columns:1fr}
+}
 
 /* Verweis auf das Formular im Kontaktblock */
 /* Der Verweis auf das Formular ist eine Schaltfläche wie im Hero, keine

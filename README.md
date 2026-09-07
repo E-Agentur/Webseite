@@ -174,6 +174,16 @@ JSON-LD-Knoten**. `build.mjs` verbindet sie mit den Knoten aus
 `src/partials/schema.json` zu einem `@graph` und setzt ihn als `{{schema}}` ein.
 So steht die Auszeichnung lesbar im Quelltext statt als escapte Zeichenkette.
 
+Eine Ausnahme ist der **`FAQPage`-Knoten: den erzeugt `build.mjs` aus dem
+Markup**. Vorher stand die FAQ doppelt in der Seite – einmal als `<details>`
+für den Leser, einmal ausgeschrieben im Kopf für die Suchmaschine. Wer den
+sichtbaren Text änderte, ließ die Auszeichnung still zurück, und eine
+Auszeichnung, die vom sichtbaren Inhalt abweicht, verstößt gegen die
+Richtlinien für strukturierte Daten. Gelesen wird nur, was im Block
+`<div class="faq">` bis zum Ende des Abschnitts steht: Ein `<details>`
+anderswo ist ein Aufklappelement, keine Frage. Beim Umstellen war der erzeugte
+Knoten mit dem handgeschriebenen identisch, `@id` eingeschlossen.
+
 Bewusst **nicht** ausgelagert:
 
 - Das Skript gegen das Farb-Aufblitzen bleibt inline im `<head>` – ausgelagert
@@ -223,6 +233,14 @@ eine Sackgasse.
 Abschnitte der Startseite: Hero, Typische Ausgangslagen, Zwei Schwerpunkte,
 NIS2-Betroffenheit, KI-Automatisierung, Vorgehen, Über uns, Häufige Fragen,
 Kontakt.
+
+Die beiden Schwerpunktseiten verweisen aufeinander. Wer über die Suche direkt
+auf `it-sicherheit.html` landet, kam vorher nur über die Startseite zur
+KI-Seite – die Karte „Der zweite Schwerpunkt“ am Seitenende schließt diese
+Lücke in beide Richtungen. Aus demselben Grund ist die Fußzeile ein Wegweiser
+mit drei Spalten (Leistungen, Unternehmen, Kontakt) statt nur Impressum und
+Datenschutzerklärung: sie ist die Stelle, an der ein Besucher am Ende einer
+Seite nach dem Weiter sucht.
 
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
