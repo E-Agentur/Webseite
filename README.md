@@ -174,6 +174,16 @@ JSON-LD-Knoten**. `build.mjs` verbindet sie mit den Knoten aus
 `src/partials/schema.json` zu einem `@graph` und setzt ihn als `{{schema}}` ein.
 So steht die Auszeichnung lesbar im Quelltext statt als escapte Zeichenkette.
 
+Eine Ausnahme ist der **`FAQPage`-Knoten: den erzeugt `build.mjs` aus dem
+Markup**. Vorher stand die FAQ doppelt in der Seite – einmal als `<details>`
+für den Leser, einmal ausgeschrieben im Kopf für die Suchmaschine. Wer den
+sichtbaren Text änderte, ließ die Auszeichnung still zurück, und eine
+Auszeichnung, die vom sichtbaren Inhalt abweicht, verstößt gegen die
+Richtlinien für strukturierte Daten. Gelesen wird nur, was im Block
+`<div class="faq">` bis zum Ende des Abschnitts steht: Ein `<details>`
+anderswo ist ein Aufklappelement, keine Frage. Beim Umstellen war der erzeugte
+Knoten mit dem handgeschriebenen identisch, `@id` eingeschlossen.
+
 Bewusst **nicht** ausgelagert:
 
 - Das Skript gegen das Farb-Aufblitzen bleibt inline im `<head>` – ausgelagert

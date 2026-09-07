@@ -92,8 +92,41 @@ function expand(text, vars, depth = 0) {
 /* ---------- Strukturierte Daten ---------- */
 const baseNodes = JSON.parse(read('src/partials/schema.json'));
 
-function schemaBlock(pageNodes) {
-  const graph = [...baseNodes, ...(pageNodes ?? [])];
+/* Die FAQ stand einmal doppelt in der Seite: einmal als <details> für den
+   Leser, einmal als FAQPage-Knoten im Kopf für die Suchmaschine. Wer den
+   sichtbaren Text änderte, ließ die Auszeichnung still zurück – und eine
+   Auszeichnung, die vom sichtbaren Inhalt abweicht, verstößt gegen die
+   Richtlinien für strukturierte Daten. Jetzt ist das Markup die Quelle und
+   der Knoten entsteht daraus. */
+const entities = (t) => t
+  .replace(/&nbsp;/g, '\u00a0').replace(/&shy;/g, '\u00ad')
+  .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+  .replace(/&quot;/g, '"');
+const plain = (t) => entities(t.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+
+function faqNode(content, path) {
+  /* Nur was im Block .faq steht. Ein <details> anderswo ist ein Aufklappelement,
+     keine Frage – und darf nicht als FAQPage ausgezeichnet werden. */
+  const start = content.indexOf('<div class="faq');
+  if (start < 0) return null;
+  const ende = content.indexOf('</section>', start);
+  const block = content.slice(start, ende < 0 ? undefined : ende);
+  const treffer = [...block.matchAll(
+    /<details>\s*<summary>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/g)];
+  if (!treffer.length) return null;
+  return {
+    '@type': 'FAQPage',
+    '@id': `https://kr3is.com/${path}#faq`,
+    mainEntity: treffer.map(([, frage, antwort]) => ({
+      '@type': 'Question',
+      name: plain(frage),
+      acceptedAnswer: { '@type': 'Answer', text: plain(antwort) },
+    })),
+  };
+}
+
+function schemaBlock(pageNodes, faq) {
+  const graph = [...baseNodes, ...(pageNodes ?? []), ...(faq ? [faq] : [])];
   const body = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }, null, 2);
   return `<script type="application/ld+json">\n${body}\n</script>`;
 }
@@ -110,6 +143,7 @@ function buildPages() {
     if (schema !== undefined && !Array.isArray(schema)) {
       throw new Error(`${file}: "schema" muss eine Liste von JSON-LD-Knoten sein`);
     }
+    const content = raw.slice(m[0].length).trim();
     const vars = {
       bodyClass: '',
       mainClass: '',
@@ -119,8 +153,8 @@ function buildPages() {
       headExtra: '',
       ...meta,
       ...assets,
-      schema: schemaBlock(schema),
-      content: raw.slice(m[0].length).trim(),
+      schema: schemaBlock(schema, faqNode(content, meta.path ?? '')),
+      content,
     };
     const html = expand(shell, vars)
       .replace(/ class=""/g, '')          // leere Attribute nicht ausliefern
