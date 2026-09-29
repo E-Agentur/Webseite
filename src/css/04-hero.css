@@ -6,7 +6,9 @@
 .hero{
   position:relative;isolation:isolate;overflow:hidden;text-align:center;
   /* zusätzliche Höhe der Kopfzeile, die hier transparent darüber liegt */
-  padding:calc(clamp(96px,14vw,170px) + var(--header-h)) 0 clamp(90px,12vw,140px);
+  /* Der Block saß tief: 242 px über der Marke, 140 px darunter. Etwas
+     angehoben passt der Hero samt Regelwerksleiste auf einen Laptop. */
+  padding:calc(clamp(88px,11vw,140px) + var(--header-h)) 0 clamp(80px,10vw,118px);
   background:#000;
   color:#f5f5f7;
 }

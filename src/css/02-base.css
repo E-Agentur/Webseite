@@ -24,7 +24,10 @@ ul,ol{list-style:none}
 main{margin-top:calc(var(--header-h) * -1)}
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
-section{padding:clamp(78px,11vw,140px) 0;position:relative;scroll-margin-top:calc(var(--header-h) + 12px)}
+/* Zwischen zwei Abschnitten standen bei 1440 px 280 px Polster – fast ein
+   Drittel Bildschirm Nichts, neunmal hintereinander. Etwas enger gefasst
+   bleibt die Luft erhalten, die Seite verliert aber rund 430 px Leerlauf. */
+section{padding:clamp(72px,8.5vw,116px) 0;position:relative;scroll-margin-top:calc(var(--header-h) + 12px)}
 .alt{background:var(--bg-alt)}
 .lead{font-size:clamp(1.08rem,2vw,1.32rem);line-height:1.45;max-width:36ch;margin-top:18px;color:var(--ink-soft)}
 
