@@ -21,14 +21,20 @@ h3{font-size:1.28rem;font-weight:600;line-height:1.2}
 p{color:var(--ink-soft);text-wrap:pretty}
 a{color:inherit}
 ul,ol{list-style:none}
-main{margin-top:calc(var(--header-h) * -1)}
+/* Die Seite ist ein Stapel von Bändern, kein durchlaufender Hintergrund mit
+   Abschnitten darauf. Jedes Band trägt seine eigene Fläche, ein schmaler
+   Spalt in der Grundfarbe trennt sie. Das übernimmt das Kachelmuster von
+   apple.com: Die Kante trennt, nicht der Leerraum – deshalb braucht ein Band
+   innen weniger Polster als ein Abschnitt vorher brauchte. */
+main{margin-top:calc(var(--header-h) * -1);background:var(--bg)}
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
-/* Zwischen zwei Abschnitten standen bei 1440 px 280 px Polster – fast ein
-   Drittel Bildschirm Nichts, neunmal hintereinander. Etwas enger gefasst
-   bleibt die Luft erhalten, die Seite verliert aber rund 430 px Leerlauf. */
-section{padding:clamp(72px,8.5vw,116px) 0;position:relative;scroll-margin-top:calc(var(--header-h) + 12px)}
-.alt{background:var(--bg-alt)}
+section{
+  padding:clamp(56px,6.5vw,88px) 0;position:relative;
+  background:var(--bg-alt);margin-bottom:var(--band-gap);
+  scroll-margin-top:calc(var(--header-h) + var(--band-gap));
+}
+main > section:last-child{margin-bottom:0}
 .lead{font-size:clamp(1.08rem,2vw,1.32rem);line-height:1.45;max-width:36ch;margin-top:18px;color:var(--ink-soft)}
 
 /* Zentrierter Abschnittskopf – Apple setzt Einleitungen mittig, Fließtext linksbündig. */

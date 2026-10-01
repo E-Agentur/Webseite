@@ -242,6 +242,37 @@ mit drei Spalten (Leistungen, Unternehmen, Kontakt) statt nur Impressum und
 Datenschutzerklärung: sie ist die Stelle, an der ein Besucher am Ende einer
 Seite nach dem Weiter sucht.
 
+### Bänder statt Abschnitte
+
+Die Seite ist ein **Stapel von Bändern**, kein durchlaufender Hintergrund mit
+Abschnitten darauf. Jedes Band trägt seine eigene Fläche (`--bg-alt`), ein
+schmaler Spalt in der Grundfarbe (`--band-gap`, 12 px) trennt sie, und jede
+Fläche darin – Karte, Eingabefeld, Kriterienzeile – ist weiß (`--surface`).
+Das übernimmt das Kachelmuster von apple.com: **Die Kante trennt, nicht der
+Leerraum.** Deshalb braucht ein Band innen weniger Polster als ein Abschnitt
+vorher brauchte (116 px → 88 px).
+
+Damit entfällt die Klasse `.alt`. Vorher wechselten die Abschnitte zwischen
+weißem und grauem Grund, und zehn Regeln der Form `.alt .card { … }` drehten
+die Innenflächen jeweils um. Jetzt ist jedes Band grau und jede Innenfläche
+weiß – eine Regel statt zweier, und eine Fehlerquelle weniger beim Einfügen
+eines Abschnitts.
+
+Die **beiden Schwerpunkte stehen nebeneinander** statt untereinander: zwei
+gleich schwere dunkle Kacheln, in jeder dieselbe Reihenfolge aus Zeichen,
+Kicker, Überschrift, einem Satz und Verweis. Das ist die Zeile, die das Muster
+trägt. Untereinander waren es zwei breite Streifen, in denen der Verweis rechts
+im Leeren stand. Unter 880 px stapeln sie.
+
+Nicht übernommen: Bilder. Das Muster lebt bei Apple von großen Produktfotos,
+die hier nichts darstellen würden – erfundene Bildwelt wäre schlimmer als
+keine. Die Kacheln tragen deshalb Text und Zeichen.
+
+Nicht angefasst, aber bekannt: Die Trennlinien der FAQ (`1px` auf `--line`)
+fallen je nach Zeilenhöhe und Bildschirmauflösung stellenweise unter die
+Subpixelschwelle und wirken dann ungleichmäßig. Das ist eine Darstellungs-
+eigenheit, kein Fehler im Stylesheet, und war vor dem Umbau genauso.
+
 ### Maß und Rhythmus
 
 Gemessen statt geschätzt: Ein Skript vergleicht je Rasterzelle die Kartenhöhe

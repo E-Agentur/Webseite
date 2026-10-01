@@ -9,9 +9,8 @@
 
 .note{
   margin:44px auto 0;padding:34px 36px;border-radius:var(--radius);
-  background:var(--bg-alt);max-width:840px;text-align:center;
+  background:var(--surface);max-width:840px;text-align:center;
 }
-.alt .note{background:var(--surface)}
 .note p{font-size:clamp(1.06rem,1.7vw,1.22rem);line-height:1.45;color:var(--ink-soft);margin:0}
 .note strong{color:var(--ink);font-weight:600}
 
@@ -22,17 +21,16 @@
 @media (max-width:760px){.situations{grid-template-columns:1fr}}
 .situations li{
   position:relative;padding:26px 30px 26px 62px;border-radius:var(--radius-sm);
-  background:var(--bg-alt);font-size:1.06rem;line-height:1.45;color:var(--ink);
+  background:var(--surface);font-size:1.06rem;line-height:1.45;color:var(--ink);
 }
-.alt .situations li{background:var(--surface)}
 /* Jede Lage führt dorthin, wo die Antwort steht. Der Verweis liegt als Fläche
    über der ganzen Kachel, damit nicht nur die Textzeile trifft; die Kachel ist
    dafür ohnehin position:relative. */
 .situations a{color:inherit;text-decoration:none}
 .situations a::after{content:"";position:absolute;inset:0;border-radius:inherit}
 .situations li{transition:background-color .2s ease}
-@media (hover:hover){.situations li:hover{background:var(--surface-2)}}
-.alt .situations li:hover{background:var(--bg-alt)}
+@media (hover:hover){.situations li:hover{background:var(--bg-alt)}}
+
 .situations li:has(a:focus-visible){outline:2px solid var(--brand-bright);outline-offset:3px}
 .situations li::before{
   content:"";position:absolute;left:30px;top:33px;width:14px;height:8px;
@@ -54,9 +52,8 @@
 .check > div{
   display:grid;grid-template-columns:auto 150px minmax(0,1fr);
   column-gap:26px;align-items:start;
-  padding:30px 32px;border-radius:var(--radius);background:var(--bg-alt);
+  padding:30px 32px;border-radius:var(--radius);background:var(--surface);
 }
-.alt .check > div{background:var(--surface)}
 .check .step-mark{
   grid-column:1;grid-row:1;
   display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
