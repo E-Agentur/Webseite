@@ -22,14 +22,12 @@ input[type="text"],input[type="email"],input[type="tel"],select,textarea{
   padding:13px 15px;
   font:inherit;font-size:1.02rem;
   color:var(--ink);
-  background:var(--bg-alt);
+  background:var(--surface);
   border:1px solid transparent;
   border-radius:12px;
   transition:border-color .2s ease,background-color .2s ease;
   appearance:none;
 }
-.alt input[type="text"],.alt input[type="email"],.alt input[type="tel"],
-.alt select,.alt textarea{background:var(--surface)}
 input::placeholder,textarea::placeholder{color:var(--ink-mute)}
 input:focus,select:focus,textarea:focus{
   outline:none;border-color:var(--brand-bright);
@@ -57,11 +55,10 @@ select{
 .check-tile{
   display:flex;align-items:flex-start;gap:12px;
   padding:14px 16px;border-radius:12px;cursor:pointer;
-  background:var(--bg-alt);border:1px solid transparent;
+  background:var(--surface);border:1px solid transparent;
   font-size:.99rem;line-height:1.4;
   transition:border-color .2s ease,background-color .2s ease;
 }
-.alt .check-tile{background:var(--surface)}
 .check-tile:hover{border-color:var(--line-strong)}
 .check-tile input{
   appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
@@ -79,10 +76,9 @@ select{
 /* Einwilligung */
 .consent{
   display:flex;align-items:flex-start;gap:13px;
-  padding:20px 22px;border-radius:14px;background:var(--bg-alt);
+  padding:20px 22px;border-radius:14px;background:var(--surface);
   font-size:.97rem;line-height:1.5;color:var(--ink-soft);
 }
-.alt .consent{background:var(--surface)}
 .consent input{
   appearance:none;flex:none;width:20px;height:20px;margin-top:1px;
   border:1.5px solid var(--line-strong);border-radius:6px;cursor:pointer;

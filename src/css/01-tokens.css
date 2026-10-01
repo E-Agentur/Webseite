@@ -15,6 +15,9 @@
 
   /* Maße */
   --maxw:1120px;
+  /* Der Spalt zwischen zwei Bändern. Er trennt sie, nicht der Leerraum
+     innerhalb – deshalb schmal. */
+  --band-gap:12px;
   --radius:22px;
   --radius-sm:14px;
   --header-h:52px;
