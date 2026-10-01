@@ -16,7 +16,10 @@ body{
 img,svg{max-width:100%}
 h1,h2,h3,h4{line-height:1.08;letter-spacing:-.035em;text-wrap:balance;hyphens:auto;color:var(--ink)}
 h1{font-size:clamp(2.1rem,7.4vw,4.4rem);font-weight:600}
-h2{font-size:clamp(1.75rem,5vw,3.05rem);font-weight:600}
+/* Eine Stufe größer und enger: Im Kachelmuster trägt die Überschrift das Band,
+   nicht der Text darunter. Die Überlaufprüfung deckt zehn Breiten ab und hält
+   die langen deutschen Komposita im Blick. */
+h2{font-size:clamp(1.95rem,5.6vw,3.6rem);font-weight:600}
 h3{font-size:1.28rem;font-weight:600;line-height:1.2}
 p{color:var(--ink-soft);text-wrap:pretty}
 a{color:inherit}
@@ -35,6 +38,23 @@ section{
   scroll-margin-top:calc(var(--header-h) + var(--band-gap));
 }
 main > section:last-child{margin-bottom:0}
+
+/* Ein dunkles Band mitten im Lauf der grauen. Statt Regel für Regel zu
+   überschreiben, definiert die Klasse die Farbtoken lokal um – jedes Kind,
+   das Token benutzt statt fester Werte, folgt von selbst. Das ist der Test
+   darauf, ob die Tokenschicht trägt. */
+.band-dark{
+  background:linear-gradient(165deg,#0b1a2e,#08131f 62%,#0a1c2a);
+  --ink:#f5f5f7;
+  --ink-soft:#a1a1a6;
+  --ink-mute:#86868b;
+  --line:#243344;
+  --line-strong:#33485f;
+  --bg-alt:#0d1b2b;
+  --surface:#13233a;
+  --surface-2:#182b44;
+  --accent:#2997ff;
+}
 .lead{font-size:clamp(1.08rem,2vw,1.32rem);line-height:1.45;max-width:36ch;margin-top:18px;color:var(--ink-soft)}
 
 /* Zentrierter Abschnittskopf – Apple setzt Einleitungen mittig, Fließtext linksbündig. */

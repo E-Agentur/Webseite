@@ -146,7 +146,7 @@
 }
 </script>
 
-<link rel="stylesheet" href="assets/site.d5779627b8.css">
+<link rel="stylesheet" href="assets/site.f1ebb3975c.css">
 </head>
 <body>
 
@@ -234,14 +234,29 @@
   <div class="grid-lines" aria-hidden="true"></div>
 
   <div class="wrap">
+    <h1 class="rise d1">Informationssicherheit,<br><span class="grad">die im Alltag funktioniert.</span></h1>
+
+    <p class="hero-sub rise d2">Wir unterstützen mittelständische Unternehmen dabei, ihre IT sicher zu betreiben,
+       regulatorische Anforderungen zu erfüllen und Risiken nachvollziehbar zu steuern –
+       auch ohne eigene Sicherheitsabteilung.</p>
+
+    <div class="cta-row rise d3">
+      <a href="betroffenheit.html" class="btn btn-primary">Erstgespräch vereinbaren
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+      <a href="it-sicherheit.html" class="btn btn-ghost">Leistungen ansehen</a>
+    </div>
+
     <!--
       Der Name ist Programm: ein Kreis, in drei Teilen. Jedes Drittel des Rings
       steht für einen Schwerpunkt und trägt dessen Farbe; zusammen ergeben sie
       den geschlossenen Kreis. Das greift auch das Zyklus-Zeichen der Kopfzeile
-      auf. Der Ring ist Zierwerk und deshalb aria-hidden, die Beschriftungen
-      bleiben gewöhnlicher Text – vorlesbar und auffindbar.
+      auf. Der Ring stand vorher 36 px groß über der Überschrift und wirkte wie
+      ein Ladezeichen; jetzt steht er dort, wo das Vorbild sein Produktbild
+      setzt – unter den Schaltflächen, als eigentliches Motiv. Er ist Zierwerk
+      und deshalb aria-hidden, die Beschriftungen bleiben gewöhnlicher Text.
     -->
-    <div class="triad rise">
+    <div class="triad rise d4">
       <span class="triad-mark" aria-hidden="true">
         <svg viewBox="0 0 40 40" fill="none">
           <circle class="tr-arc tr-a" cx="20" cy="20" r="16"/>
@@ -256,20 +271,7 @@
       </span>
     </div>
 
-    <h1 class="rise d1">Informationssicherheit,<br><span class="grad">die im Alltag funktioniert.</span></h1>
-
-    <p class="hero-sub rise d2">Wir unterstützen mittelständische Unternehmen dabei, ihre IT sicher zu betreiben,
-       regulatorische Anforderungen zu erfüllen und Risiken nachvollziehbar zu steuern –
-       auch ohne eigene Sicherheitsabteilung.</p>
-
-    <div class="cta-row rise d3">
-      <a href="betroffenheit.html" class="btn btn-primary">Erstgespräch vereinbaren
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow"/></svg>
-      </a>
-      <a href="it-sicherheit.html" class="btn btn-ghost">Leistungen ansehen</a>
-    </div>
-
-    <div class="standards rise d4">
+    <div class="standards rise d5">
       <p>Unsere Arbeit orientiert sich an</p>
       <ul>
         <li>NIS2</li>
@@ -442,6 +444,38 @@
       IT-Sicherheit, die nur ihre Karte hat. Jetzt trägt der Abschnitt das
       Warum, die Unterseite das Was.
     -->
+    <!--
+      Die einzige Zeichnung der Seite – und sie zeigt etwas Echtes: wo ein
+      Agent sitzt, was ihn begrenzt und was er hinterlässt. Gebaut aus HTML
+      und CSS statt als SVG, damit die Beschriftungen gewöhnlicher Text
+      bleiben: vorlesbar, auffindbar, und von der Kontrastprüfung messbar.
+    -->
+    <figure class="agent-map reveal">
+      <ol>
+        <li>
+          <span class="am-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-server"/></svg></span>
+          <h3>Ihre Systeme</h3>
+          <p>Postfach, Dateien, Fachanwendung – dort, wo die Arbeit ohnehin liegt.</p>
+        </li>
+        <li class="am-gate">
+          <span class="am-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-key"/></svg></span>
+          <h3>Freigabegrenze</h3>
+          <p>Ein eigenes Konto je Agent, beschränkt auf die Felder seiner Aufgabe. Was nicht freigegeben ist, sieht er nicht.</p>
+        </li>
+        <li>
+          <span class="am-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-cpu"/></svg></span>
+          <h3>Der Agent</h3>
+          <p>Liest, ordnet, bereitet vor. Vor kritischen Schritten hält er an und fragt.</p>
+        </li>
+        <li>
+          <span class="am-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-log"/></svg></span>
+          <h3>Protokoll</h3>
+          <p>Jeder Zugriff und jede Entscheidung bleibt belegbar – auch Monate später, auch in einer Prüfung.</p>
+        </li>
+      </ol>
+      <figcaption>Wo ein Agent sitzt, was ihn begrenzt und was er hinterlässt.</figcaption>
+    </figure>
+
     <div class="note reveal">
       <p><strong>Unsere Empfehlung:</strong> der Einstieg über einen klar abgegrenzten
          Anwendungsfall. So lässt sich der Nutzen belegen, bevor Automatisierung auf
@@ -457,7 +491,7 @@
 </section>
 
 <!-- ==================== VORGEHEN ==================== -->
-<section id="vorgehen">
+<section id="vorgehen" class="band-dark">
   <div class="wrap">
     <div class="reveal intro">
       <span class="kicker">Vorgehen</span>
