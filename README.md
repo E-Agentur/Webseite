@@ -242,6 +242,34 @@ mit drei Spalten (Leistungen, Unternehmen, Kontakt) statt nur Impressum und
 Datenschutzerklärung: sie ist die Stelle, an der ein Besucher am Ende einer
 Seite nach dem Weiter sucht.
 
+### Maß und Rhythmus
+
+Gemessen statt geschätzt: Ein Skript vergleicht je Rasterzelle die Kartenhöhe
+mit der Höhe ihres Inhalts und zählt die Zeichen je Zeile in den Absätzen.
+Drei Befunde kamen dabei heraus.
+
+Die **drei NIS2-Kriterien** standen als gleich hohe Spalten nebeneinander,
+obwohl „Größe“ neun Zeilen braucht und „Lieferkette“ fünf. Unter der kürzesten
+Karte klaffte ein Loch von 96 px, bei 900 px Fensterbreite 120 px, und der
+Fließtext lief auf 36 Zeichen je Zeile zusammen – bei 900 px auf 26. Jetzt ist
+jedes Kriterium eine **Zeile**: Nummer, Stichwort, Antwort nebeneinander. Jede
+Zeile ist so hoch wie ihr Inhalt, der Text bekommt sein Maß zurück. Unter
+860 px rückt die Antwort unter das Stichwort.
+
+Im **Zeitstrahl** waren die Überschriften ein- oder zweizeilig, wodurch die
+Absätze auf zwei verschiedenen Grundlinien begannen. Zwei Zeilen reserviert,
+dann fluchtet die Reihe.
+
+Die **Abschnittspolster** waren überall gleich: 140 px oben und unten, also
+280 px zwischen zwei Abschnitten – bei 1440 px fast ein Drittel Bildschirm
+Nichts, neunmal hintereinander. Jetzt sind es 116 px. Zusammen mit dem etwas
+angehobenen Hero, der samt Regelwerksleiste auf einen Laptop passt, verliert
+die Startseite rund 340 px Leerlauf, ohne dass Luft fehlt.
+
+Nicht angefasst: Die 49 px Unterschied im Bento-Raster auf
+`ki-automatisierung.html` fielen dem Skript auf, im Bild aber nicht – ein
+Bento lebt von gleich hohen Kacheln. Gemeldet heißt nicht behoben.
+
 Es entstehen **keine Anfragen an Dritte** – keine Webfonts, kein CDN, kein
 Tracking. Das vereinfacht die Datenschutzerklärung erheblich.
 
