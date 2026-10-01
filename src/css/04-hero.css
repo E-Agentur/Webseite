@@ -8,7 +8,7 @@
   /* zusätzliche Höhe der Kopfzeile, die hier transparent darüber liegt */
   /* Der Block saß tief: 242 px über der Marke, 140 px darunter. Etwas
      angehoben passt der Hero samt Regelwerksleiste auf einen Laptop. */
-  padding:calc(clamp(88px,11vw,140px) + var(--header-h)) 0 clamp(80px,10vw,118px);
+  padding:calc(clamp(60px,7.5vw,100px) + var(--header-h)) 0 clamp(52px,6.5vw,80px);
   background:#000;
   color:#f5f5f7;
 }
@@ -45,27 +45,38 @@
    eine Drehung: So braucht es weder transform-box noch transform-origin auf
    einem SVG-Element, und das Einzeichnen kann über stroke-dasharray laufen,
    ohne mit der Positionierung ins Gehege zu kommen. */
+/* Das Zeichen steht jetzt über seinen Beschriftungen, nicht daneben. */
 .triad{
-  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
-  gap:10px 18px;margin-bottom:10px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:18px;margin-top:clamp(30px,3.8vw,50px);
 }
 .triad-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 20px}
-.triad-mark{width:36px;height:36px;flex:none;display:block}
-/* Ohne die Drehung begänne das erste Drittel rechts, auf drei Uhr. Der schwache
-   Schein hebt das Zeichen von der dunklen Bühne ab, ohne dass es gegen die
-   Überschrift antritt. */
+.triad-mark{
+  width:clamp(136px,16vw,190px);aspect-ratio:1;flex:none;display:block;
+}
+/* Ohne die Drehung begänne das erste Drittel rechts, auf drei Uhr. Der Schein
+   trägt das Zeichen auf der dunklen Bühne – groß gezogen darf er kräftiger
+   sein als beim Zeichen in Schriftgröße. */
 .triad-mark svg{
-  width:100%;height:100%;display:block;transform:rotate(-90deg);
-  filter:drop-shadow(0 0 7px rgba(41,151,255,.28));
+  width:100%;height:100%;display:block;
+  filter:drop-shadow(0 0 26px rgba(41,151,255,.3));
+  animation:tr-turn 72s linear infinite;
+  transform-origin:50% 50%;
+}
+@keyframes tr-turn{from{rotate:-90deg}to{rotate:270deg}}
+@media (prefers-reduced-motion:reduce){
+  .triad-mark svg{animation:none;rotate:-90deg}
 }
 .tr-arc{
-  stroke-width:3.6;stroke-linecap:round;
-  animation:tr-draw .85s cubic-bezier(.16,.84,.44,1) both;
+  stroke-width:2.1;stroke-linecap:round;
+  animation:tr-draw 1.5s cubic-bezier(.16,.84,.44,1) both;
 }
-@keyframes tr-draw{from{stroke-dasharray:0 100.53}to{stroke-dasharray:28 72.53}}
-.tr-a{stroke:#2997ff;stroke-dashoffset:0}
-.tr-b{stroke:#30c9c9;stroke-dashoffset:-33.51;animation-delay:.1s}
-.tr-c{stroke:#7fc4ff;stroke-dashoffset:-67.02;animation-delay:.2s}
+/* Jeder Bogen lässt an beiden Enden eine Lücke – der Kreis bleibt als Ganzes
+   lesbar, die drei Teile bleiben unterscheidbar. */
+@keyframes tr-draw{from{stroke-dasharray:0 100.53}to{stroke-dasharray:29.5 71.03}}
+.tr-a{stroke:#2997ff;stroke-dashoffset:-1}
+.tr-b{stroke:#30c9c9;stroke-dashoffset:-34.51;animation-delay:.18s}
+.tr-c{stroke:#7fc4ff;stroke-dashoffset:-68.02;animation-delay:.36s}
 
 .triad-item{
   font-size:clamp(.92rem,1.7vw,1.04rem);font-weight:500;letter-spacing:-.01em;
@@ -77,16 +88,13 @@
   content:"";position:absolute;left:-10px;top:50%;translate:0 -50%;
   width:1px;height:13px;background:rgba(255,255,255,.22);
 }
-/* Schmale Fenster: Das Zeichen rückt über die Beschriftungen. Nebeneinander
-   drängte es die drei Felder auf zwei ungleiche Zeilen; untereinander stehen
-   sie in einer. */
 @media (max-width:560px){
-  .triad{flex-direction:column;gap:9px}
+  .triad{gap:18px}
   .triad-list{gap:5px 14px}
   .triad-item + .triad-item::before{left:-7px;height:11px}
 }
 
-.hero h1{margin-top:10px;color:#f5f5f7}
+.hero h1{color:#f5f5f7}
 .hero h1 .grad{
   background:linear-gradient(100deg,#2997ff,#30c9c9 70%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -113,7 +121,7 @@
 
 
 /* Standards-Leiste */
-.standards{margin-top:clamp(56px,8vw,88px)}
+.standards{margin-top:clamp(40px,5vw,64px)}
 .standards p{font-size:.94rem;color:#86868b}
 .standards ul{
   display:flex;flex-wrap:wrap;justify-content:center;gap:10px 34px;margin-top:18px;
@@ -129,7 +137,7 @@
   .rise{opacity:0;transform:translateY(18px);animation:rise-in .45s cubic-bezier(.16,.84,.44,1) forwards}
   .rise:nth-child(1){animation-delay:.02s}
   .d1{animation-delay:.06s}.d2{animation-delay:.12s}.d3{animation-delay:.18s}
-  .d4{animation-delay:.24s}
+  .d4{animation-delay:.24s}.d5{animation-delay:.3s}
 }
 
 /* Aurora anhalten, sobald der Hero aus dem Bild ist – sonst läuft sie über die

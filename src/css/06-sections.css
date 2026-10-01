@@ -272,3 +272,58 @@ footer{padding:56px 0 32px;background:var(--bg-alt)}
    Textstelle im Fließtext – er ist die zweite Handlungsaufforderung des
    Abschnitts und soll so aussehen. */
 .contact-cta{margin-top:18px}
+
+/* ============================================================
+   9b. Wo der Agent sitzt – die Zeichnung im KI-Abschnitt
+   ============================================================ */
+/* Vier Stationen in einer Reihe, durch Pfeile verbunden: Systeme,
+   Freigabegrenze, Agent, Protokoll. Die Grenze ist die mittlere Station und
+   trägt deshalb die kräftige Linie – sie ist der Punkt, auf den es ankommt.
+   Unter 900 px wird aus der Reihe eine Spalte und die Pfeile drehen sich
+   mit; unter 560 px entfallen sie, der Abstand trägt die Abfolge dann. */
+.agent-map{margin:48px 0 0}
+.agent-map ol{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:46px;
+  list-style:none;counter-reset:none;
+}
+.agent-map li{position:relative;text-align:center}
+.agent-map h3{font-size:1.1rem;margin:14px 0 8px}
+.agent-map p{font-size:.96rem;line-height:1.5;color:var(--ink-mute)}
+
+.am-ico{
+  display:grid;place-items:center;width:52px;height:52px;margin:0 auto;
+  border-radius:50%;background:var(--surface);
+  border:1px solid var(--line);color:var(--accent);
+}
+.am-ico svg{width:24px;height:24px}
+
+/* Die Grenze hebt sich ab: gefüllte Marke, kräftigere Schrift. */
+.am-gate .am-ico{background:var(--brand);border-color:var(--brand);color:#fff}
+.am-gate h3{color:var(--ink)}
+
+/* Der Pfeil sitzt in der Lücke zwischen zwei Stationen, auf Höhe der Marke. */
+.agent-map li + li::before{
+  content:"";position:absolute;top:26px;left:-32px;
+  width:18px;height:18px;translate:0 -50%;
+  border-top:1.6px solid var(--line-strong);
+  border-right:1.6px solid var(--line-strong);
+  rotate:45deg;
+}
+.agent-map figcaption{
+  margin-top:34px;text-align:center;
+  font-size:.92rem;color:var(--ink-mute);
+}
+
+@media (max-width:900px){
+  .agent-map ol{grid-template-columns:1fr 1fr;gap:44px 46px}
+}
+@media (max-width:560px){
+  .agent-map ol{grid-template-columns:1fr;gap:30px}
+  .agent-map li + li::before{display:none}
+  .agent-map li{
+    display:grid;grid-template-columns:52px 1fr;gap:4px 18px;text-align:left;
+  }
+  .am-ico{grid-row:1 / 3;margin:0}
+  .agent-map h3{margin:0 0 6px;align-self:center}
+  .agent-map p{grid-column:2}
+}

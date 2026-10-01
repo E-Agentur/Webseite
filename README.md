@@ -273,6 +273,48 @@ fallen je nach Zeilenhöhe und Bildschirmauflösung stellenweise unter die
 Subpixelschwelle und wirken dann ungleichmäßig. Das ist eine Darstellungs-
 eigenheit, kein Fehler im Stylesheet, und war vor dem Umbau genauso.
 
+### Was es zu sehen gibt
+
+Die Seite hat keine Fotos und bekommt auch keine: Es gibt nichts zu
+fotografieren, und erfundene Bildwelt wäre schlimmer als keine. Der Ersatz
+muss deshalb aus echtem Material kommen.
+
+**Der Ring im Hero** stand mit 36 px über der Überschrift und wirkte wie ein
+Ladezeichen. Jetzt steht er dort, wo das Vorbild sein Produktbild setzt –
+unter den Schaltflächen, 190 px groß, als eigentliches Motiv. Die drei Bögen
+zeichnen sich nacheinander und drehen sich danach sehr langsam weiter
+(72 Sekunden je Umlauf, unter `prefers-reduced-motion` gar nicht). Der Ring
+ist Zierwerk und `aria-hidden`; die drei Beschriftungen darunter bleiben
+gewöhnlicher Text.
+
+**Die Zeichnung im KI-Abschnitt** ist die einzige der Seite und zeigt etwas
+Echtes: vier Stationen – Ihre Systeme, Freigabegrenze, Agent, Protokoll –
+durch Pfeile verbunden, die Grenze als mittlere Station hervorgehoben. Gebaut
+aus HTML und CSS statt als SVG, damit die Beschriftungen gewöhnlicher Text
+bleiben: vorlesbar, auffindbar und von der Kontrastprüfung messbar. Unter
+560 px wird aus der Reihe eine Spalte, das Zeichen rückt neben den Text.
+
+**Ein dunkles Band** unterbricht den Lauf der grauen: der Zeitstrahl im
+Abschnitt „Vorgehen". Die Klasse `.band-dark` definiert dafür die Farbtoken
+lokal um (`--ink`, `--ink-soft`, `--line`, `--surface`, `--accent` …), statt
+Regel für Regel zu überschreiben. Jedes Kind, das Token benutzt statt fester
+Werte, folgt von selbst – ein Band umzufärben kostet damit eine Klasse.
+
+Weil der Grund dieses Bandes ein **Verlauf** ist, überspringt die
+Kontrastprüfung seinen Text: 74 statt 52 nicht eindeutig messbare Knoten. Die
+vier Paare sind deshalb von Hand nachgerechnet, gegen die hellste Stelle des
+Verlaufs (`#0b1a2e`) als ungünstigsten Fall:
+
+| Token | Farbe | Kontrast |
+|---|---|---|
+| `--ink` (Überschrift) | `#f5f5f7` | 16,05:1 |
+| `--ink-soft` (Lead, Absätze) | `#a1a1a6` | 6,80:1 |
+| `--ink-mute` | `#86868b` | 4,82:1 |
+| `--accent` (Kicker) | `#2997ff` | 5,80:1 |
+
+Alle erfüllen WCAG AA (4,5:1). **Wer die Farben dieses Bandes ändert, muss
+diese Tabelle neu rechnen** – die Prüfkette tut es nicht.
+
 ### Maß und Rhythmus
 
 Gemessen statt geschätzt: Ein Skript vergleicht je Rasterzelle die Kartenhöhe
